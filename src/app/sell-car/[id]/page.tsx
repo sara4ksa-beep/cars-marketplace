@@ -60,8 +60,9 @@ const soldCars = [
   }
 ];
 
-export default function SoldCarDetails({ params }: { params: { id: string } }) {
-  const car = soldCars.find((c) => c.id === params.id);
+export default async function SoldCarDetails({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const car = soldCars.find((c) => c.id === id);
   if (!car) return notFound();
 
   return (
