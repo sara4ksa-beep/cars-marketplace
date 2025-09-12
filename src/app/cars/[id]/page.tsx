@@ -28,6 +28,7 @@ export default function CarDetailsPage() {
   const [car, setCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   // دالة لتحويل العلامات التجارية إلى العربية
   const getBrandName = (brand: string) => {
@@ -169,38 +170,53 @@ export default function CarDetailsPage() {
       </section>
 
       {/* Car Details */}
-      <section className="py-12">
+      <section className="py-6 md:py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12">
               
               {/* Car Images */}
-              <div className="space-y-6">
-                <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                  <div className="h-96 relative">
+              <div className="space-y-4 md:space-y-6">
+                {/* Main Image - Better mobile sizing */}
+                <div className="bg-white rounded-2xl shadow-xl overflow-hidden mobile-image-container">
+                  <div 
+                    className="h-64 md:h-96 relative cursor-pointer group"
+                    onClick={() => setSelectedImageIndex(0)}
+                  >
                     <Image 
                       src={car.imageUrl || '/default-car.jpg'} 
                       alt={car.name} 
                       fill 
-                      className="object-cover"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                       sizes="(max-width: 768px) 100vw, 50vw"
+                      priority
                     />
+                    {/* Click indicator for mobile */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full p-3">
+                        <i className="fas fa-expand text-gray-700 text-xl"></i>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 
-                {/* Additional Images */}
+                {/* Additional Images - Better mobile grid */}
                 {car.images && car.images.length > 1 && (
-                  <div className="bg-white rounded-2xl shadow-xl p-6">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4">صور إضافية</h3>
-                    <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white rounded-2xl shadow-xl p-4 md:p-6">
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-4">صور إضافية</h3>
+                    <div className="image-gallery-mobile">
                       {car.images.slice(1).map((image, index) => (
-                        <div key={index} className="h-32 relative rounded-lg overflow-hidden">
+                        <div 
+                          key={index} 
+                          className="h-24 md:h-32 relative rounded-lg overflow-hidden group cursor-pointer mobile-image-container"
+                          onClick={() => setSelectedImageIndex(index + 1)}
+                        >
                           <Image 
                             src={image} 
                             alt={`${car.name} ${index + 2}`} 
                             fill 
-                            className="object-cover hover:scale-105 transition-transform duration-300"
-                            sizes="(max-width: 768px) 50vw, 25vw"
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                            sizes="(max-width: 768px) 33vw, 25vw"
                           />
                         </div>
                       ))}
@@ -208,20 +224,28 @@ export default function CarDetailsPage() {
                   </div>
                 )}
                 
-                {/* Show all images if more than 1 */}
+                {/* All Images Gallery - Improved mobile layout */}
                 {car.images && car.images.length > 1 && (
-                  <div className="bg-white rounded-2xl shadow-xl p-6">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4">جميع الصور ({car.images.length})</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="bg-white rounded-2xl shadow-xl p-4 md:p-6">
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-4">جميع الصور ({car.images.length})</h3>
+                    <div className="image-gallery-mobile">
                       {car.images.map((image, index) => (
-                        <div key={index} className="h-24 relative rounded-lg overflow-hidden">
+                        <div 
+                          key={index} 
+                          className="h-20 md:h-24 relative rounded-lg overflow-hidden group cursor-pointer mobile-image-container"
+                          onClick={() => setSelectedImageIndex(index)}
+                        >
                           <Image 
                             src={image} 
                             alt={`${car.name} ${index + 1}`} 
                             fill 
-                            className="object-cover hover:scale-105 transition-transform duration-300"
-                            sizes="(max-width: 768px) 33vw, 20vw"
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                            sizes="(max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
                           />
+                          {/* Image number indicator */}
+                          <div className="absolute top-1 right-1 bg-black/50 text-white text-xs px-1.5 py-0.5 rounded-full">
+                            {index + 1}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -230,12 +254,12 @@ export default function CarDetailsPage() {
               </div>
 
               {/* Car Information */}
-              <div className="space-y-8">
+              <div className="space-y-6 md:space-y-8">
                 
                 {/* Price Section */}
-                <div className="bg-white rounded-2xl shadow-xl p-8">
+                <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
                   <div className="text-center mb-6">
-                    <div className="text-4xl font-bold text-green-600 mb-2">
+                    <div className="text-3xl md:text-4xl font-bold text-green-600 mb-2">
                       {car.price.toLocaleString()} ريال
                     </div>
                     <p className="text-gray-600">السعر المطلوب</p>
@@ -245,7 +269,7 @@ export default function CarDetailsPage() {
                     <div className="space-y-3">
                       <a 
                         href="tel:+966501234567"
-                        className="block bg-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                        className="block bg-blue-600 text-white py-3 md:py-4 px-4 md:px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm md:text-base"
                       >
                         <i className="fas fa-phone ml-2"></i>
                         اتصل بفريق المبيعات
@@ -254,7 +278,7 @@ export default function CarDetailsPage() {
                         href="https://wa.me/966501234567"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block bg-green-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                        className="block bg-green-600 text-white py-3 md:py-4 px-4 md:px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors text-sm md:text-base"
                       >
                         <i className="fab fa-whatsapp ml-2"></i>
                         واتساب فريق المبيعات
@@ -264,10 +288,10 @@ export default function CarDetailsPage() {
                 </div>
 
                 {/* Car Specifications */}
-                <div className="bg-white rounded-2xl shadow-xl p-8">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-6">مواصفات السيارة</h3>
+                <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-6">مواصفات السيارة</h3>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     <div className="space-y-4">
                       <div className="flex justify-between items-center py-3 border-b border-gray-200">
                         <span className="text-gray-600">الماركة</span>
@@ -335,15 +359,15 @@ export default function CarDetailsPage() {
                 </div>
 
                 {/* Car Description */}
-                <div className="bg-white rounded-2xl shadow-xl p-8">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-6">وصف السيارة</h3>
+                <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-6">وصف السيارة</h3>
                   {car.description ? (
-                    <p className="text-gray-700 leading-relaxed text-lg">
+                    <p className="text-gray-700 leading-relaxed text-base md:text-lg">
                       {car.description}
                     </p>
                   ) : (
-                    <div className="text-center py-8">
-                      <div className="text-gray-400 text-4xl mb-4">
+                    <div className="text-center py-6 md:py-8">
+                      <div className="text-gray-400 text-3xl md:text-4xl mb-4">
                         <i className="fas fa-file-alt"></i>
                       </div>
                       <p className="text-gray-600">لا يوجد وصف متاح للسيارة</p>
@@ -359,6 +383,63 @@ export default function CarDetailsPage() {
           </div>
         </div>
       </section>
+
+      {/* Image Modal for Mobile */}
+      {selectedImageIndex !== null && car && (
+        <div 
+          className="image-modal-mobile"
+          onClick={() => setSelectedImageIndex(null)}
+        >
+          <div className="image-modal-content">
+            <button
+              onClick={() => setSelectedImageIndex(null)}
+              className="absolute top-4 right-4 z-10 bg-white/20 hover:bg-white/30 text-white rounded-full p-3 transition-colors"
+            >
+              <i className="fas fa-times text-xl"></i>
+            </button>
+            
+            <div className="relative h-96 md:h-[70vh] w-full">
+              <Image
+                src={car.images[selectedImageIndex] || car.imageUrl || '/default-car.jpg'}
+                alt={`${car.name} ${selectedImageIndex + 1}`}
+                fill
+                className="object-contain"
+                sizes="100vw"
+              />
+            </div>
+            
+            {/* Navigation arrows */}
+            {car.images.length > 1 && (
+              <>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedImageIndex(prev => prev === 0 ? car.images.length - 1 : (prev || 0) - 1);
+                  }}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white rounded-full p-3 transition-colors"
+                >
+                  <i className="fas fa-chevron-right text-xl"></i>
+                </button>
+                
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedImageIndex(prev => prev === car.images.length - 1 ? 0 : (prev || 0) + 1);
+                  }}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white rounded-full p-3 transition-colors"
+                >
+                  <i className="fas fa-chevron-left text-xl"></i>
+                </button>
+              </>
+            )}
+            
+            {/* Image counter */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white/20 text-white px-4 py-2 rounded-full text-sm">
+              {selectedImageIndex + 1} / {car.images.length}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
