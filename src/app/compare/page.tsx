@@ -134,15 +134,15 @@ export default function ComparePage() {
       <Header />
 
       {/* Page Header */}
-      <section className="bg-white shadow-md py-12">
+      <section className="bg-white shadow-md py-6 md:py-12">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-6 md:mb-8">
+            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">
               <i className="fas fa-balance-scale text-blue-600 ml-2"></i>
               مقارنة السيارات
             </h1>
-            <p className="text-gray-600 text-lg">قارن بين السيارات المختلفة لتتخذ القرار الأمثل</p>
-            <div className="mt-4 text-sm text-gray-500">
+            <p className="text-gray-600 text-base md:text-lg">قارن بين السيارات المختلفة لتتخذ القرار الأمثل</p>
+            <div className="mt-3 md:mt-4 text-xs md:text-sm text-gray-500">
               يمكنك مقارنة حتى 4 سيارات في نفس الوقت
             </div>
           </div>
@@ -151,32 +151,33 @@ export default function ComparePage() {
 
       {/* Selected Cars for Comparison */}
       {selectedCars.length > 0 && (
-        <section className="py-8 bg-blue-50 border-b">
+        <section className="py-6 md:py-8 bg-blue-50 border-b">
           <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-blue-800 mb-6 text-center">
+            <h2 className="text-xl md:text-2xl font-bold text-blue-800 mb-4 md:mb-6 text-center">
               السيارات المختارة للمقارنة ({selectedCars.length}/4)
             </h2>
-            <div className="grid grid-cols-2 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {selectedCars.map((car) => (
-                <div key={car.id} className="bg-white rounded-lg shadow-md overflow-hidden relative">
+                <div key={car.id} className="bg-white rounded-xl shadow-lg overflow-hidden relative hover:shadow-xl transition-all duration-300">
                   <button
                     onClick={() => removeFromComparison(car.id)}
-                    className="absolute top-2 left-2 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors z-10"
+                    className="absolute top-3 left-3 bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors z-10 shadow-lg"
                   >
-                    <i className="fas fa-times text-xs"></i>
+                    <i className="fas fa-times text-sm"></i>
                   </button>
-                  <div className="h-32 relative">
+                  <div className="h-40 md:h-48 relative">
                     <Image
                       src={car.imageUrl || '/default-car.jpg'}
                       alt={car.name}
                       fill
                       className="object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-bold text-gray-800 mb-1 text-sm truncate">{car.name}</h3>
-                    <p className="text-gray-600 text-xs mb-2">{getBrandName(car.brand)} • {car.year}</p>
-                    <div className="text-green-600 font-bold text-sm">{car.price.toLocaleString()} ريال</div>
+                  <div className="p-4 md:p-5">
+                    <h3 className="font-bold text-gray-800 mb-2 text-sm md:text-base truncate">{car.name}</h3>
+                    <p className="text-gray-600 text-xs md:text-sm mb-2">{getBrandName(car.brand)} • {car.year}</p>
+                    <div className="text-green-600 font-bold text-sm md:text-base">{car.price.toLocaleString()} ريال</div>
                   </div>
                 </div>
               ))}
@@ -186,7 +187,7 @@ export default function ComparePage() {
               <div className="text-center mt-6">
                 <button
                   onClick={() => document.getElementById('comparison-table')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   <i className="fas fa-arrow-down ml-2"></i>
                   عرض المقارنة التفصيلية
@@ -198,67 +199,68 @@ export default function ComparePage() {
       )}
 
       {/* Car Selection */}
-      <section className="py-12">
+      <section className="py-6 md:py-12">
         <div className="container mx-auto px-4">
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">اختر السيارات للمقارنة</h2>
-            <div className="max-w-md">
+          <div className="mb-6 md:mb-8">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">اختر السيارات للمقارنة</h2>
+            <div className="max-w-md mx-auto md:mx-0">
               <input
                 type="text"
                 placeholder="ابحث عن سيارة..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
               />
             </div>
           </div>
 
           {filteredCars.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-gray-400 text-6xl mb-4">
+            <div className="text-center py-8 md:py-12">
+              <div className="text-gray-400 text-4xl md:text-6xl mb-4">
                 <i className="fas fa-search"></i>
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">لا توجد سيارات متاحة</h3>
-              <p className="text-gray-600">جرب تغيير كلمات البحث</p>
+              <h3 className="text-lg md:text-xl font-semibold text-gray-800 mb-2">لا توجد سيارات متاحة</h3>
+              <p className="text-gray-600 text-sm md:text-base">جرب تغيير كلمات البحث</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
               {filteredCars.map((car) => {
                 const isSelected = selectedCars.find(c => c.id === car.id);
                 const canAdd = selectedCars.length < 4;
 
                 return (
-                  <div key={car.id} className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 ${isSelected ? 'ring-2 ring-blue-500' : ''}`}>
-                    <div className="h-48 relative">
+                  <div key={car.id} className={`bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl transform hover:scale-105 ${isSelected ? 'ring-2 ring-blue-500' : ''}`}>
+                    <div className="h-48 md:h-56 relative">
                       <Image
                         src={car.imageUrl || '/default-car.jpg'}
                         alt={car.name}
                         fill
                         className="object-cover"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                       />
                       {isSelected && (
-                        <div className="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                        <div className="absolute top-3 right-3 bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                           <i className="fas fa-check ml-1"></i>
                           مختارة
                         </div>
                       )}
                     </div>
-                    <div className="p-4">
-                      <h3 className="text-lg font-bold text-gray-800 mb-2">{car.name}</h3>
-                      <p className="text-gray-600 mb-2">{getBrandName(car.brand)} • {car.year}</p>
+                    <div className="p-4 md:p-5">
+                      <h3 className="text-base md:text-lg font-bold text-gray-800 mb-2 line-clamp-2">{car.name}</h3>
+                      <p className="text-gray-600 text-sm mb-2">{getBrandName(car.brand)} • {car.year}</p>
                       <div className="text-green-600 font-bold text-lg mb-4">{car.price.toLocaleString()} ريال</div>
                       
-                      <div className="flex gap-2">
+                      <div className="flex flex-col sm:flex-row gap-2">
                         <a
                           href={`/cars/${car.id}`}
-                          className="flex-1 bg-gray-100 text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-200 transition-colors text-center text-sm"
+                          className="flex-1 bg-gray-100 text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-200 transition-colors text-center text-sm font-medium"
                         >
                           التفاصيل
                         </a>
                         {isSelected ? (
                           <button
                             onClick={() => removeFromComparison(car.id)}
-                            className="flex-1 bg-red-500 text-white py-2 px-3 rounded-lg hover:bg-red-600 transition-colors text-sm"
+                            className="flex-1 bg-red-500 text-white py-2 px-3 rounded-lg hover:bg-red-600 transition-colors text-sm font-medium"
                           >
                             <i className="fas fa-minus ml-1"></i>
                             إزالة
@@ -267,7 +269,7 @@ export default function ComparePage() {
                           <button
                             onClick={() => addToComparison(car)}
                             disabled={!canAdd}
-                            className={`flex-1 py-2 px-3 rounded-lg transition-colors text-sm ${
+                            className={`flex-1 py-2 px-3 rounded-lg transition-colors text-sm font-medium ${
                               canAdd 
                                 ? 'bg-blue-500 text-white hover:bg-blue-600' 
                                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
@@ -289,22 +291,22 @@ export default function ComparePage() {
 
       {/* Comparison Table */}
       {selectedCars.length >= 2 && (
-        <section id="comparison-table" className="py-12 bg-white">
+        <section id="comparison-table" className="py-6 md:py-12 bg-white">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 md:mb-8 text-center">
               <i className="fas fa-table text-blue-600 ml-2"></i>
               مقارنة تفصيلية
             </h2>
             
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse bg-white rounded-lg shadow-lg overflow-hidden">
+              <table className="w-full border-collapse bg-white rounded-lg shadow-lg overflow-hidden min-w-[600px]">
                 <thead>
                   <tr className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
-                    <th className="p-4 text-right font-semibold">المواصفات</th>
+                    <th className="p-3 md:p-4 text-right font-semibold text-sm md:text-base">المواصفات</th>
                     {selectedCars.map((car) => (
-                      <th key={car.id} className="p-4 text-center font-semibold min-w-[200px]">
-                        <div className="space-y-2">
-                          <div className="text-sm font-medium">{car.name}</div>
+                      <th key={car.id} className="p-3 md:p-4 text-center font-semibold min-w-[150px] md:min-w-[200px]">
+                        <div className="space-y-1 md:space-y-2">
+                          <div className="text-xs md:text-sm font-medium">{car.name}</div>
                           <div className="text-xs opacity-90">{getBrandName(car.brand)} • {car.year}</div>
                         </div>
                       </th>
@@ -314,15 +316,16 @@ export default function ComparePage() {
                 <tbody>
                   {/* الصور */}
                   <tr className="border-b border-gray-200">
-                    <td className="p-4 font-semibold text-gray-700 bg-gray-50">الصورة</td>
+                    <td className="p-3 md:p-4 font-semibold text-gray-700 bg-gray-50 text-sm md:text-base">الصورة</td>
                     {selectedCars.map((car) => (
-                      <td key={car.id} className="p-4 text-center">
-                        <div className="w-20 h-20 relative mx-auto rounded-lg overflow-hidden">
+                      <td key={car.id} className="p-3 md:p-4 text-center">
+                        <div className="w-16 h-16 md:w-20 md:h-20 relative mx-auto rounded-lg overflow-hidden">
                           <Image
                             src={car.imageUrl || '/default-car.jpg'}
                             alt={car.name}
                             fill
                             className="object-cover"
+                            sizes="80px"
                           />
                         </div>
                       </td>
@@ -331,10 +334,10 @@ export default function ComparePage() {
 
                   {/* السعر */}
                   <tr className="border-b border-gray-200">
-                    <td className="p-4 font-semibold text-gray-700 bg-gray-50">السعر</td>
+                    <td className="p-3 md:p-4 font-semibold text-gray-700 bg-gray-50 text-sm md:text-base">السعر</td>
                     {selectedCars.map((car) => (
-                      <td key={car.id} className="p-4 text-center">
-                        <div className="text-lg font-bold text-green-600">
+                      <td key={car.id} className="p-3 md:p-4 text-center">
+                        <div className="text-sm md:text-lg font-bold text-green-600">
                           {car.price.toLocaleString()} ريال
                         </div>
                       </td>
@@ -343,9 +346,9 @@ export default function ComparePage() {
 
                   {/* سنة الصنع */}
                   <tr className="border-b border-gray-200">
-                    <td className="p-4 font-semibold text-gray-700 bg-gray-50">سنة الصنع</td>
+                    <td className="p-3 md:p-4 font-semibold text-gray-700 bg-gray-50 text-sm md:text-base">سنة الصنع</td>
                     {selectedCars.map((car) => (
-                      <td key={car.id} className="p-4 text-center font-medium">
+                      <td key={car.id} className="p-3 md:p-4 text-center font-medium text-sm md:text-base">
                         {car.year}
                       </td>
                     ))}
@@ -353,9 +356,9 @@ export default function ComparePage() {
 
                   {/* المسافة المقطوعة */}
                   <tr className="border-b border-gray-200">
-                    <td className="p-4 font-semibold text-gray-700 bg-gray-50">المسافة المقطوعة</td>
+                    <td className="p-3 md:p-4 font-semibold text-gray-700 bg-gray-50 text-sm md:text-base">المسافة المقطوعة</td>
                     {selectedCars.map((car) => (
-                      <td key={car.id} className="p-4 text-center font-medium">
+                      <td key={car.id} className="p-3 md:p-4 text-center font-medium text-sm md:text-base">
                         {car.mileage ? `${car.mileage.toLocaleString()} كم` : 'غير محدد'}
                       </td>
                     ))}
@@ -363,9 +366,9 @@ export default function ComparePage() {
 
                   {/* نوع الوقود */}
                   <tr className="border-b border-gray-200">
-                    <td className="p-4 font-semibold text-gray-700 bg-gray-50">نوع الوقود</td>
+                    <td className="p-3 md:p-4 font-semibold text-gray-700 bg-gray-50 text-sm md:text-base">نوع الوقود</td>
                     {selectedCars.map((car) => (
-                      <td key={car.id} className="p-4 text-center font-medium">
+                      <td key={car.id} className="p-3 md:p-4 text-center font-medium text-sm md:text-base">
                         {getFuelType(car.fuelType)}
                       </td>
                     ))}
@@ -373,9 +376,9 @@ export default function ComparePage() {
 
                   {/* ناقل الحركة */}
                   <tr className="border-b border-gray-200">
-                    <td className="p-4 font-semibold text-gray-700 bg-gray-50">ناقل الحركة</td>
+                    <td className="p-3 md:p-4 font-semibold text-gray-700 bg-gray-50 text-sm md:text-base">ناقل الحركة</td>
                     {selectedCars.map((car) => (
-                      <td key={car.id} className="p-4 text-center font-medium">
+                      <td key={car.id} className="p-3 md:p-4 text-center font-medium text-sm md:text-base">
                         {getTransmission(car.transmission)}
                       </td>
                     ))}
@@ -383,9 +386,9 @@ export default function ComparePage() {
 
                   {/* اللون */}
                   <tr className="border-b border-gray-200">
-                    <td className="p-4 font-semibold text-gray-700 bg-gray-50">اللون</td>
+                    <td className="p-3 md:p-4 font-semibold text-gray-700 bg-gray-50 text-sm md:text-base">اللون</td>
                     {selectedCars.map((car) => (
-                      <td key={car.id} className="p-4 text-center font-medium">
+                      <td key={car.id} className="p-3 md:p-4 text-center font-medium text-sm md:text-base">
                         {car.color || 'غير محدد'}
                       </td>
                     ))}
@@ -393,10 +396,10 @@ export default function ComparePage() {
 
                   {/* الحالة */}
                   <tr className="border-b border-gray-200">
-                    <td className="p-4 font-semibold text-gray-700 bg-gray-50">الحالة</td>
+                    <td className="p-3 md:p-4 font-semibold text-gray-700 bg-gray-50 text-sm md:text-base">الحالة</td>
                     {selectedCars.map((car) => (
-                      <td key={car.id} className="p-4 text-center">
-                        <span className="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                      <td key={car.id} className="p-3 md:p-4 text-center">
+                        <span className="inline-block bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs md:text-sm font-medium">
                           متاحة للبيع
                         </span>
                       </td>
@@ -405,19 +408,19 @@ export default function ComparePage() {
 
                   {/* الإجراءات */}
                   <tr>
-                    <td className="p-4 font-semibold text-gray-700 bg-gray-50">الإجراءات</td>
+                    <td className="p-3 md:p-4 font-semibold text-gray-700 bg-gray-50 text-sm md:text-base">الإجراءات</td>
                     {selectedCars.map((car) => (
-                      <td key={car.id} className="p-4 text-center">
+                      <td key={car.id} className="p-3 md:p-4 text-center">
                         <div className="space-y-2">
                           <a
                             href={`/cars/${car.id}`}
-                            className="block bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                            className="block bg-blue-600 text-white py-2 px-3 rounded-lg hover:bg-blue-700 transition-colors text-xs md:text-sm font-medium"
                           >
                             عرض التفاصيل
                           </a>
                           <button
                             onClick={() => removeFromComparison(car.id)}
-                            className="block w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors text-sm"
+                            className="block w-full bg-red-500 text-white py-2 px-3 rounded-lg hover:bg-red-600 transition-colors text-xs md:text-sm font-medium"
                           >
                             إزالة من المقارنة
                           </button>
@@ -433,43 +436,43 @@ export default function ComparePage() {
       )}
 
       {/* Tips Section */}
-      <section className="py-12 bg-gray-100">
+      <section className="py-6 md:py-12 bg-gray-100">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">نصائح للمقارنة</h2>
+          <div className="text-center mb-6 md:mb-8">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">نصائح للمقارنة</h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-md text-center">
-              <div className="text-blue-600 text-3xl mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="bg-white p-4 md:p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
+              <div className="text-blue-600 text-2xl md:text-3xl mb-3 md:mb-4">
                 <i className="fas fa-dollar-sign"></i>
               </div>
-              <h3 className="font-bold text-gray-800 mb-2">السعر</h3>
-              <p className="text-gray-600 text-sm">قارن الأسعار واختر الأنسب لميزانيتك</p>
+              <h3 className="font-bold text-gray-800 mb-2 text-sm md:text-base">السعر</h3>
+              <p className="text-gray-600 text-xs md:text-sm">قارن الأسعار واختر الأنسب لميزانيتك</p>
             </div>
             
-            <div className="bg-white p-6 rounded-lg shadow-md text-center">
-              <div className="text-green-600 text-3xl mb-4">
+            <div className="bg-white p-4 md:p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
+              <div className="text-green-600 text-2xl md:text-3xl mb-3 md:mb-4">
                 <i className="fas fa-tachometer-alt"></i>
               </div>
-              <h3 className="font-bold text-gray-800 mb-2">المسافة المقطوعة</h3>
-              <p className="text-gray-600 text-sm">كلما قلت المسافة كانت السيارة أفضل</p>
+              <h3 className="font-bold text-gray-800 mb-2 text-sm md:text-base">المسافة المقطوعة</h3>
+              <p className="text-gray-600 text-xs md:text-sm">كلما قلت المسافة كانت السيارة أفضل</p>
             </div>
             
-            <div className="bg-white p-6 rounded-lg shadow-md text-center">
-              <div className="text-purple-600 text-3xl mb-4">
+            <div className="bg-white p-4 md:p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
+              <div className="text-purple-600 text-2xl md:text-3xl mb-3 md:mb-4">
                 <i className="fas fa-gas-pump"></i>
               </div>
-              <h3 className="font-bold text-gray-800 mb-2">نوع الوقود</h3>
-              <p className="text-gray-600 text-sm">اختر نوع الوقود المناسب لاستخدامك</p>
+              <h3 className="font-bold text-gray-800 mb-2 text-sm md:text-base">نوع الوقود</h3>
+              <p className="text-gray-600 text-xs md:text-sm">اختر نوع الوقود المناسب لاستخدامك</p>
             </div>
             
-            <div className="bg-white p-6 rounded-lg shadow-md text-center">
-              <div className="text-orange-600 text-3xl mb-4">
+            <div className="bg-white p-4 md:p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
+              <div className="text-orange-600 text-2xl md:text-3xl mb-3 md:mb-4">
                 <i className="fas fa-calendar-alt"></i>
               </div>
-              <h3 className="font-bold text-gray-800 mb-2">سنة الصنع</h3>
-              <p className="text-gray-600 text-sm">السيارات الأحدث تحتوي على تقنيات أفضل</p>
+              <h3 className="font-bold text-gray-800 mb-2 text-sm md:text-base">سنة الصنع</h3>
+              <p className="text-gray-600 text-xs md:text-sm">السيارات الأحدث تحتوي على تقنيات أفضل</p>
             </div>
           </div>
         </div>

@@ -224,12 +224,12 @@ export default function SellCarPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-8 md:py-16">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-6 md:py-16">
         <div className="container-custom text-center">
-          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">
+          <h1 className="text-xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">
             بيع سيارتك معنا
           </h1>
-          <p className="text-base md:text-xl text-blue-100 max-w-2xl mx-auto px-4">
+          <p className="text-sm md:text-xl text-blue-100 max-w-2xl mx-auto px-4">
             املأ النموذج أدناه لعرض سيارتك على موقعنا والوصول إلى آلاف المشترين المحتملين
           </p>
         </div>
@@ -237,13 +237,13 @@ export default function SellCarPage() {
 
       {/* Tab Navigation */}
       {/* تم حذف التبويب الثاني */}
-      <div className="container-custom py-4 md:py-8">
+      <div className="container-custom py-3 md:py-8">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-lg shadow-md p-2 mb-6 md:mb-8">
+          <div className="bg-white rounded-lg shadow-md p-2 mb-4 md:mb-8">
             <div className="flex">
               <button
                 onClick={() => setActiveTab('form')}
-                className={`flex-1 py-2 md:py-3 px-4 md:px-6 rounded-lg font-medium transition-all duration-300 bg-blue-600 text-white text-sm md:text-base`}
+                className={`flex-1 py-2 md:py-3 px-3 md:px-6 rounded-lg font-medium transition-all duration-300 bg-blue-600 text-white text-xs md:text-base`}
               >
                 إضافة سيارة للبيع
               </button>
@@ -253,19 +253,19 @@ export default function SellCarPage() {
       </div>
 
       {/* Content */}
-      <div className="container-custom pb-12">
+      <div className="container-custom pb-8 md:pb-12">
         {/* تم حذف سكشن السيارات المعروضة للبيع */}
         {/* Form Section فقط */}
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl p-4 md:p-8">
-            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-8">
               {/* Basic Car Information */}
               <div className="space-y-4 md:space-y-6">
-                <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 text-center">
+                <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 text-center">
                   معلومات السيارة الأساسية
                 </h2>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       عنوان السيارة *
@@ -378,7 +378,7 @@ export default function SellCarPage() {
                       value={formData.year}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="">اختر السنة</option>
                       {Array.from({ length: 25 }, (_, i) => 2025 - i).map(year => (
@@ -397,7 +397,7 @@ export default function SellCarPage() {
                       value={formData.price}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="مثال: 50000"
                     />
                   </div>
@@ -412,7 +412,7 @@ export default function SellCarPage() {
                       value={formData.mileage}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="مثال: 50000"
                     />
                   </div>
@@ -426,7 +426,7 @@ export default function SellCarPage() {
                       value={formData.fuelType}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="">اختر نوع الوقود</option>
                       <option value="gasoline">بنزين</option>
@@ -445,7 +445,7 @@ export default function SellCarPage() {
                       value={formData.transmission}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="">اختر ناقل الحركة</option>
                       <option value="automatic">أوتوماتيك</option>
@@ -463,7 +463,7 @@ export default function SellCarPage() {
                       value={formData.color}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="مثال: اسود"
                     />
                   </div>
@@ -479,19 +479,19 @@ export default function SellCarPage() {
                     onChange={handleInputChange}
                     required
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="اكتب وصفاً مفصلاً للسيارة، الحالة، المميزات، العيوب إن وجدت..."
                   />
                 </div>
               </div>
 
               {/* Contact Information */}
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+              <div className="space-y-4 md:space-y-6">
+                <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 text-center">
                   معلومات التواصل
                 </h2>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       الاسم الكامل *
@@ -502,7 +502,7 @@ export default function SellCarPage() {
                       value={formData.contactName}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="الاسم الكامل"
                     />
                   </div>
@@ -519,7 +519,7 @@ export default function SellCarPage() {
                           value={formData.phoneNumber}
                           onChange={handleInputChange}
                           required
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           placeholder={selectedCountry?.placeholder || '5xxxxxxxx'}
                           dir="ltr"
                         />
@@ -529,7 +529,7 @@ export default function SellCarPage() {
                           name="countryCode"
                           value={formData.countryCode}
                           onChange={handleInputChange}
-                          className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white min-w-[140px]"
+                          className="w-full px-2 md:px-3 py-2 md:py-3 text-xs md:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white min-w-[120px] md:min-w-[140px]"
                         >
                           {gulfCountries.map((country) => (
                             <option key={country.code} value={country.code}>
@@ -553,7 +553,7 @@ export default function SellCarPage() {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="example@email.com"
                     />
                   </div>
@@ -568,7 +568,7 @@ export default function SellCarPage() {
                       value={formData.location}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="مثال: الرياض"
                     />
                   </div>
@@ -576,8 +576,8 @@ export default function SellCarPage() {
               </div>
 
               {/* Images Upload */}
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+              <div className="space-y-4 md:space-y-6">
+                <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 text-center">
                   صور السيارة
                 </h2>
                 
@@ -585,7 +585,7 @@ export default function SellCarPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     رفع صور السيارة (اختياري) - يمكنك رفع عدة صور
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 md:p-6 text-center hover:border-blue-500 transition-colors">
                     <input
                       type="file"
                       multiple
@@ -596,9 +596,9 @@ export default function SellCarPage() {
                     />
                     <label htmlFor="image-upload" className="cursor-pointer">
                       <div className="space-y-2">
-                        <i className="fas fa-cloud-upload-alt text-3xl text-gray-400"></i>
-                        <p className="text-gray-600">اضغط هنا لرفع الصور أو اسحبها إلى هنا</p>
-                        <p className="text-sm text-gray-500">يمكنك رفع عدة صور في نفس الوقت - جميع الصور ستظهر في الإعلان</p>
+                        <i className="fas fa-cloud-upload-alt text-2xl md:text-3xl text-gray-400"></i>
+                        <p className="text-gray-600 text-sm md:text-base">اضغط هنا لرفع الصور أو اسحبها إلى هنا</p>
+                        <p className="text-xs md:text-sm text-gray-500">يمكنك رفع عدة صور في نفس الوقت - جميع الصور ستظهر في الإعلان</p>
                         <p className="text-xs text-blue-600 font-medium">✓ نظام الصور المتعددة مُفعّل</p>
                       </div>
                     </label>
@@ -617,22 +617,22 @@ export default function SellCarPage() {
                         جميع الصور ستظهر في الإعلان
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                       {previewImages.map((url, index) => (
                         <div key={index} className="relative group">
                           <img
                             src={url}
                             alt={`Preview ${index + 1}`}
-                            className="w-full h-32 object-cover rounded-lg"
+                            className="w-full h-24 md:h-32 object-cover rounded-lg"
                           />
                           <button
                             type="button"
                             onClick={() => removeImage(index)}
-                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition-colors"
+                            className="absolute top-1 right-1 md:top-2 md:right-2 bg-red-500 text-white rounded-full w-5 h-5 md:w-6 md:h-6 flex items-center justify-center text-xs md:text-sm hover:bg-red-600 transition-colors"
                           >
                             ×
                           </button>
-                          <div className="absolute bottom-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-xs">
+                          <div className="absolute bottom-1 left-1 md:bottom-2 md:left-2 bg-black/50 text-white px-1 md:px-2 py-0.5 md:py-1 rounded text-xs">
                             {index + 1}
                           </div>
                         </div>
@@ -643,15 +643,15 @@ export default function SellCarPage() {
               </div>
 
               {/* Submit Button */}
-              <div className="text-center pt-8">
+              <div className="text-center pt-6 md:pt-8">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-12 py-4 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 md:px-12 py-3 md:py-4 rounded-lg font-semibold text-sm md:text-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
                 >
                   {isSubmitting ? (
                     <div className="flex items-center space-x-2 space-x-reverse">
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <div className="w-4 h-4 md:w-5 md:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                       <span>جاري الإرسال...</span>
                     </div>
                   ) : (

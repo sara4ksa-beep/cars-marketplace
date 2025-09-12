@@ -346,42 +346,48 @@ export default function CarsPage() {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
               {filteredCars.map((car) => (
-                <div key={car.id} className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
-                  <div className="relative h-32 md:h-48">
+                <div key={car.id} className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  <div className="relative h-48 md:h-56">
                     <Image 
                       src={car.imageUrl || '/default-car.jpg'} 
                       alt={car.name} 
                       fill
                       className="object-cover"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                     />
-                    <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-medium">
+                    <div className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
                       جديد
                     </div>
                   </div>
-                  <div className="p-3">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs md:text-sm text-blue-600 font-medium">
+                  <div className="p-4 md:p-5">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-sm md:text-base text-blue-600 font-semibold bg-blue-50 px-3 py-1 rounded-full">
                         {getBrandName(car.brand)}
                       </span>
-                      <span className="text-sm md:text-xl font-bold text-green-600">
+                      <span className="text-lg md:text-2xl font-bold text-green-600">
                         {car.price.toLocaleString()}
                       </span>
                     </div>
-                    <h3 className="text-xs md:text-lg font-semibold text-gray-800 mb-2 line-clamp-2 leading-tight">
+                    <h3 className="text-base md:text-lg font-bold text-gray-800 mb-3 line-clamp-2 leading-tight">
                       {car.name}
                     </h3>
                     
-                    {/* Mobile: Essential info only */}
-                    <div className="md:hidden text-xs text-gray-500 mb-3">
-                      <div className="flex justify-between">
-                        <span>{car.year}</span>
-                        <span>{car.fuelType === 'gasoline' ? 'بنزين' : 
-                         car.fuelType === 'diesel' ? 'ديزل' : 
-                         car.fuelType === 'hybrid' ? 'هجين' : 
-                         car.fuelType === 'electric' ? 'كهربائي' : car.fuelType || 'غير محدد'}</span>
+                    {/* Mobile: Enhanced info display */}
+                    <div className="md:hidden space-y-2 mb-4">
+                      <div className="flex justify-between items-center bg-gray-50 p-2 rounded-lg">
+                        <span className="text-sm text-gray-600">السنة</span>
+                        <span className="font-semibold text-gray-800">{car.year}</span>
+                      </div>
+                      <div className="flex justify-between items-center bg-gray-50 p-2 rounded-lg">
+                        <span className="text-sm text-gray-600">الوقود</span>
+                        <span className="font-semibold text-gray-800">
+                          {car.fuelType === 'gasoline' ? 'بنزين' : 
+                           car.fuelType === 'diesel' ? 'ديزل' : 
+                           car.fuelType === 'hybrid' ? 'هجين' : 
+                           car.fuelType === 'electric' ? 'كهربائي' : car.fuelType || 'غير محدد'}
+                        </span>
                       </div>
                     </div>
                     
@@ -410,7 +416,7 @@ export default function CarsPage() {
                         </div>
                       </div>
                     </div>
-                    <a href={`/cars/${car.id}`} className="block w-full bg-blue-600 text-white text-center py-2 px-3 rounded text-xs md:text-base font-medium hover:bg-blue-700 transition-colors">
+                    <a href={`/cars/${car.id}`} className="block w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center py-3 px-4 rounded-lg text-sm md:text-base font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl">
                       عرض التفاصيل
                     </a>
                   </div>
@@ -422,39 +428,67 @@ export default function CarsPage() {
       </section>
 
       {/* Enhanced Footer */}
-      <footer className="bg-gray-900 text-white py-8 md:py-12">
+      <footer className="bg-gray-900 text-white py-6 md:py-12">
         <div className="container mx-auto px-4">
-          <div className="text-center">
-            <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4">موقع السيارات</h3>
-            <p className="text-gray-400 mb-6 md:mb-8 text-base md:text-lg">أفضل موقع لبيع وشراء السيارات</p>
-            
-            {/* Enhanced Social Media */}
-            <div className="mb-6 md:mb-8">
-              <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-6">تابعنا على</h4>
-              <div className="flex justify-center space-x-4 md:space-x-6 space-x-reverse">
-                <a href="#" className="group bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 p-3 md:p-4 rounded-xl md:rounded-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
-                  <i className="fab fa-facebook-f text-white text-lg md:text-2xl group-hover:scale-110 transition-transform duration-300"></i>
-                </a>
-                <a href="#" className="group bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 p-3 md:p-4 rounded-xl md:rounded-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
-                  <i className="fab fa-twitter text-white text-lg md:text-2xl group-hover:scale-110 transition-transform duration-300"></i>
-                </a>
-                <a href="#" className="group bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 p-3 md:p-4 rounded-xl md:rounded-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
-                  <i className="fab fa-instagram text-white text-lg md:text-2xl group-hover:scale-110 transition-transform duration-300"></i>
-                </a>
-                <a href="#" className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 p-3 md:p-4 rounded-xl md:rounded-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
-                  <i className="fab fa-youtube text-white text-lg md:text-2xl group-hover:scale-110 transition-transform duration-300"></i>
-                </a>
-                <a href="#" className="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 p-3 md:p-4 rounded-xl md:rounded-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
-                  <i className="fab fa-whatsapp text-white text-lg md:text-2xl group-hover:scale-110 transition-transform duration-300"></i>
-                </a>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            {/* Brand Section */}
+            <div className="text-center md:text-right">
+              <h3 className="text-xl md:text-2xl font-bold mb-3 flex items-center justify-center md:justify-start">
+                <i className="fas fa-car text-blue-500 ml-2"></i>
+                موقع السيارات
+              </h3>
+              <p className="text-gray-400 text-sm md:text-base mb-4">أفضل موقع لبيع وشراء السيارات في الشرق الأوسط</p>
+              
+              {/* Contact Info */}
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center justify-center md:justify-start">
+                  <i className="fas fa-phone text-blue-500 ml-2"></i>
+                  <span>966+ 50 123 4567</span>
+                </div>
+                <div className="flex items-center justify-center md:justify-start">
+                  <i className="fas fa-envelope text-blue-500 ml-2"></i>
+                  <span>info@carsite.com</span>
+                </div>
               </div>
             </div>
             
-            {/* Contact Info */}
-            <div className="text-gray-400 text-sm">
-              <p>تواصل معنا: info@carsite.com | 966+ 50 123 4567</p>
-              <p className="mt-2">© 2024 موقع السيارات. جميع الحقوق محفوظة</p>
+            {/* Quick Links */}
+            <div className="text-center md:text-right">
+              <h4 className="text-lg font-semibold mb-4">روابط سريعة</h4>
+              <div className="space-y-2">
+                <a href="/cars" className="block text-gray-400 hover:text-white transition-colors text-sm">تصفح السيارات</a>
+                <a href="/sell-car" className="block text-gray-400 hover:text-white transition-colors text-sm">بيع سيارتك</a>
+                <a href="/compare" className="block text-gray-400 hover:text-white transition-colors text-sm">مقارنة السيارات</a>
+                <a href="/contact" className="block text-gray-400 hover:text-white transition-colors text-sm">اتصل بنا</a>
+              </div>
+            </div>
+            
+            {/* Social Media */}
+            <div className="text-center md:text-right">
+              <h4 className="text-lg font-semibold mb-4">تابعنا على</h4>
+              <div className="grid grid-cols-3 md:grid-cols-5 gap-3 max-w-xs mx-auto md:max-w-none">
+                <a href="#" className="group bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 p-3 rounded-xl transition-all duration-300 transform hover:scale-110">
+                  <i className="fab fa-facebook-f text-white text-lg group-hover:scale-110 transition-transform duration-300"></i>
+                </a>
+                <a href="#" className="group bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 p-3 rounded-xl transition-all duration-300 transform hover:scale-110">
+                  <i className="fab fa-twitter text-white text-lg group-hover:scale-110 transition-transform duration-300"></i>
+                </a>
+                <a href="#" className="group bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 p-3 rounded-xl transition-all duration-300 transform hover:scale-110">
+                  <i className="fab fa-instagram text-white text-lg group-hover:scale-110 transition-transform duration-300"></i>
+                </a>
+                <a href="#" className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 p-3 rounded-xl transition-all duration-300 transform hover:scale-110">
+                  <i className="fab fa-youtube text-white text-lg group-hover:scale-110 transition-transform duration-300"></i>
+                </a>
+                <a href="#" className="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 p-3 rounded-xl transition-all duration-300 transform hover:scale-110">
+                  <i className="fab fa-whatsapp text-white text-lg group-hover:scale-110 transition-transform duration-300"></i>
+                </a>
+              </div>
+            </div>
           </div>
+          
+          {/* Copyright */}
+          <div className="border-t border-gray-800 mt-6 pt-6 text-center">
+            <p className="text-gray-400 text-sm">© 2024 موقع السيارات. جميع الحقوق محفوظة</p>
           </div>
         </div>
       </footer>
