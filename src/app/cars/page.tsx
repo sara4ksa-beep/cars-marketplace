@@ -346,10 +346,10 @@ export default function CarsPage() {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6 lg:gap-8">
               {filteredCars.map((car) => (
-                <div key={car.id} className="card-hover bg-white rounded-xl overflow-hidden shadow-lg flex flex-col border border-blue-100 hover:border-blue-300">
-                  <div className="h-48 w-full relative">
+                <div key={car.id} className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+                  <div className="relative h-32 md:h-48">
                     <Image 
                       src={car.imageUrl || '/default-car.jpg'} 
                       alt={car.name} 
@@ -357,46 +357,62 @@ export default function CarsPage() {
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
-                    <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+                    <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-medium">
                       جديد
                     </div>
                   </div>
-                  <div className="p-6 flex-1 flex flex-col">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
+                  <div className="p-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs md:text-sm text-blue-600 font-medium">
                         {getBrandName(car.brand)}
                       </span>
-                      <span className="text-2xl font-bold text-green-600">
-                        {car.price.toLocaleString()} ريال
+                      <span className="text-sm md:text-xl font-bold text-green-600">
+                        {car.price.toLocaleString()}
                       </span>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-800 mb-4">{car.name}</h3>
-                    <ul className="space-y-2 mb-6">
-                      <li className="flex items-center text-gray-600">
-                        <i className="fas fa-calendar text-gray-400 ml-2"></i>
-                        سنة: {car.year}
-                      </li>
-                      <li className="flex items-center text-gray-600">
-                        <i className="fas fa-gas-pump text-gray-400 ml-2"></i>
-                        نوع الوقود: {car.fuelType === 'gasoline' ? 'بنزين' : 
+                    <h3 className="text-xs md:text-lg font-semibold text-gray-800 mb-2 line-clamp-2 leading-tight">
+                      {car.name}
+                    </h3>
+                    
+                    {/* Mobile: Essential info only */}
+                    <div className="md:hidden text-xs text-gray-500 mb-3">
+                      <div className="flex justify-between">
+                        <span>{car.year}</span>
+                        <span>{car.fuelType === 'gasoline' ? 'بنزين' : 
                          car.fuelType === 'diesel' ? 'ديزل' : 
                          car.fuelType === 'hybrid' ? 'هجين' : 
-                         car.fuelType === 'electric' ? 'كهربائي' : car.fuelType || 'غير محدد'}
-                      </li>
-                      <li className="flex items-center text-gray-600">
-                        <i className="fas fa-cog text-gray-400 ml-2"></i>
-                        ناقل الحركة: {car.transmission === 'automatic' ? 'أوتوماتيك' : 
-                         car.transmission === 'manual' ? 'يدوي' : car.transmission || 'غير محدد'}
-                      </li>
-                      <li className="flex items-center text-gray-600">
-                        <i className="fas fa-tint text-gray-400 ml-2"></i>
-                        اللون: {car.color || 'غير محدد'}
-                      </li>
-                    </ul>
-                    <div className="flex gap-3 mt-auto">
-                      <a href={`/cars/${car.id}`} className="btn-primary flex-1 text-sm">عرض التفاصيل</a>
-                      <button className="btn-secondary text-sm">احجز الآن</button>
+                         car.fuelType === 'electric' ? 'كهربائي' : car.fuelType || 'غير محدد'}</span>
+                      </div>
                     </div>
+                    
+                    {/* Desktop: Show full details */}
+                    <div className="hidden md:block text-sm text-gray-600 mb-4">
+                      <div className="space-y-2">
+                        <div className="flex items-center">
+                          <i className="fas fa-calendar text-gray-400 ml-2 text-sm"></i>
+                          سنة: {car.year}
+                        </div>
+                        <div className="flex items-center">
+                          <i className="fas fa-gas-pump text-gray-400 ml-2 text-sm"></i>
+                          نوع الوقود: {car.fuelType === 'gasoline' ? 'بنزين' : 
+                           car.fuelType === 'diesel' ? 'ديزل' : 
+                           car.fuelType === 'hybrid' ? 'هجين' : 
+                           car.fuelType === 'electric' ? 'كهربائي' : car.fuelType || 'غير محدد'}
+                        </div>
+                        <div className="flex items-center">
+                          <i className="fas fa-cog text-gray-400 ml-2 text-sm"></i>
+                          ناقل الحركة: {car.transmission === 'automatic' ? 'أوتوماتيك' : 
+                           car.transmission === 'manual' ? 'يدوي' : car.transmission || 'غير محدد'}
+                        </div>
+                        <div className="flex items-center">
+                          <i className="fas fa-tint text-gray-400 ml-2 text-sm"></i>
+                          اللون: {car.color || 'غير محدد'}
+                        </div>
+                      </div>
+                    </div>
+                    <a href={`/cars/${car.id}`} className="block w-full bg-blue-600 text-white text-center py-2 px-3 rounded text-xs md:text-base font-medium hover:bg-blue-700 transition-colors">
+                      عرض التفاصيل
+                    </a>
                   </div>
                 </div>
               ))}
