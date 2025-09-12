@@ -32,22 +32,43 @@ interface AdminStats {
   approvedCars: number;
   rejectedCars: number;
   totalValue: number;
+  totalBookings: number;
+  pendingBookings: number;
+  completedBookings: number;
+}
+
+interface Booking {
+  id: number;
+  carId: number;
+  carName: string;
+  carPrice: number;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  message: string | null;
+  status: string;
+  createdAt: string;
 }
 
 export default function AdminPage() {
   const [pendingCars, setPendingCars] = useState<Car[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [stats, setStats] = useState<AdminStats>({
     totalCars: 0,
     pendingCars: 0,
     approvedCars: 0,
     rejectedCars: 0,
-    totalValue: 0
+    totalValue: 0,
+    totalBookings: 0,
+    pendingBookings: 0,
+    completedBookings: 0
   });
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<number | null>(null);
   const [admin, setAdmin] = useState<any>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
+  const [activeTab, setActiveTab] = useState<'cars' | 'bookings'>('cars');
   const router = useRouter();
 
   // التحقق من تسجيل دخول المشرف
@@ -55,10 +76,11 @@ export default function AdminPage() {
     checkAuth();
   }, []);
 
-  // جلب السيارات في انتظار الموافقة
+  // جلب السيارات في انتظار الموافقة والطلبات
   useEffect(() => {
     if (admin) {
       fetchPendingCars();
+      fetchBookings();
     }
   }, [admin]);
 
@@ -88,13 +110,12 @@ export default function AdminPage() {
         setPendingCars(data.cars);
         // حساب الإحصائيات
         const totalValue = data.cars.reduce((sum: number, car: Car) => sum + car.price, 0);
-        setStats({
+        setStats(prev => ({
+          ...prev,
           totalCars: data.cars.length,
           pendingCars: data.cars.length,
-          approvedCars: 0, // يمكن إضافة API لجلب هذه البيانات
-          rejectedCars: 0,
           totalValue
-        });
+        }));
       } else {
         if (data.error === 'غير مخول للوصول' || data.error === 'انتهت صلاحية الجلسة') {
           router.push('/admin/login');
@@ -106,6 +127,27 @@ export default function AdminPage() {
       console.error('Error fetching pending cars:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchBookings = async () => {
+    try {
+      const response = await fetch('/api/bookings');
+      const data = await response.json();
+      if (data.success) {
+        setBookings(data.bookings);
+        const pendingBookings = data.bookings.filter((b: Booking) => b.status === 'PENDING').length;
+        const completedBookings = data.bookings.filter((b: Booking) => b.status === 'COMPLETED').length;
+        
+        setStats(prev => ({
+          ...prev,
+          totalBookings: data.bookings.length,
+          pendingBookings,
+          completedBookings
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
     }
   };
 
@@ -154,6 +196,67 @@ export default function AdminPage() {
   const showSuccessMessage = (message: string) => {
     // يمكن استبدال هذا بمكون toast أفضل
     alert(message);
+  };
+
+  const handleBookingStatusUpdate = async (bookingId: number, newStatus: string) => {
+    try {
+      setActionLoading(bookingId);
+      const response = await fetch('/api/bookings', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ bookingId, status: newStatus }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setBookings(prev => prev.map(booking => 
+          booking.id === bookingId ? { ...booking, status: newStatus } : booking
+        ));
+        
+        // Update stats
+        const pendingBookings = bookings.filter(b => b.id !== bookingId && b.status === 'PENDING').length + (newStatus === 'PENDING' ? 1 : 0);
+        const completedBookings = bookings.filter(b => b.id !== bookingId && b.status === 'COMPLETED').length + (newStatus === 'COMPLETED' ? 1 : 0);
+        
+        setStats(prev => ({
+          ...prev,
+          pendingBookings,
+          completedBookings
+        }));
+        
+        showSuccessMessage(`تم تحديث حالة الطلب إلى ${getStatusText(newStatus)}`);
+      } else {
+        showErrorMessage('حدث خطأ في تحديث حالة الطلب');
+      }
+    } catch (error) {
+      console.error('Error updating booking status:', error);
+      showErrorMessage('حدث خطأ في التحديث');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    const statusMap: { [key: string]: string } = {
+      'PENDING': 'في انتظار المراجعة',
+      'CONTACTED': 'تم التواصل',
+      'APPROVED': 'موافق عليه',
+      'REJECTED': 'مرفوض',
+      'COMPLETED': 'مكتمل'
+    };
+    return statusMap[status] || status;
+  };
+
+  const getStatusColor = (status: string) => {
+    const colorMap: { [key: string]: string } = {
+      'PENDING': 'from-orange-500 to-yellow-500',
+      'CONTACTED': 'from-blue-500 to-blue-600',
+      'APPROVED': 'from-green-500 to-green-600',
+      'REJECTED': 'from-red-500 to-red-600',
+      'COMPLETED': 'from-purple-500 to-purple-600'
+    };
+    return colorMap[status] || 'from-gray-500 to-gray-600';
   };
 
   const showErrorMessage = (message: string) => {
@@ -246,6 +349,34 @@ export default function AdminPage() {
             </div>
           </div>
 
+          {/* Tabs */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-2 mb-8 border border-white/20">
+            <div className="flex space-x-2 space-x-reverse">
+              <button
+                onClick={() => setActiveTab('cars')}
+                className={`flex-1 py-3 px-6 rounded-2xl font-semibold transition-all duration-300 ${
+                  activeTab === 'cars'
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                <i className="fas fa-car ml-2"></i>
+                إدارة السيارات
+              </button>
+              <button
+                onClick={() => setActiveTab('bookings')}
+                className={`flex-1 py-3 px-6 rounded-2xl font-semibold transition-all duration-300 ${
+                  activeTab === 'bookings'
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                <i className="fas fa-calendar-check ml-2"></i>
+                إدارة الطلبات
+              </button>
+            </div>
+          </div>
+
           {/* Statistics Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
@@ -287,19 +418,48 @@ export default function AdminPage() {
             <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-purple-100 text-sm font-medium">القيمة الإجمالية</p>
-                  <p className="text-2xl font-bold">{stats.totalValue.toLocaleString()}</p>
-                  <p className="text-purple-200 text-xs">ريال سعودي</p>
+                  <p className="text-purple-100 text-sm font-medium">إجمالي الطلبات</p>
+                  <p className="text-3xl font-bold">{stats.totalBookings}</p>
                 </div>
                 <div className="bg-purple-400/30 p-3 rounded-xl">
-                  <i className="fas fa-money-bill-wave text-2xl"></i>
+                  <i className="fas fa-calendar-check text-2xl"></i>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Additional Booking Stats */}
+          {activeTab === 'bookings' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="bg-gradient-to-r from-orange-500 to-yellow-500 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-orange-100 text-sm font-medium">طلبات في الانتظار</p>
+                    <p className="text-3xl font-bold">{stats.pendingBookings}</p>
+                  </div>
+                  <div className="bg-orange-400/30 p-3 rounded-xl">
+                    <i className="fas fa-clock text-2xl"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-green-100 text-sm font-medium">طلبات مكتملة</p>
+                    <p className="text-3xl font-bold">{stats.completedBookings}</p>
+                  </div>
+                  <div className="bg-green-400/30 p-3 rounded-xl">
+                    <i className="fas fa-check-double text-2xl"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           
-          {/* Pending Cars Section */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 border border-white/20">
+          {/* Content based on active tab */}
+          {activeTab === 'cars' && (
+            <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 border border-white/20">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
                 <div className="bg-gradient-to-r from-orange-400 to-red-400 p-3 rounded-2xl">
@@ -530,6 +690,169 @@ export default function AdminPage() {
               </div>
             )}
           </div>
+          )}
+
+          {/* Bookings Management Section */}
+          {activeTab === 'bookings' && (
+            <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 border border-white/20">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
+                  <div className="bg-gradient-to-r from-blue-400 to-purple-400 p-3 rounded-2xl">
+                    <i className="fas fa-calendar-check text-white text-lg"></i>
+                  </div>
+                  إدارة طلبات الحجز
+                  <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full text-lg font-bold">
+                    {bookings.length}
+                  </span>
+                </h2>
+              </div>
+              
+              {bookings.length === 0 ? (
+                <div className="text-center py-16">
+                  <div className="bg-gradient-to-r from-blue-400 to-purple-400 p-8 rounded-full w-32 h-32 mx-auto mb-6 flex items-center justify-center">
+                    <i className="fas fa-calendar-check text-white text-4xl"></i>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                    لا توجد طلبات حجز
+                  </h3>
+                  <p className="text-gray-600 text-lg">
+                    لم يتم إرسال أي طلبات حجز بعد
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {bookings.map((booking) => (
+                    <div key={booking.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden">
+                      <div className="p-6">
+                        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-xl font-bold text-gray-900">{booking.carName}</h3>
+                              <span className={`bg-gradient-to-r ${getStatusColor(booking.status)} text-white px-3 py-1 rounded-full text-sm font-bold`}>
+                                {getStatusText(booking.status)}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-4 text-sm text-gray-600">
+                              <span className="flex items-center gap-1">
+                                <i className="fas fa-money-bill-wave text-green-500"></i>
+                                {booking.carPrice.toLocaleString()} ريال
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <i className="fas fa-calendar text-blue-500"></i>
+                                {new Date(booking.createdAt).toLocaleDateString('ar-SA')}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                          <div className="space-y-3">
+                            <h4 className="font-semibold text-gray-800 flex items-center gap-2">
+                              <i className="fas fa-user text-blue-500"></i>
+                              معلومات العميل
+                            </h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-center gap-2">
+                                <span className="text-gray-600 w-20">الاسم:</span>
+                                <span className="font-medium">{booking.customerName}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-gray-600 w-20">الهاتف:</span>
+                                <a href={`tel:${booking.customerPhone}`} className="font-medium text-blue-600 hover:underline">
+                                  {booking.customerPhone}
+                                </a>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-gray-600 w-20">البريد:</span>
+                                <a href={`mailto:${booking.customerEmail}`} className="font-medium text-blue-600 hover:underline">
+                                  {booking.customerEmail}
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+
+                          {booking.message && (
+                            <div className="space-y-3">
+                              <h4 className="font-semibold text-gray-800 flex items-center gap-2">
+                                <i className="fas fa-comment text-purple-500"></i>
+                                الرسالة
+                              </h4>
+                              <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
+                                {booking.message}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="flex flex-wrap gap-2">
+                          {booking.status === 'PENDING' && (
+                            <>
+                              <button
+                                onClick={() => handleBookingStatusUpdate(booking.id, 'CONTACTED')}
+                                disabled={actionLoading === booking.id}
+                                className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
+                              >
+                                <i className="fas fa-phone"></i>
+                                تم التواصل
+                              </button>
+                              <button
+                                onClick={() => handleBookingStatusUpdate(booking.id, 'APPROVED')}
+                                disabled={actionLoading === booking.id}
+                                className="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
+                              >
+                                <i className="fas fa-check"></i>
+                                موافق عليه
+                              </button>
+                              <button
+                                onClick={() => handleBookingStatusUpdate(booking.id, 'REJECTED')}
+                                disabled={actionLoading === booking.id}
+                                className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
+                              >
+                                <i className="fas fa-times"></i>
+                                رفض
+                              </button>
+                            </>
+                          )}
+                          
+                          {booking.status === 'CONTACTED' && (
+                            <>
+                              <button
+                                onClick={() => handleBookingStatusUpdate(booking.id, 'APPROVED')}
+                                disabled={actionLoading === booking.id}
+                                className="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
+                              >
+                                <i className="fas fa-check"></i>
+                                موافق عليه
+                              </button>
+                              <button
+                                onClick={() => handleBookingStatusUpdate(booking.id, 'COMPLETED')}
+                                disabled={actionLoading === booking.id}
+                                className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
+                              >
+                                <i className="fas fa-check-double"></i>
+                                مكتمل
+                              </button>
+                            </>
+                          )}
+
+                          {booking.status === 'APPROVED' && (
+                            <button
+                              onClick={() => handleBookingStatusUpdate(booking.id, 'COMPLETED')}
+                              disabled={actionLoading === booking.id}
+                              className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
+                            >
+                              <i className="fas fa-check-double"></i>
+                              مكتمل
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
           
           {/* Quick Actions */}
           <div className="mt-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-3xl p-8 text-white">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Header from '../../components/Header';
 
@@ -24,6 +24,7 @@ interface Car {
 
 export default function CarDetailsPage() {
   const params = useParams();
+  const router = useRouter();
   const carId = params.id;
   const [car, setCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
@@ -266,24 +267,13 @@ export default function CarDetailsPage() {
                   </div>
                   
                   <div className="text-center">
-                    <div className="space-y-2 sm:space-y-3">
-                      <a 
-                        href="tel:+966501234567"
-                        className="block bg-blue-600 text-white py-2.5 sm:py-3 md:py-4 px-3 sm:px-4 md:px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-xs sm:text-sm md:text-base"
-                      >
-                        <i className="fas fa-phone ml-1 sm:ml-2"></i>
-                        اتصل بفريق المبيعات
-                      </a>
-                      <a 
-                        href="https://wa.me/966501234567"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block bg-green-600 text-white py-2.5 sm:py-3 md:py-4 px-3 sm:px-4 md:px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors text-xs sm:text-sm md:text-base"
-                      >
-                        <i className="fab fa-whatsapp ml-1 sm:ml-2"></i>
-                        واتساب فريق المبيعات
-                      </a>
-                    </div>
+                    <button
+                      onClick={() => router.push(`/booking/${carId}`)}
+                      className="w-full bg-blue-600 text-white py-2.5 sm:py-3 md:py-4 px-3 sm:px-4 md:px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-xs sm:text-sm md:text-base"
+                    >
+                      <i className="fas fa-calendar-check ml-1 sm:ml-2"></i>
+                      احجزها الآن
+                    </button>
                   </div>
                 </div>
 
@@ -440,6 +430,7 @@ export default function CarDetailsPage() {
           </div>
         </div>
       )}
+
     </div>
   );
 } 

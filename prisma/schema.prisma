@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,40 +7,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// نموذج السيارات
 model Car {
-  id          Int      @id @default(autoincrement())
-  name        String
-  brand       String
-  year        Int
-  price       Float
-  mileage     Int?
-  fuelType    String?
-  transmission String?
-  color       String?
-  description String?
-  imageUrl    String?
-  images      String[] @default([]) // <-- جديد: مصفوفة الصور المتعددة
-  contactName String?              // <-- اسم البائع
-  contactPhone String?             // <-- رقم هاتف البائع
-  contactLocation String?          // <-- موقع البائع
-  contactEmail String?             // <-- بريد البائع الإلكتروني
-  isAvailable Boolean  @default(true)
-  featured    Boolean  @default(false) // <-- جديد: هل السيارة مميزة؟
-  status      CarStatus @default(PENDING) // <-- جديد: حالة الموافقة
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // العلاقات
-  sellerId    Int?
-  seller      User?    @relation(fields: [sellerId], references: [id])
-  orders      Order[]
-  reviews     Review[]
-  
+  id              Int       @id @default(autoincrement())
+  name            String
+  brand           String
+  year            Int
+  price           Float
+  mileage         Int?
+  fuelType        String?
+  transmission    String?
+  color           String?
+  description     String?
+  imageUrl        String?
+  images          String[]  @default([])
+  contactName     String?
+  contactPhone    String?
+  contactLocation String?
+  contactEmail    String?
+  isAvailable     Boolean   @default(true)
+  featured        Boolean   @default(false)
+  status          CarStatus @default(PENDING)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  sellerId        Int?
+  seller          User?     @relation(fields: [sellerId], references: [id])
+  orders          Order[]
+  reviews         Review[]
+
   @@map("cars")
 }
 
-// نموذج المستخدمين
 model User {
   id        Int      @id @default(autoincrement())
   name      String
@@ -53,33 +46,27 @@ model User {
   role      UserRole @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
-  // العلاقات
   cars      Car[]
   orders    Order[]
   reviews   Review[]
-  
+
   @@map("users")
 }
 
-// نموذج الطلبات
 model Order {
-  id        Int       @id @default(autoincrement())
-  userId    Int
-  carId     Int
-  status    OrderStatus @default(PENDING)
+  id         Int         @id @default(autoincrement())
+  userId     Int
+  carId      Int
+  status     OrderStatus @default(PENDING)
   totalPrice Float
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  
-  // العلاقات
-  user      User      @relation(fields: [userId], references: [id])
-  car       Car       @relation(fields: [carId], references: [id])
-  
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  car        Car         @relation(fields: [carId], references: [id])
+  user       User        @relation(fields: [userId], references: [id])
+
   @@map("orders")
 }
 
-// نموذج التقييمات
 model Review {
   id        Int      @id @default(autoincrement())
   userId    Int
@@ -87,12 +74,26 @@ model Review {
   rating    Int
   comment   String?
   createdAt DateTime @default(now())
-  
-  // العلاقات
-  user      User     @relation(fields: [userId], references: [id])
   car       Car      @relation(fields: [carId], references: [id])
-  
+  user      User     @relation(fields: [userId], references: [id])
+
   @@map("reviews")
+}
+
+model Booking {
+  id            Int           @id @default(autoincrement())
+  carId         Int
+  carName       String
+  carPrice      Float
+  customerName  String
+  customerEmail String
+  customerPhone String
+  message       String?
+  status        BookingStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@map("bookings")
 }
 
 enum UserRole {
@@ -109,7 +110,15 @@ enum OrderStatus {
 }
 
 enum CarStatus {
-  PENDING     // في انتظار الموافقة
-  APPROVED    // معتمدة
-  REJECTED    // مرفوضة
-} 
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum BookingStatus {
+  PENDING
+  CONTACTED
+  APPROVED
+  REJECTED
+  COMPLETED
+}
