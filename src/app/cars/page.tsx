@@ -369,19 +369,13 @@ export default function CarsPage() {
                     <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">{getBrandName(car.brand)} • {car.year}</p>
                     <div className="text-green-600 font-bold text-xs sm:text-sm md:text-lg mb-2 sm:mb-3">{car.price.toLocaleString()} ريال</div>
                     
-                    <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2">
+                    <div className="flex justify-center">
                       <a
                         href={`/cars/${car.id}`}
-                        className="flex-1 bg-gray-100 text-gray-700 py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg hover:bg-gray-200 transition-colors text-center text-xs sm:text-sm font-medium"
+                        className="w-full bg-blue-500 text-white py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg hover:bg-blue-600 transition-colors text-center text-xs sm:text-sm font-medium"
                       >
-                        التفاصيل
-                      </a>
-                      <a
-                        href={`/cars/${car.id}`}
-                        className="flex-1 bg-blue-500 text-white py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg hover:bg-blue-600 transition-colors text-xs sm:text-sm font-medium"
-                      >
-                        <i className="fas fa-plus ml-1"></i>
-                        عرض
+                        <i className="fas fa-eye ml-1"></i>
+                        عرض التفاصيل
                       </a>
                     </div>
                   </div>
