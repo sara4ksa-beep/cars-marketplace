@@ -190,21 +190,21 @@ export default function Home() {
             </div>
 
             {/* Action Buttons */}
-            <div className="hero-buttons flex flex-col sm:flex-row justify-center animate-fade-in-delayed gap-2 sm:gap-3 md:gap-4 px-4">
-              <a href="/cars" className="hero-button bg-white text-blue-600 rounded-xl md:rounded-2xl font-bold hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-105 hover:-translate-y-1 py-2.5 sm:py-3 px-4 sm:px-6 text-xs sm:text-sm md:text-base">
-                <i className="fas fa-car ml-1 sm:ml-2"></i>
+            <div className="hero-buttons flex flex-col sm:flex-row justify-center animate-fade-in-delayed gap-3 sm:gap-4 md:gap-6 px-4">
+              <a href="/cars" className="hero-button bg-white text-blue-600 rounded-xl md:rounded-2xl font-bold hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-105 hover:-translate-y-1 py-4 sm:py-5 px-6 sm:px-8 text-sm sm:text-base md:text-lg">
+                <i className="fas fa-car ml-2"></i>
                 <span className="hidden sm:inline">تصفح السيارات</span>
                 <span className="sm:hidden">السيارات</span>
               </a>
               
-              <a href="/sell-car" className="hero-button bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl md:rounded-2xl font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 py-2.5 sm:py-3 px-4 sm:px-6 text-xs sm:text-sm md:text-base">
-                <i className="fas fa-plus-circle ml-1 sm:ml-2"></i>
+              <a href="/sell-car" className="hero-button bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl md:rounded-2xl font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 py-4 sm:py-5 px-6 sm:px-8 text-sm sm:text-base md:text-lg">
+                <i className="fas fa-plus-circle ml-2"></i>
                 <span className="hidden sm:inline">بيع سيارتك</span>
                 <span className="sm:hidden">بيع</span>
               </a>
               
-              <button className="hero-button bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl md:rounded-2xl font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 py-2.5 sm:py-3 px-4 sm:px-6 text-xs sm:text-sm md:text-base hidden lg:block">
-                <i className="fas fa-calendar-check ml-1 sm:ml-2"></i>
+              <button className="hero-button bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl md:rounded-2xl font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 py-4 sm:py-5 px-6 sm:px-8 text-sm sm:text-base md:text-lg hidden lg:block">
+                <i className="fas fa-calendar-check ml-2"></i>
                 احجز تجربة قيادة
               </button>
             </div>
@@ -232,130 +232,91 @@ export default function Home() {
             <>
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
                 {displayedCars.map((car) => (
-                  <div key={car.id} className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105 mobile-card">
-                    <div className="relative h-32 sm:h-40 md:h-48">
-                      <Image src={car.imageUrl || "/default-car.jpg"} alt={car.name} fill className="object-cover" sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw" />
-                      <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
+                  <div key={car.id} className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl transform hover:scale-105">
+                    <div className="h-32 sm:h-40 md:h-56 relative">
+                      <Image
+                        src={car.imageUrl || '/default-car.jpg'}
+                        alt={car.name}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                      />
+                      <div className="absolute top-2 right-2 sm:top-3 sm:right-3 bg-red-500 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-bold shadow-lg">
                         جديد
                       </div>
                     </div>
-                    <div className="p-2 sm:p-3 md:p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs sm:text-sm md:text-sm text-blue-600 font-semibold bg-blue-50 px-2 py-1 rounded-full">
-                          {car.brand === 'toyota' ? 'تويوتا' :
-                           car.brand === 'honda' ? 'هوندا' :
-                           car.brand === 'nissan' ? 'نيسان' :
-                           car.brand === 'bmw' ? 'بي إم دبليو' :
-                           car.brand === 'mercedes' ? 'مرسيدس' :
-                           car.brand === 'audi' ? 'أودي' :
-                           car.brand === 'lexus' ? 'لكزس' :
-                           car.brand === 'hyundai' ? 'هيونداي' :
-                           car.brand === 'kia' ? 'كيا' :
-                           car.brand === 'ford' ? 'فورد' :
-                           car.brand === 'chevrolet' ? 'شيفروليه' :
-                           car.brand === 'tesla' ? 'تسلا' :
-                           car.brand === 'landrover' ? 'لاند روفر' :
-                           car.brand === 'cadillac' ? 'كاديلاك' :
-                           car.brand === 'volkswagen' ? 'فولكسفاغن' :
-                           car.brand === 'volvo' ? 'فولفو' :
-                           car.brand === 'infiniti' ? 'إنفينيتي' :
-                           car.brand === 'jaguar' ? 'جاكوار' :
-                           car.brand === 'porsche' ? 'بورش' :
-                           car.brand === 'maserati' ? 'مازيراتي' :
-                           car.brand === 'ferrari' ? 'فيراري' :
-                           car.brand === 'lamborghini' ? 'لامبورغيني' :
-                           car.brand === 'bentley' ? 'بنتلي' :
-                           car.brand === 'rollsroyce' ? 'رولز رويس' :
-                           car.brand === 'jeep' ? 'جيب' :
-                           car.brand === 'mitsubishi' ? 'ميتسوبيشي' :
-                           car.brand === 'mazda' ? 'مازدا' :
-                           car.brand === 'subaru' ? 'سوبارو' :
-                           car.brand === 'suzuki' ? 'سوزوكي' :
-                           car.brand === 'isuzu' ? 'إيسوزو' :
-                           car.brand === 'gmc' ? 'جي إم سي' :
-                           car.brand === 'buick' ? 'بيوك' :
-                           car.brand === 'lincoln' ? 'لينكولن' :
-                           car.brand === 'acura' ? 'أكورا' :
-                           car.brand === 'genesis' ? 'جينيسيس' :
-                           car.brand === 'mini' ? 'ميني' :
-                           car.brand === 'fiat' ? 'فيات' :
-                           car.brand === 'alfa' ? 'ألفا روميو' :
-                           car.brand === 'peugeot' ? 'بيجو' :
-                           car.brand === 'renault' ? 'رينو' :
-                           car.brand === 'citroen' ? 'ستروين' :
-                           car.brand === 'skoda' ? 'سكودا' :
-                           car.brand === 'seat' ? 'سيات' :
-                           car.brand === 'opel' ? 'أوبل' :
-                           car.brand === 'saab' ? 'ساب' :
-                           car.brand === 'dacia' ? 'داسيا' :
-                           car.brand === 'lada' ? 'لادا' :
-                           car.brand === 'geely' ? 'جيلي' :
-                           car.brand === 'chery' ? 'شيري' :
-                           car.brand === 'byd' ? 'بي واي دي' :
-                           car.brand === 'great wall' ? 'جريت وول' :
-                           car.brand === 'mg' ? 'إم جي' :
-                           car.brand === 'haval' ? 'هافال' :
-                           car.brand === 'changan' ? 'تشانجان' :
-                           car.brand === 'dongfeng' ? 'دونغ فينغ' :
-                           car.brand === 'gac' ? 'جي إيه سي' :
-                           car.brand === 'lynk' ? 'لينك آند كو' :
-                           car.brand === 'wuling' ? 'وولينغ' :
-                           'علامة تجارية غير معروفة'}
-                        </span>
-                        <span className="text-sm sm:text-base md:text-xl font-bold text-green-600 mobile-card-price">
-                          {car.price.toLocaleString()}
-                        </span>
-                      </div>
-                      <h3 className="text-xs sm:text-sm md:text-lg font-semibold text-gray-800 mb-1 sm:mb-2 line-clamp-2 leading-tight mobile-card-title">
-                        {car.name}
-                      </h3>
+                    <div className="p-2 sm:p-3 md:p-5">
+                      <h3 className="text-xs sm:text-sm md:text-lg font-bold text-gray-800 mb-1 sm:mb-2 line-clamp-2">{car.name}</h3>
+                      <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">{car.brand === 'toyota' ? 'تويوتا' :
+                       car.brand === 'honda' ? 'هوندا' :
+                       car.brand === 'nissan' ? 'نيسان' :
+                       car.brand === 'bmw' ? 'بي إم دبليو' :
+                       car.brand === 'mercedes' ? 'مرسيدس' :
+                       car.brand === 'audi' ? 'أودي' :
+                       car.brand === 'lexus' ? 'لكزس' :
+                       car.brand === 'hyundai' ? 'هيونداي' :
+                       car.brand === 'kia' ? 'كيا' :
+                       car.brand === 'ford' ? 'فورد' :
+                       car.brand === 'chevrolet' ? 'شيفروليه' :
+                       car.brand === 'tesla' ? 'تسلا' :
+                       car.brand === 'landrover' ? 'لاند روفر' :
+                       car.brand === 'cadillac' ? 'كاديلاك' :
+                       car.brand === 'volkswagen' ? 'فولكسفاغن' :
+                       car.brand === 'volvo' ? 'فولفو' :
+                       car.brand === 'infiniti' ? 'إنفينيتي' :
+                       car.brand === 'jaguar' ? 'جاكوار' :
+                       car.brand === 'porsche' ? 'بورش' :
+                       car.brand === 'maserati' ? 'مازيراتي' :
+                       car.brand === 'ferrari' ? 'فيراري' :
+                       car.brand === 'lamborghini' ? 'لامبورغيني' :
+                       car.brand === 'bentley' ? 'بنتلي' :
+                       car.brand === 'rollsroyce' ? 'رولز رويس' :
+                       car.brand === 'jeep' ? 'جيب' :
+                       car.brand === 'mitsubishi' ? 'ميتسوبيشي' :
+                       car.brand === 'mazda' ? 'مازدا' :
+                       car.brand === 'subaru' ? 'سوبارو' :
+                       car.brand === 'suzuki' ? 'سوزوكي' :
+                       car.brand === 'isuzu' ? 'إيسوزو' :
+                       car.brand === 'gmc' ? 'جي إم سي' :
+                       car.brand === 'buick' ? 'بيوك' :
+                       car.brand === 'lincoln' ? 'لينكولن' :
+                       car.brand === 'acura' ? 'أكورا' :
+                       car.brand === 'genesis' ? 'جينيسيس' :
+                       car.brand === 'mini' ? 'ميني' :
+                       car.brand === 'fiat' ? 'فيات' :
+                       car.brand === 'alfa' ? 'ألفا روميو' :
+                       car.brand === 'peugeot' ? 'بيجو' :
+                       car.brand === 'renault' ? 'رينو' :
+                       car.brand === 'citroen' ? 'ستروين' :
+                       car.brand === 'skoda' ? 'سكودا' :
+                       car.brand === 'seat' ? 'سيات' :
+                       car.brand === 'opel' ? 'أوبل' :
+                       car.brand === 'saab' ? 'ساب' :
+                       car.brand === 'dacia' ? 'داسيا' :
+                       car.brand === 'lada' ? 'لادا' :
+                       car.brand === 'geely' ? 'جيلي' :
+                       car.brand === 'chery' ? 'شيري' :
+                       car.brand === 'byd' ? 'بي واي دي' :
+                       car.brand === 'great wall' ? 'جريت وول' :
+                       car.brand === 'mg' ? 'إم جي' :
+                       car.brand === 'haval' ? 'هافال' :
+                       car.brand === 'changan' ? 'تشانجان' :
+                       car.brand === 'dongfeng' ? 'دونغ فينغ' :
+                       car.brand === 'gac' ? 'جي إيه سي' :
+                       car.brand === 'lynk' ? 'لينك آند كو' :
+                       car.brand === 'wuling' ? 'وولينغ' :
+                       'علامة تجارية غير معروفة'} • {car.year}</p>
+                      <div className="text-green-600 font-bold text-xs sm:text-sm md:text-lg mb-2 sm:mb-3">{car.price.toLocaleString()} ريال</div>
                       
-                      {/* Mobile: Essential info only */}
-                      <div className="sm:hidden text-xs text-gray-500 mb-2">
-                        <div className="flex justify-between items-center bg-gray-50 p-1.5 rounded-lg">
-                          <span className="flex items-center">
-                            <i className="fas fa-calendar text-gray-400 ml-1 text-xs"></i>
-                            {car.year}
-                          </span>
-                          <span className="flex items-center">
-                            <i className="fas fa-gas-pump text-gray-400 ml-1 text-xs"></i>
-                            {car.fuelType === 'gasoline' ? 'بنزين' : 
-                             car.fuelType === 'diesel' ? 'ديزل' : 
-                             car.fuelType === 'hybrid' ? 'هجين' : 
-                             car.fuelType === 'electric' ? 'كهربائي' : car.fuelType || 'غير محدد'}
-                          </span>
-                        </div>
+                      <div className="flex justify-center">
+                        <a
+                          href={`/cars/${car.id}`}
+                          className="w-full bg-blue-500 text-white py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg hover:bg-blue-600 transition-colors text-center text-xs sm:text-sm font-medium"
+                        >
+                          <i className="fas fa-eye ml-1"></i>
+                          عرض التفاصيل
+                        </a>
                       </div>
-                      
-                      {/* Desktop: Show full details */}
-                      <div className="hidden sm:block text-sm text-gray-600 mb-4">
-                        <div className="space-y-2">
-                          <div className="flex items-center">
-                            <i className="fas fa-calendar text-gray-400 ml-2 text-sm"></i>
-                            سنة: {car.year}
-                          </div>
-                          <div className="flex items-center">
-                            <i className="fas fa-gas-pump text-gray-400 ml-2 text-sm"></i>
-                            نوع الوقود: {car.fuelType === 'gasoline' ? 'بنزين' : 
-                             car.fuelType === 'diesel' ? 'ديزل' : 
-                             car.fuelType === 'hybrid' ? 'هجين' : 
-                             car.fuelType === 'electric' ? 'كهربائي' : car.fuelType || 'غير محدد'}
-                          </div>
-                          <div className="flex items-center">
-                            <i className="fas fa-cog text-gray-400 ml-2 text-sm"></i>
-                            ناقل الحركة: {car.transmission === 'automatic' ? 'أوتوماتيك' : 
-                             car.transmission === 'manual' ? 'يدوي' : car.transmission || 'غير محدد'}
-                          </div>
-                          <div className="flex items-center">
-                            <i className="fas fa-tint text-gray-400 ml-2 text-sm"></i>
-                            اللون: {car.color || 'غير محدد'}
-                          </div>
-                        </div>
-                      </div>
-                      <a href={`/cars/${car.id}`} className="block w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg text-xs sm:text-sm md:text-base font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl">
-                        <i className="fas fa-eye ml-1"></i>
-                        عرض التفاصيل
-                      </a>
                     </div>
                   </div>
                 ))}
@@ -363,7 +324,7 @@ export default function Home() {
               
               {/* عرض جميع السيارات */}
               <div className="text-center mt-12">
-                <a href="/cars" className="btn-primary inline-block px-12 py-4 text-lg">
+                <a href="/cars" className="btn-primary inline-block px-6 py-2 text-sm">
                   <i className="fas fa-arrow-left ml-2"></i>
                   عرض جميع السيارات
                 </a>
@@ -636,24 +597,24 @@ export default function Home() {
               {/* Social Media */}
               <div>
                 <h4 className="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-center sm:text-right">تابعنا على</h4>
-                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-4 max-w-xs mx-auto sm:max-w-none">
-                  <a href="#" className="group bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                    <i className="fab fa-facebook-f text-white text-lg sm:text-xl group-hover:scale-110 transition-transform duration-300"></i>
+                <div className="flex flex-wrap justify-center sm:justify-start gap-4 sm:gap-6">
+                  <a href="#" className="group text-blue-400 hover:text-blue-300 transition-all duration-300 transform hover:scale-110">
+                    <i className="fab fa-facebook-f text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
                   </a>
-                  <a href="#" className="group bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                    <i className="fab fa-twitter text-white text-lg sm:text-xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group text-sky-400 hover:text-sky-300 transition-all duration-300 transform hover:scale-110">
+                    <i className="fab fa-twitter text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
                   </a>
-                  <a href="#" className="group bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                    <i className="fab fa-instagram text-white text-lg sm:text-xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group text-pink-400 hover:text-pink-300 transition-all duration-300 transform hover:scale-110">
+                    <i className="fab fa-instagram text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
                   </a>
-                  <a href="#" className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                    <i className="fab fa-youtube text-white text-lg sm:text-xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group text-red-400 hover:text-red-300 transition-all duration-300 transform hover:scale-110">
+                    <i className="fab fa-youtube text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
                   </a>
-                  <a href="#" className="group bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                    <i className="fab fa-linkedin-in text-white text-lg sm:text-xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group text-blue-500 hover:text-blue-400 transition-all duration-300 transform hover:scale-110">
+                    <i className="fab fa-linkedin-in text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
                   </a>
-                  <a href="#" className="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                    <i className="fab fa-whatsapp text-white text-lg sm:text-xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group text-green-400 hover:text-green-300 transition-all duration-300 transform hover:scale-110">
+                    <i className="fab fa-whatsapp text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
                   </a>
                 </div>
                 <div className="mt-4 sm:mt-6 text-center sm:text-right">

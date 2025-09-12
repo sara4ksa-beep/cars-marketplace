@@ -351,78 +351,39 @@ export default function CarsPage() {
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
               {filteredCars.map((car) => (
-                <div key={car.id} className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105 mobile-card">
-                  <div className="relative h-32 sm:h-40 md:h-56">
-                    <Image 
-                      src={car.imageUrl || '/default-car.jpg'} 
-                      alt={car.name} 
-                      fill 
+                <div key={car.id} className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl transform hover:scale-105">
+                  <div className="h-32 sm:h-40 md:h-56 relative">
+                    <Image
+                      src={car.imageUrl || '/default-car.jpg'}
+                      alt={car.name}
+                      fill
                       className="object-cover"
-                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                     />
-                    <div className="absolute top-2 right-2 sm:top-3 sm:right-3 bg-red-500 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-bold shadow-lg">
+                    <div className="absolute top-2 right-2 sm:top-3 sm:right-3 bg-red-500 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-bold shadow-lg">
                       جديد
                     </div>
                   </div>
                   <div className="p-2 sm:p-3 md:p-5">
-                    <div className="flex items-center justify-between mb-1 sm:mb-2">
-                      <span className="text-xs sm:text-sm md:text-base text-blue-600 font-semibold bg-blue-50 px-2 py-1 rounded-full">
-                        {getBrandName(car.brand)}
-                      </span>
-                      <span className="text-xs sm:text-sm md:text-2xl font-bold text-green-600 mobile-card-price">
-                        {car.price.toLocaleString()}
-                      </span>
-                    </div>
-                    <h3 className="text-xs sm:text-sm md:text-lg font-bold text-gray-800 mb-1 sm:mb-2 line-clamp-2 leading-tight mobile-card-title">
-                      {car.name}
-                    </h3>
+                    <h3 className="text-xs sm:text-sm md:text-lg font-bold text-gray-800 mb-1 sm:mb-2 line-clamp-2">{car.name}</h3>
+                    <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">{getBrandName(car.brand)} • {car.year}</p>
+                    <div className="text-green-600 font-bold text-xs sm:text-sm md:text-lg mb-2 sm:mb-3">{car.price.toLocaleString()} ريال</div>
                     
-                    {/* Mobile: Enhanced info display */}
-                    <div className="sm:hidden mb-2">
-                      <div className="flex justify-between items-center bg-gray-50 p-1.5 rounded-lg">
-                        <span className="flex items-center text-xs text-gray-600">
-                          <i className="fas fa-calendar text-gray-400 ml-1 text-xs"></i>
-                          {car.year}
-                        </span>
-                        <span className="flex items-center text-xs text-gray-600">
-                          <i className="fas fa-gas-pump text-gray-400 ml-1 text-xs"></i>
-                          {car.fuelType === 'gasoline' ? 'بنزين' : 
-                           car.fuelType === 'diesel' ? 'ديزل' : 
-                           car.fuelType === 'hybrid' ? 'هجين' : 
-                           car.fuelType === 'electric' ? 'كهربائي' : car.fuelType || 'غير محدد'}
-                        </span>
-                      </div>
+                    <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2">
+                      <a
+                        href={`/cars/${car.id}`}
+                        className="flex-1 bg-gray-100 text-gray-700 py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg hover:bg-gray-200 transition-colors text-center text-xs sm:text-sm font-medium"
+                      >
+                        التفاصيل
+                      </a>
+                      <a
+                        href={`/cars/${car.id}`}
+                        className="flex-1 bg-blue-500 text-white py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg hover:bg-blue-600 transition-colors text-xs sm:text-sm font-medium"
+                      >
+                        <i className="fas fa-plus ml-1"></i>
+                        عرض
+                      </a>
                     </div>
-                    
-                    {/* Desktop: Show full details */}
-                    <div className="hidden sm:block text-sm text-gray-600 mb-3 sm:mb-4">
-                      <div className="space-y-1 sm:space-y-2">
-                        <div className="flex items-center">
-                          <i className="fas fa-calendar text-gray-400 ml-2 text-xs sm:text-sm"></i>
-                          <span className="text-xs sm:text-sm">سنة: {car.year}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <i className="fas fa-gas-pump text-gray-400 ml-2 text-xs sm:text-sm"></i>
-                          <span className="text-xs sm:text-sm">نوع الوقود: {car.fuelType === 'gasoline' ? 'بنزين' : 
-                           car.fuelType === 'diesel' ? 'ديزل' : 
-                           car.fuelType === 'hybrid' ? 'هجين' : 
-                           car.fuelType === 'electric' ? 'كهربائي' : car.fuelType || 'غير محدد'}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <i className="fas fa-cog text-gray-400 ml-2 text-xs sm:text-sm"></i>
-                          <span className="text-xs sm:text-sm">ناقل الحركة: {car.transmission === 'automatic' ? 'أوتوماتيك' : 
-                           car.transmission === 'manual' ? 'يدوي' : car.transmission || 'غير محدد'}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <i className="fas fa-tint text-gray-400 ml-2 text-xs sm:text-sm"></i>
-                          <span className="text-xs sm:text-sm">اللون: {car.color || 'غير محدد'}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <a href={`/cars/${car.id}`} className="block w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center py-1.5 sm:py-2 md:py-3 px-2 sm:px-3 md:px-4 rounded-lg text-xs sm:text-sm md:text-base font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl">
-                      <i className="fas fa-eye ml-1"></i>
-                      عرض التفاصيل
-                    </a>
                   </div>
                 </div>
               ))}
