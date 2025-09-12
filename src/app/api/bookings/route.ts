@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
         customerEmail: email,
         customerPhone: phone,
         message: message || '',
-        status: 'pending',
+        status: 'PENDING',
         createdAt: new Date(),
       },
     });
@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
 
     // Build where clause
-    const where = status !== 'all' ? { status } : {};
+    const where = status !== 'all' ? { status: status.toUpperCase() as any } : {};
 
     const [bookings, total] = await Promise.all([
       prisma.booking.findMany({
