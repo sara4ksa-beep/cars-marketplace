@@ -219,41 +219,42 @@ export default function CarsPage() {
 
       {/* Featured Cars Section */}
       {featuredCars.length > 0 && (
-        <section className="py-6 md:py-8 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
+        <section className="py-4 sm:py-6 md:py-8 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
           <div className="container mx-auto px-4">
-            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-blue-800 mb-4 md:mb-6 text-center">السيارات المميزة</h2>
-            <div className="flex gap-4 md:gap-6 overflow-x-auto pb-2 snap-x">
+            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-blue-800 mb-3 sm:mb-4 md:mb-6 text-center">السيارات المميزة</h2>
+            <div className="flex gap-3 sm:gap-4 md:gap-6 overflow-x-auto pb-2 snap-x">
               {featuredCars.map((car) => (
-                <div key={car.id} className="min-w-[280px] md:min-w-[320px] max-w-xs card-hover bg-white rounded-xl shadow-lg border border-blue-100 hover:border-blue-300 snap-center flex-shrink-0 flex flex-col">
-                  <div className="h-40 relative rounded-t-xl overflow-hidden">
+                <div key={car.id} className="min-w-[260px] sm:min-w-[280px] md:min-w-[320px] max-w-xs card-hover bg-white rounded-xl shadow-lg border border-blue-100 hover:border-blue-300 snap-center flex-shrink-0 flex flex-col">
+                  <div className="h-36 sm:h-40 relative rounded-t-xl overflow-hidden">
                     <Image
                       src={car.imageUrl || '/default-car.jpg'}
                       alt={car.name}
                       fill
                       className="object-cover"
-                      sizes="320px"
+                      sizes="(max-width: 640px) 260px, (max-width: 768px) 280px, 320px"
                     />
                     <div className="absolute top-2 right-2 bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-bold">
                       مميز
                     </div>
                   </div>
-                  <div className="p-4 flex flex-col gap-2 flex-1">
+                  <div className="p-3 sm:p-4 flex flex-col gap-2 flex-1">
                     <div className="flex items-center justify-between mb-2">
                       <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-semibold">
                         {getBrandName(car.brand)}
                       </span>
-                      <span className="text-green-600 font-bold text-lg">{car.price.toLocaleString()} ريال</span>
+                      <span className="text-green-600 font-bold text-sm sm:text-lg">{car.price.toLocaleString()} ريال</span>
                     </div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-1 truncate">{car.name}</h3>
-                    <p className="text-gray-600 text-sm mb-2 flex items-center">
-                      <i className="fas fa-calendar text-gray-400 ml-1"></i>
+                    <h3 className="text-sm sm:text-lg font-bold text-gray-800 mb-1 truncate">{car.name}</h3>
+                    <p className="text-gray-600 text-xs sm:text-sm mb-2 flex items-center">
+                      <i className="fas fa-calendar text-gray-400 ml-1 text-xs"></i>
                       {car.year}
                     </p>
                     <div className="mt-auto">
                       <a
                         href={`/cars/${car.id}`}
-                        className="btn-primary block w-full text-center text-sm py-2"
+                        className="btn-primary block w-full text-center text-xs sm:text-sm py-2"
                       >
+                        <i className="fas fa-eye ml-1"></i>
                         عرض التفاصيل
                       </a>
                     </div>
@@ -266,33 +267,33 @@ export default function CarsPage() {
       )}
 
       {/* Simple Header */}
-      <section className="bg-white shadow-md py-6 md:py-12">
+      <section className="bg-white shadow-md py-4 sm:py-6 md:py-12">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-6 md:mb-8">
-            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">السيارات المتاحة</h1>
-            <p className="text-sm md:text-base text-gray-600 mb-2">تصفح مجموعة واسعة من السيارات المتاحة للبيع</p>
-            <p className="text-sm md:text-base text-blue-600 font-medium">
+          <div className="text-center mb-4 sm:mb-6 md:mb-8">
+            <h1 className="text-xl sm:text-2xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3 md:mb-4">السيارات المتاحة</h1>
+            <p className="text-xs sm:text-sm md:text-base text-gray-600 mb-2">تصفح مجموعة واسعة من السيارات المتاحة للبيع</p>
+            <p className="text-xs sm:text-sm md:text-base text-blue-600 font-medium">
               {filteredCars.length} {filteredCars.length === 1 ? 'سيارة' : filteredCars.length === 2 ? 'سيارتان' : filteredCars.length < 11 ? 'سيارات' : 'سيارة'} متاحة للبيع
             </p>
           </div>
 
           {/* Search and Filter */}
           <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <input
                   type="text"
                   placeholder="ابحث عن سيارة..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mobile-form-input"
                 />
               </div>
               <div>
                 <select
                   value={selectedBrand}
                   onChange={(e) => setSelectedBrand(e.target.value)}
-                  className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mobile-form-input"
                 >
                   <option value="">كافة الماركات</option>
                   {brands.map(brand => (
@@ -308,81 +309,83 @@ export default function CarsPage() {
       </section>
 
       {/* Cars Grid */}
-      <section className="py-6 md:py-12">
+      <section className="py-4 sm:py-6 md:py-12">
         <div className="container mx-auto px-4">
           {filteredCars.length === 0 ? (
-            <div className="text-center py-12">
+            <div className="text-center py-8 sm:py-12">
               <div className="max-w-md mx-auto">
-                <div className="text-gray-400 text-6xl mb-4">
+                <div className="text-gray-400 text-4xl sm:text-6xl mb-4">
                   <i className="fas fa-car"></i>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">
                   {cars.length === 0 ? 'لا توجد سيارات في قاعدة البيانات' :
                    searchTerm || selectedBrand !== '' ? 'لا توجد نتائج للبحث' : 'لا توجد سيارات متاحة'}
                 </h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
                   {searchTerm || selectedBrand !== '' 
                     ? 'جرب تغيير كلمات البحث أو اختيار ماركة أخرى' 
                     : 'جرب العودة لاحقاً أو أضف سيارتك للبيع'
                   }
                 </p>
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <button 
                     onClick={() => {
                       setSearchTerm('');
                       setSelectedBrand('');
                     }}
-                    className="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                    className="block w-full bg-blue-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
                   >
+                    <i className="fas fa-refresh ml-1"></i>
                     إظهار كافة السيارات
                   </button>
                   <a 
                     href="/sell-car" 
-                    className="block w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors text-center"
+                    className="block w-full bg-green-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-green-700 transition-colors text-center text-sm sm:text-base"
                   >
+                    <i className="fas fa-plus ml-1"></i>
                     أضف سيارتك للبيع
                   </a>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
               {filteredCars.map((car) => (
-                <div key={car.id} className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                  <div className="relative h-48 md:h-56">
+                <div key={car.id} className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105 mobile-card">
+                  <div className="relative h-32 sm:h-40 md:h-56">
                     <Image 
                       src={car.imageUrl || '/default-car.jpg'} 
                       alt={car.name} 
-                      fill
+                      fill 
                       className="object-cover"
-                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                     />
-                    <div className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                    <div className="absolute top-2 right-2 sm:top-3 sm:right-3 bg-red-500 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-bold shadow-lg">
                       جديد
                     </div>
                   </div>
-                  <div className="p-4 md:p-5">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm md:text-base text-blue-600 font-semibold bg-blue-50 px-3 py-1 rounded-full">
+                  <div className="p-2 sm:p-3 md:p-5">
+                    <div className="flex items-center justify-between mb-1 sm:mb-2">
+                      <span className="text-xs sm:text-sm md:text-base text-blue-600 font-semibold bg-blue-50 px-2 py-1 rounded-full">
                         {getBrandName(car.brand)}
                       </span>
-                      <span className="text-lg md:text-2xl font-bold text-green-600">
+                      <span className="text-xs sm:text-sm md:text-2xl font-bold text-green-600 mobile-card-price">
                         {car.price.toLocaleString()}
                       </span>
                     </div>
-                    <h3 className="text-base md:text-lg font-bold text-gray-800 mb-3 line-clamp-2 leading-tight">
+                    <h3 className="text-xs sm:text-sm md:text-lg font-bold text-gray-800 mb-1 sm:mb-2 line-clamp-2 leading-tight mobile-card-title">
                       {car.name}
                     </h3>
                     
                     {/* Mobile: Enhanced info display */}
-                    <div className="md:hidden space-y-2 mb-4">
-                      <div className="flex justify-between items-center bg-gray-50 p-2 rounded-lg">
-                        <span className="text-sm text-gray-600">السنة</span>
-                        <span className="font-semibold text-gray-800">{car.year}</span>
-                      </div>
-                      <div className="flex justify-between items-center bg-gray-50 p-2 rounded-lg">
-                        <span className="text-sm text-gray-600">الوقود</span>
-                        <span className="font-semibold text-gray-800">
+                    <div className="sm:hidden mb-2">
+                      <div className="flex justify-between items-center bg-gray-50 p-1.5 rounded-lg">
+                        <span className="flex items-center text-xs text-gray-600">
+                          <i className="fas fa-calendar text-gray-400 ml-1 text-xs"></i>
+                          {car.year}
+                        </span>
+                        <span className="flex items-center text-xs text-gray-600">
+                          <i className="fas fa-gas-pump text-gray-400 ml-1 text-xs"></i>
                           {car.fuelType === 'gasoline' ? 'بنزين' : 
                            car.fuelType === 'diesel' ? 'ديزل' : 
                            car.fuelType === 'hybrid' ? 'هجين' : 
@@ -392,31 +395,32 @@ export default function CarsPage() {
                     </div>
                     
                     {/* Desktop: Show full details */}
-                    <div className="hidden md:block text-sm text-gray-600 mb-4">
-                      <div className="space-y-2">
+                    <div className="hidden sm:block text-sm text-gray-600 mb-3 sm:mb-4">
+                      <div className="space-y-1 sm:space-y-2">
                         <div className="flex items-center">
-                          <i className="fas fa-calendar text-gray-400 ml-2 text-sm"></i>
-                          سنة: {car.year}
+                          <i className="fas fa-calendar text-gray-400 ml-2 text-xs sm:text-sm"></i>
+                          <span className="text-xs sm:text-sm">سنة: {car.year}</span>
                         </div>
                         <div className="flex items-center">
-                          <i className="fas fa-gas-pump text-gray-400 ml-2 text-sm"></i>
-                          نوع الوقود: {car.fuelType === 'gasoline' ? 'بنزين' : 
+                          <i className="fas fa-gas-pump text-gray-400 ml-2 text-xs sm:text-sm"></i>
+                          <span className="text-xs sm:text-sm">نوع الوقود: {car.fuelType === 'gasoline' ? 'بنزين' : 
                            car.fuelType === 'diesel' ? 'ديزل' : 
                            car.fuelType === 'hybrid' ? 'هجين' : 
-                           car.fuelType === 'electric' ? 'كهربائي' : car.fuelType || 'غير محدد'}
+                           car.fuelType === 'electric' ? 'كهربائي' : car.fuelType || 'غير محدد'}</span>
                         </div>
                         <div className="flex items-center">
-                          <i className="fas fa-cog text-gray-400 ml-2 text-sm"></i>
-                          ناقل الحركة: {car.transmission === 'automatic' ? 'أوتوماتيك' : 
-                           car.transmission === 'manual' ? 'يدوي' : car.transmission || 'غير محدد'}
+                          <i className="fas fa-cog text-gray-400 ml-2 text-xs sm:text-sm"></i>
+                          <span className="text-xs sm:text-sm">ناقل الحركة: {car.transmission === 'automatic' ? 'أوتوماتيك' : 
+                           car.transmission === 'manual' ? 'يدوي' : car.transmission || 'غير محدد'}</span>
                         </div>
                         <div className="flex items-center">
-                          <i className="fas fa-tint text-gray-400 ml-2 text-sm"></i>
-                          اللون: {car.color || 'غير محدد'}
+                          <i className="fas fa-tint text-gray-400 ml-2 text-xs sm:text-sm"></i>
+                          <span className="text-xs sm:text-sm">اللون: {car.color || 'غير محدد'}</span>
                         </div>
                       </div>
                     </div>
-                    <a href={`/cars/${car.id}`} className="block w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center py-3 px-4 rounded-lg text-sm md:text-base font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    <a href={`/cars/${car.id}`} className="block w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center py-1.5 sm:py-2 md:py-3 px-2 sm:px-3 md:px-4 rounded-lg text-xs sm:text-sm md:text-base font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl">
+                      <i className="fas fa-eye ml-1"></i>
                       عرض التفاصيل
                     </a>
                   </div>
@@ -428,67 +432,68 @@ export default function CarsPage() {
       </section>
 
       {/* Enhanced Footer */}
-      <footer className="bg-gray-900 text-white py-6 md:py-12">
+      <footer className="bg-gray-900 text-white py-4 sm:py-6 md:py-12">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {/* Brand Section */}
-            <div className="text-center md:text-right">
-              <h3 className="text-xl md:text-2xl font-bold mb-3 flex items-center justify-center md:justify-start">
+            <div className="text-center sm:text-right sm:col-span-2 lg:col-span-1">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3 flex items-center justify-center sm:justify-start">
                 <i className="fas fa-car text-blue-500 ml-2"></i>
-                موقع السيارات
+                <span className="hidden sm:inline">موقع السيارات</span>
+                <span className="sm:hidden">موقع السيارات</span>
               </h3>
-              <p className="text-gray-400 text-sm md:text-base mb-4">أفضل موقع لبيع وشراء السيارات في الشرق الأوسط</p>
+              <p className="text-gray-400 text-xs sm:text-sm md:text-base mb-3 sm:mb-4">أفضل موقع لبيع وشراء السيارات في الشرق الأوسط</p>
               
               {/* Contact Info */}
-              <div className="space-y-2 text-sm">
-                <div className="flex items-center justify-center md:justify-start">
-                  <i className="fas fa-phone text-blue-500 ml-2"></i>
+              <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm">
+                <div className="flex items-center justify-center sm:justify-start">
+                  <i className="fas fa-phone text-blue-500 ml-2 text-xs"></i>
                   <span>966+ 50 123 4567</span>
                 </div>
-                <div className="flex items-center justify-center md:justify-start">
-                  <i className="fas fa-envelope text-blue-500 ml-2"></i>
+                <div className="flex items-center justify-center sm:justify-start">
+                  <i className="fas fa-envelope text-blue-500 ml-2 text-xs"></i>
                   <span>info@carsite.com</span>
                 </div>
               </div>
             </div>
             
             {/* Quick Links */}
-            <div className="text-center md:text-right">
-              <h4 className="text-lg font-semibold mb-4">روابط سريعة</h4>
-              <div className="space-y-2">
-                <a href="/cars" className="block text-gray-400 hover:text-white transition-colors text-sm">تصفح السيارات</a>
-                <a href="/sell-car" className="block text-gray-400 hover:text-white transition-colors text-sm">بيع سيارتك</a>
-                <a href="/compare" className="block text-gray-400 hover:text-white transition-colors text-sm">مقارنة السيارات</a>
-                <a href="/contact" className="block text-gray-400 hover:text-white transition-colors text-sm">اتصل بنا</a>
+            <div className="text-center sm:text-right">
+              <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">روابط سريعة</h4>
+              <div className="space-y-1 sm:space-y-2">
+                <a href="/cars" className="block text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">تصفح السيارات</a>
+                <a href="/sell-car" className="block text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">بيع سيارتك</a>
+                <a href="/compare" className="block text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">مقارنة السيارات</a>
+                <a href="/contact" className="block text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">اتصل بنا</a>
               </div>
             </div>
             
             {/* Social Media */}
-            <div className="text-center md:text-right">
-              <h4 className="text-lg font-semibold mb-4">تابعنا على</h4>
-              <div className="grid grid-cols-3 md:grid-cols-5 gap-3 max-w-xs mx-auto md:max-w-none">
-                <a href="#" className="group bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 p-3 rounded-xl transition-all duration-300 transform hover:scale-110">
-                  <i className="fab fa-facebook-f text-white text-lg group-hover:scale-110 transition-transform duration-300"></i>
+            <div className="text-center sm:text-right">
+              <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">تابعنا على</h4>
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3 max-w-xs mx-auto sm:max-w-none">
+                <a href="#" className="group bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-110">
+                  <i className="fab fa-facebook-f text-white text-sm sm:text-lg group-hover:scale-110 transition-transform duration-300"></i>
                 </a>
-                <a href="#" className="group bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 p-3 rounded-xl transition-all duration-300 transform hover:scale-110">
-                  <i className="fab fa-twitter text-white text-lg group-hover:scale-110 transition-transform duration-300"></i>
+                <a href="#" className="group bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-110">
+                  <i className="fab fa-twitter text-white text-sm sm:text-lg group-hover:scale-110 transition-transform duration-300"></i>
                 </a>
-                <a href="#" className="group bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 p-3 rounded-xl transition-all duration-300 transform hover:scale-110">
-                  <i className="fab fa-instagram text-white text-lg group-hover:scale-110 transition-transform duration-300"></i>
+                <a href="#" className="group bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-110">
+                  <i className="fab fa-instagram text-white text-sm sm:text-lg group-hover:scale-110 transition-transform duration-300"></i>
                 </a>
-                <a href="#" className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 p-3 rounded-xl transition-all duration-300 transform hover:scale-110">
-                  <i className="fab fa-youtube text-white text-lg group-hover:scale-110 transition-transform duration-300"></i>
+                <a href="#" className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-110">
+                  <i className="fab fa-youtube text-white text-sm sm:text-lg group-hover:scale-110 transition-transform duration-300"></i>
                 </a>
-                <a href="#" className="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 p-3 rounded-xl transition-all duration-300 transform hover:scale-110">
-                  <i className="fab fa-whatsapp text-white text-lg group-hover:scale-110 transition-transform duration-300"></i>
+                <a href="#" className="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-110">
+                  <i className="fab fa-whatsapp text-white text-sm sm:text-lg group-hover:scale-110 transition-transform duration-300"></i>
                 </a>
               </div>
             </div>
           </div>
           
           {/* Copyright */}
-          <div className="border-t border-gray-800 mt-6 pt-6 text-center">
-            <p className="text-gray-400 text-sm">© 2024 موقع السيارات. جميع الحقوق محفوظة</p>
+          <div className="border-t border-gray-800 mt-4 sm:mt-6 pt-4 sm:pt-6 text-center">
+            <p className="text-gray-400 text-xs sm:text-sm">© 2024 موقع السيارات. جميع الحقوق محفوظة</p>
           </div>
         </div>
       </footer>

@@ -298,6 +298,19 @@
       grid-template-columns: repeat(3, 1fr) !important;
       gap: 0.75rem !important;
     }
+    
+    /* Tablet responsive improvements */
+    .tablet-grid-2 {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+    
+    .tablet-text-lg {
+      font-size: 1.125rem !important;
+    }
+    
+    .tablet-p-6 {
+      padding: 1.5rem !important;
+    }
   }
   
   @media (max-width: 768px) {
@@ -518,6 +531,75 @@
     .footer-links {
       @apply grid grid-cols-2 gap-4;
     }
+    
+    /* Enhanced mobile form styles */
+    .mobile-form-section {
+      @apply space-y-4;
+    }
+    
+    .mobile-form-group {
+      @apply space-y-2;
+    }
+    
+    .mobile-form-row {
+      @apply grid grid-cols-1 gap-3;
+    }
+    
+    /* Mobile image modal improvements */
+    .mobile-image-modal {
+      @apply fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4;
+    }
+    
+    .mobile-image-modal-content {
+      @apply relative max-w-full max-h-full w-full;
+    }
+    
+    /* Mobile button groups */
+    .mobile-button-group {
+      @apply flex flex-col space-y-2;
+    }
+    
+    .mobile-button-group-horizontal {
+      @apply flex flex-row space-x-2 space-x-reverse;
+    }
+    
+    /* Mobile text utilities */
+    .mobile-text-center {
+      @apply text-center;
+    }
+    
+    .mobile-text-sm {
+      @apply text-sm;
+    }
+    
+    .mobile-text-xs {
+      @apply text-xs;
+    }
+    
+    /* Mobile spacing utilities */
+    .mobile-mb-4 {
+      @apply mb-4;
+    }
+    
+    .mobile-mb-6 {
+      @apply mb-6;
+    }
+    
+    .mobile-mt-4 {
+      @apply mt-4;
+    }
+    
+    .mobile-mt-6 {
+      @apply mt-6;
+    }
+    
+    .mobile-p-4 {
+      @apply p-4;
+    }
+    
+    .mobile-p-6 {
+      @apply p-6;
+    }
   }
   
   @media (max-width: 640px) {
@@ -550,6 +632,70 @@
     /* Button adjustments */
     .btn-primary, .btn-secondary, .btn-glass {
       @apply text-sm px-4 py-2;
+    }
+    
+    /* Mobile form improvements */
+    .mobile-form-grid {
+      grid-template-columns: 1fr !important;
+      gap: 0.75rem !important;
+    }
+    
+    .mobile-form-input {
+      @apply text-sm py-2.5 px-3;
+    }
+    
+    .mobile-form-label {
+      @apply text-sm font-medium;
+    }
+    
+    /* Mobile card improvements */
+    .mobile-card {
+      @apply p-3 rounded-lg;
+    }
+    
+    .mobile-card-title {
+      @apply text-sm font-bold leading-tight;
+    }
+    
+    .mobile-card-price {
+      @apply text-base font-bold;
+    }
+    
+    /* Mobile image gallery */
+    .mobile-image-gallery {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 0.5rem !important;
+    }
+    
+    .mobile-image-item {
+      @apply h-20 rounded-md;
+    }
+    
+    /* Mobile table improvements */
+    .mobile-table-container {
+      @apply overflow-x-auto;
+    }
+    
+    .mobile-table {
+      min-width: 600px;
+    }
+    
+    .mobile-table-cell {
+      @apply p-2 text-xs;
+    }
+    
+    /* Mobile navigation improvements */
+    .mobile-nav-item {
+      @apply py-3 px-4 text-sm;
+    }
+    
+    /* Mobile spacing utilities */
+    .mobile-space-y-3 > * + * {
+      margin-top: 0.75rem;
+    }
+    
+    .mobile-space-y-4 > * + * {
+      margin-top: 1rem;
     }
   }
 }

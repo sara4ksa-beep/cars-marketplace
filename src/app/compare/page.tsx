@@ -134,15 +134,15 @@ export default function ComparePage() {
       <Header />
 
       {/* Page Header */}
-      <section className="bg-white shadow-md py-6 md:py-12">
+      <section className="bg-white shadow-md py-4 sm:py-6 md:py-12">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-6 md:mb-8">
-            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">
-              <i className="fas fa-balance-scale text-blue-600 ml-2"></i>
+          <div className="text-center mb-4 sm:mb-6 md:mb-8">
+            <h1 className="text-xl sm:text-2xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3 md:mb-4">
+              <i className="fas fa-balance-scale text-blue-600 ml-1 sm:ml-2 text-lg sm:text-xl md:text-2xl"></i>
               مقارنة السيارات
             </h1>
-            <p className="text-gray-600 text-base md:text-lg">قارن بين السيارات المختلفة لتتخذ القرار الأمثل</p>
-            <div className="mt-3 md:mt-4 text-xs md:text-sm text-gray-500">
+            <p className="text-gray-600 text-sm sm:text-base md:text-lg">قارن بين السيارات المختلفة لتتخذ القرار الأمثل</p>
+            <div className="mt-2 sm:mt-3 md:mt-4 text-xs sm:text-sm text-gray-500">
               يمكنك مقارنة حتى 4 سيارات في نفس الوقت
             </div>
           </div>
@@ -151,45 +151,45 @@ export default function ComparePage() {
 
       {/* Selected Cars for Comparison */}
       {selectedCars.length > 0 && (
-        <section className="py-6 md:py-8 bg-blue-50 border-b">
+        <section className="py-4 sm:py-6 md:py-8 bg-blue-50 border-b">
           <div className="container mx-auto px-4">
-            <h2 className="text-xl md:text-2xl font-bold text-blue-800 mb-4 md:mb-6 text-center">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-blue-800 mb-3 sm:mb-4 md:mb-6 text-center">
               السيارات المختارة للمقارنة ({selectedCars.length}/4)
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
               {selectedCars.map((car) => (
                 <div key={car.id} className="bg-white rounded-xl shadow-lg overflow-hidden relative hover:shadow-xl transition-all duration-300">
                   <button
                     onClick={() => removeFromComparison(car.id)}
-                    className="absolute top-3 left-3 bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors z-10 shadow-lg"
+                    className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-red-500 text-white w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors z-10 shadow-lg"
                   >
-                    <i className="fas fa-times text-sm"></i>
+                    <i className="fas fa-times text-xs sm:text-sm"></i>
                   </button>
-                  <div className="h-40 md:h-48 relative">
+                  <div className="h-28 sm:h-32 md:h-48 relative">
                     <Image
                       src={car.imageUrl || '/default-car.jpg'}
                       alt={car.name}
                       fill
                       className="object-cover"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
                     />
                   </div>
-                  <div className="p-4 md:p-5">
-                    <h3 className="font-bold text-gray-800 mb-2 text-sm md:text-base truncate">{car.name}</h3>
-                    <p className="text-gray-600 text-xs md:text-sm mb-2">{getBrandName(car.brand)} • {car.year}</p>
-                    <div className="text-green-600 font-bold text-sm md:text-base">{car.price.toLocaleString()} ريال</div>
+                  <div className="p-2 sm:p-3 md:p-5">
+                    <h3 className="font-bold text-gray-800 mb-1 sm:mb-2 text-xs sm:text-sm md:text-base truncate">{car.name}</h3>
+                    <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">{getBrandName(car.brand)} • {car.year}</p>
+                    <div className="text-green-600 font-bold text-xs sm:text-sm md:text-base">{car.price.toLocaleString()} ريال</div>
                   </div>
                 </div>
               ))}
             </div>
             
             {selectedCars.length >= 2 && (
-              <div className="text-center mt-6">
+              <div className="text-center mt-4 sm:mt-6">
                 <button
                   onClick={() => document.getElementById('comparison-table')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
                 >
-                  <i className="fas fa-arrow-down ml-2"></i>
+                  <i className="fas fa-arrow-down ml-1 sm:ml-2"></i>
                   عرض المقارنة التفصيلية
                 </button>
               </div>
@@ -199,68 +199,68 @@ export default function ComparePage() {
       )}
 
       {/* Car Selection */}
-      <section className="py-6 md:py-12">
+      <section className="py-4 sm:py-6 md:py-12">
         <div className="container mx-auto px-4">
-          <div className="mb-6 md:mb-8">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">اختر السيارات للمقارنة</h2>
+          <div className="mb-4 sm:mb-6 md:mb-8">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-3 sm:mb-4">اختر السيارات للمقارنة</h2>
             <div className="max-w-md mx-auto md:mx-0">
               <input
                 type="text"
                 placeholder="ابحث عن سيارة..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm md:text-base mobile-form-input"
               />
             </div>
           </div>
 
           {filteredCars.length === 0 ? (
-            <div className="text-center py-8 md:py-12">
-              <div className="text-gray-400 text-4xl md:text-6xl mb-4">
+            <div className="text-center py-6 sm:py-8 md:py-12">
+              <div className="text-gray-400 text-3xl sm:text-4xl md:text-6xl mb-3 sm:mb-4">
                 <i className="fas fa-search"></i>
               </div>
-              <h3 className="text-lg md:text-xl font-semibold text-gray-800 mb-2">لا توجد سيارات متاحة</h3>
-              <p className="text-gray-600 text-sm md:text-base">جرب تغيير كلمات البحث</p>
+              <h3 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">لا توجد سيارات متاحة</h3>
+              <p className="text-gray-600 text-xs sm:text-sm md:text-base">جرب تغيير كلمات البحث</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
               {filteredCars.map((car) => {
                 const isSelected = selectedCars.find(c => c.id === car.id);
                 const canAdd = selectedCars.length < 4;
 
                 return (
                   <div key={car.id} className={`bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl transform hover:scale-105 ${isSelected ? 'ring-2 ring-blue-500' : ''}`}>
-                    <div className="h-48 md:h-56 relative">
+                    <div className="h-32 sm:h-40 md:h-56 relative">
                       <Image
                         src={car.imageUrl || '/default-car.jpg'}
                         alt={car.name}
                         fill
                         className="object-cover"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                       />
                       {isSelected && (
-                        <div className="absolute top-3 right-3 bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                        <div className="absolute top-2 right-2 sm:top-3 sm:right-3 bg-blue-500 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-bold shadow-lg">
                           <i className="fas fa-check ml-1"></i>
                           مختارة
                         </div>
                       )}
                     </div>
-                    <div className="p-4 md:p-5">
-                      <h3 className="text-base md:text-lg font-bold text-gray-800 mb-2 line-clamp-2">{car.name}</h3>
-                      <p className="text-gray-600 text-sm mb-2">{getBrandName(car.brand)} • {car.year}</p>
-                      <div className="text-green-600 font-bold text-lg mb-4">{car.price.toLocaleString()} ريال</div>
+                    <div className="p-2 sm:p-3 md:p-5">
+                      <h3 className="text-xs sm:text-sm md:text-lg font-bold text-gray-800 mb-1 sm:mb-2 line-clamp-2">{car.name}</h3>
+                      <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">{getBrandName(car.brand)} • {car.year}</p>
+                      <div className="text-green-600 font-bold text-xs sm:text-sm md:text-lg mb-2 sm:mb-3">{car.price.toLocaleString()} ريال</div>
                       
-                      <div className="flex flex-col sm:flex-row gap-2">
+                      <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2">
                         <a
                           href={`/cars/${car.id}`}
-                          className="flex-1 bg-gray-100 text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-200 transition-colors text-center text-sm font-medium"
+                          className="flex-1 bg-gray-100 text-gray-700 py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg hover:bg-gray-200 transition-colors text-center text-xs sm:text-sm font-medium"
                         >
                           التفاصيل
                         </a>
                         {isSelected ? (
                           <button
                             onClick={() => removeFromComparison(car.id)}
-                            className="flex-1 bg-red-500 text-white py-2 px-3 rounded-lg hover:bg-red-600 transition-colors text-sm font-medium"
+                            className="flex-1 bg-red-500 text-white py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg hover:bg-red-600 transition-colors text-xs sm:text-sm font-medium"
                           >
                             <i className="fas fa-minus ml-1"></i>
                             إزالة
@@ -269,7 +269,7 @@ export default function ComparePage() {
                           <button
                             onClick={() => addToComparison(car)}
                             disabled={!canAdd}
-                            className={`flex-1 py-2 px-3 rounded-lg transition-colors text-sm font-medium ${
+                            className={`flex-1 py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg transition-colors text-xs sm:text-sm font-medium ${
                               canAdd 
                                 ? 'bg-blue-500 text-white hover:bg-blue-600' 
                                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'

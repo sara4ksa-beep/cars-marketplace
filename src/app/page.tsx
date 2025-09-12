@@ -110,7 +110,7 @@ export default function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative h-[60vh] md:min-h-screen flex items-center overflow-hidden">
+      <section className="relative h-[50vh] sm:h-[60vh] md:min-h-screen flex items-center overflow-hidden">
         {/* Car Background Image */}
         <div className="absolute inset-0 w-full h-full">
           <Image 
@@ -148,25 +148,28 @@ export default function Home() {
 
         {/* Main Content */}
         <div className="container-custom relative z-10 text-white py-4 md:py-16">
-          <div className="max-w-5xl mx-auto text-center space-y-4 md:space-y-10">
+          <div className="max-w-5xl mx-auto text-center space-y-3 md:space-y-6 lg:space-y-10">
             
             {/* Welcome Text */}
-            <div className="space-y-4 md:space-y-6 animate-fade-in">
+            <div className="space-y-3 md:space-y-4 lg:space-y-6 animate-fade-in">
               <div className="inline-block">
                 <span className="hero-welcome-text bg-white/20 backdrop-blur-sm text-white font-medium rounded-full border border-white/30 shadow-lg px-3 py-1 md:px-4 md:py-2 text-xs md:text-sm">
                   <i className="fas fa-sparkles mr-1 md:mr-2"></i>
-                  مرحباً بكم في عالم السيارات المتميز
+                  <span className="hidden sm:inline">مرحباً بكم في عالم السيارات المتميز</span>
+                  <span className="sm:hidden">مرحباً بكم</span>
                 </span>
               </div>
               
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-white text-shadow-glow animate-slide-up">
+              <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-white text-shadow-glow animate-slide-up px-2">
                 <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
-                  اعثر على سيارة احلامك
+                  <span className="hidden sm:inline">اعثر على سيارة احلامك</span>
+                  <span className="sm:hidden">سيارة أحلامك</span>
                 </span>
               </h1>
               
-              <p className="text-sm md:text-lg lg:text-xl text-white/90 leading-relaxed max-w-4xl mx-auto animate-slide-up-delayed font-medium px-4">
-                أفضل مجموعة سيارات فاخرة واقتصادية في الشرق الأوسط مع خدمة متميزة وضمان شامل
+              <p className="text-xs sm:text-sm md:text-lg lg:text-xl text-white/90 leading-relaxed max-w-4xl mx-auto animate-slide-up-delayed font-medium px-4">
+                <span className="hidden sm:inline">أفضل مجموعة سيارات فاخرة واقتصادية في الشرق الأوسط مع خدمة متميزة وضمان شامل</span>
+                <span className="sm:hidden">أفضل السيارات في الشرق الأوسط</span>
               </p>
             </div>
 
@@ -187,16 +190,21 @@ export default function Home() {
             </div>
 
             {/* Action Buttons */}
-            <div className="hero-buttons flex flex-col sm:flex-row justify-center animate-fade-in-delayed gap-3 md:gap-4 px-4">
-              <a href="/cars" className="hero-button bg-white text-blue-600 rounded-xl md:rounded-2xl font-bold hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-105 hover:-translate-y-1 py-3 px-6 text-sm md:text-base">
-                تصفح السيارات
+            <div className="hero-buttons flex flex-col sm:flex-row justify-center animate-fade-in-delayed gap-2 sm:gap-3 md:gap-4 px-4">
+              <a href="/cars" className="hero-button bg-white text-blue-600 rounded-xl md:rounded-2xl font-bold hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-105 hover:-translate-y-1 py-2.5 sm:py-3 px-4 sm:px-6 text-xs sm:text-sm md:text-base">
+                <i className="fas fa-car ml-1 sm:ml-2"></i>
+                <span className="hidden sm:inline">تصفح السيارات</span>
+                <span className="sm:hidden">السيارات</span>
               </a>
               
-              <a href="/sell-car" className="hero-button bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl md:rounded-2xl font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 py-3 px-6 text-sm md:text-base">
-                بيع سيارتك
+              <a href="/sell-car" className="hero-button bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl md:rounded-2xl font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 py-2.5 sm:py-3 px-4 sm:px-6 text-xs sm:text-sm md:text-base">
+                <i className="fas fa-plus-circle ml-1 sm:ml-2"></i>
+                <span className="hidden sm:inline">بيع سيارتك</span>
+                <span className="sm:hidden">بيع</span>
               </a>
               
-              <button className="hero-button bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl md:rounded-2xl font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 py-3 px-6 text-sm md:text-base hidden md:block">
+              <button className="hero-button bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl md:rounded-2xl font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 py-2.5 sm:py-3 px-4 sm:px-6 text-xs sm:text-sm md:text-base hidden lg:block">
+                <i className="fas fa-calendar-check ml-1 sm:ml-2"></i>
                 احجز تجربة قيادة
               </button>
             </div>
@@ -209,31 +217,31 @@ export default function Home() {
       {/* Cars Section */}
       <section className="section-padding bg-white">
         <div className="container-custom">
-          <h2 className="text-2xl md:text-4xl font-bold text-center mb-8 md:mb-12 text-gray-800">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-center mb-6 sm:mb-8 md:mb-12 text-gray-800">
             السيارات
           </h2>
           {loading ? (
-            <div className="text-center py-12">
-              <div className="text-6xl text-gray-300 mb-4">
+            <div className="text-center py-8 sm:py-12">
+              <div className="text-4xl sm:text-6xl text-gray-300 mb-4">
                 <i className="fas fa-car"></i>
               </div>
-              <h3 className="text-2xl font-bold text-gray-600 mb-2">جاري تحميل السيارات...</h3>
-              <p className="text-gray-500 mb-6">يرجى الانتظار قليلاً</p>
+              <h3 className="text-lg sm:text-2xl font-bold text-gray-600 mb-2">جاري تحميل السيارات...</h3>
+              <p className="text-gray-500 mb-6 text-sm sm:text-base">يرجى الانتظار قليلاً</p>
             </div>
           ) : displayedCars.length > 0 ? (
             <>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6 lg:gap-8">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
                 {displayedCars.map((car) => (
-                  <div key={car.id} className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
-                    <div className="relative h-32 md:h-48">
-                      <Image src={car.imageUrl || "/default-car.jpg"} alt={car.name} fill className="object-cover" />
-                      <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-medium">
+                  <div key={car.id} className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105 mobile-card">
+                    <div className="relative h-32 sm:h-40 md:h-48">
+                      <Image src={car.imageUrl || "/default-car.jpg"} alt={car.name} fill className="object-cover" sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw" />
+                      <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
                         جديد
                       </div>
                     </div>
-                    <div className="p-3">
+                    <div className="p-2 sm:p-3 md:p-4">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs md:text-sm text-blue-600 font-medium">
+                        <span className="text-xs sm:text-sm md:text-sm text-blue-600 font-semibold bg-blue-50 px-2 py-1 rounded-full">
                           {car.brand === 'toyota' ? 'تويوتا' :
                            car.brand === 'honda' ? 'هوندا' :
                            car.brand === 'nissan' ? 'نيسان' :
@@ -294,27 +302,33 @@ export default function Home() {
                            car.brand === 'wuling' ? 'وولينغ' :
                            'علامة تجارية غير معروفة'}
                         </span>
-                        <span className="text-sm md:text-xl font-bold text-green-600">
+                        <span className="text-sm sm:text-base md:text-xl font-bold text-green-600 mobile-card-price">
                           {car.price.toLocaleString()}
                         </span>
                       </div>
-                      <h3 className="text-xs md:text-lg font-semibold text-gray-800 mb-2 line-clamp-2 leading-tight">
+                      <h3 className="text-xs sm:text-sm md:text-lg font-semibold text-gray-800 mb-1 sm:mb-2 line-clamp-2 leading-tight mobile-card-title">
                         {car.name}
                       </h3>
                       
                       {/* Mobile: Essential info only */}
-                      <div className="md:hidden text-xs text-gray-500 mb-3">
-                        <div className="flex justify-between">
-                          <span>{car.year}</span>
-                          <span>{car.fuelType === 'gasoline' ? 'بنزين' : 
-                           car.fuelType === 'diesel' ? 'ديزل' : 
-                           car.fuelType === 'hybrid' ? 'هجين' : 
-                           car.fuelType === 'electric' ? 'كهربائي' : car.fuelType || 'غير محدد'}</span>
+                      <div className="sm:hidden text-xs text-gray-500 mb-2">
+                        <div className="flex justify-between items-center bg-gray-50 p-1.5 rounded-lg">
+                          <span className="flex items-center">
+                            <i className="fas fa-calendar text-gray-400 ml-1 text-xs"></i>
+                            {car.year}
+                          </span>
+                          <span className="flex items-center">
+                            <i className="fas fa-gas-pump text-gray-400 ml-1 text-xs"></i>
+                            {car.fuelType === 'gasoline' ? 'بنزين' : 
+                             car.fuelType === 'diesel' ? 'ديزل' : 
+                             car.fuelType === 'hybrid' ? 'هجين' : 
+                             car.fuelType === 'electric' ? 'كهربائي' : car.fuelType || 'غير محدد'}
+                          </span>
                         </div>
                       </div>
                       
                       {/* Desktop: Show full details */}
-                      <div className="hidden md:block text-sm text-gray-600 mb-4">
+                      <div className="hidden sm:block text-sm text-gray-600 mb-4">
                         <div className="space-y-2">
                           <div className="flex items-center">
                             <i className="fas fa-calendar text-gray-400 ml-2 text-sm"></i>
@@ -338,7 +352,8 @@ export default function Home() {
                           </div>
                         </div>
                       </div>
-                      <a href={`/cars/${car.id}`} className="block w-full bg-blue-600 text-white text-center py-2 px-3 rounded text-xs md:text-base font-medium hover:bg-blue-700 transition-colors">
+                      <a href={`/cars/${car.id}`} className="block w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg text-xs sm:text-sm md:text-base font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl">
+                        <i className="fas fa-eye ml-1"></i>
                         عرض التفاصيل
                       </a>
                     </div>
@@ -372,11 +387,11 @@ export default function Home() {
       {/* Testimonials Carousel Section */}
       <section className="section-padding bg-gradient-to-br from-blue-50 to-purple-50">
         <div className="container-custom">
-          <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-3 md:mb-4">
+          <div className="text-center mb-6 sm:mb-8 md:mb-12">
+            <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-gray-800 mb-2 sm:mb-3 md:mb-4">
             آراء عملائنا
           </h2>
-            <p className="text-gray-600 text-base md:text-lg">ماذا يقول عملاؤنا عنا</p>
+            <p className="text-gray-600 text-sm sm:text-base md:text-lg">ماذا يقول عملاؤنا عنا</p>
           </div>
           
           {/* Desktop: Three Testimonials Grid */}
@@ -464,34 +479,34 @@ export default function Home() {
           <div className="lg:hidden">
             <div className="relative max-w-4xl mx-auto">
               {/* Main Testimonial Display */}
-              <div className="bg-white p-6 md:p-12 rounded-3xl shadow-2xl border border-blue-100 relative overflow-hidden">
+              <div className="bg-white p-4 sm:p-6 md:p-12 rounded-2xl sm:rounded-3xl shadow-2xl border border-blue-100 relative overflow-hidden">
                 {/* Background Pattern */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -translate-y-16 translate-x-16"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-50 rounded-full translate-y-12 -translate-x-12"></div>
+                <div className="absolute top-0 right-0 w-20 h-20 sm:w-32 sm:h-32 bg-blue-50 rounded-full -translate-y-10 sm:-translate-y-16 translate-x-10 sm:translate-x-16"></div>
+                <div className="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-purple-50 rounded-full translate-y-8 sm:translate-y-12 -translate-x-8 sm:-translate-x-12"></div>
                 
                 {/* Quote Icon */}
-                <div className="absolute top-8 right-8 text-blue-200 text-6xl">
+                <div className="absolute top-4 right-4 sm:top-8 sm:right-8 text-blue-200 text-3xl sm:text-6xl">
                   <i className="fas fa-quote-right"></i>
                 </div>
                 
                 {/* Testimonial Content */}
                 <div className="relative z-10 text-center">
                   {/* Rating Stars */}
-                  <div className="flex justify-center mb-4 md:mb-6">
+                  <div className="flex justify-center mb-3 sm:mb-4 md:mb-6">
                     {[...Array(5)].map((_, i) => (
-                      <i key={i} className={`fas fa-star text-2xl md:text-3xl mx-1 ${i < testimonials[currentTestimonial].rating ? 'text-yellow-400' : 'text-gray-300'}`}></i>
+                      <i key={i} className={`fas fa-star text-lg sm:text-2xl md:text-3xl mx-1 ${i < testimonials[currentTestimonial].rating ? 'text-yellow-400' : 'text-gray-300'}`}></i>
                     ))}
                   </div>
                   
                   {/* Comment */}
-                  <p className="text-gray-700 text-base md:text-xl lg:text-2xl italic mb-6 md:mb-8 leading-relaxed">
+                  <p className="text-gray-700 text-sm sm:text-base md:text-xl lg:text-2xl italic mb-4 sm:mb-6 md:mb-8 leading-relaxed">
                     "{testimonials[currentTestimonial].comment}"
                   </p>
                   
                   {/* Customer Info */}
-                  <div className="border-t border-gray-200 pt-4 md:pt-6">
-                    <div className="font-bold text-blue-800 text-lg md:text-xl mb-2">{testimonials[currentTestimonial].name}</div>
-                    <div className="text-gray-500 text-base md:text-lg">اشترى {testimonials[currentTestimonial].car}</div>
+                  <div className="border-t border-gray-200 pt-3 sm:pt-4 md:pt-6">
+                    <div className="font-bold text-blue-800 text-base sm:text-lg md:text-xl mb-1 sm:mb-2">{testimonials[currentTestimonial].name}</div>
+                    <div className="text-gray-500 text-sm sm:text-base md:text-lg">اشترى {testimonials[currentTestimonial].car}</div>
                   </div>
                 </div>
               </div>
@@ -553,30 +568,30 @@ export default function Home() {
       {/* Features Section */}
       <section className="section-padding bg-white">
         <div className="container-custom">
-          <h2 className="text-2xl md:text-4xl font-bold text-center mb-8 md:mb-12 text-gray-800">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-center mb-6 sm:mb-8 md:mb-12 text-gray-800">
             لماذا تختارنا؟
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            <div className="text-center card-hover p-6 md:p-8 rounded-2xl">
-              <div className="text-4xl md:text-6xl mb-4 md:mb-6 text-blue-600">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+            <div className="text-center card-hover p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl">
+              <div className="text-3xl sm:text-4xl md:text-6xl mb-3 sm:mb-4 md:mb-6 text-blue-600">
                 <i className="fas fa-trophy"></i>
               </div>
-              <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 md:mb-4">جودة عالية</h3>
-              <p className="text-gray-600 leading-relaxed text-sm md:text-base">نقدم أفضل السيارات من أشهر الماركات العالمية مع ضمان الجودة</p>
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-2 sm:mb-3 md:mb-4">جودة عالية</h3>
+              <p className="text-gray-600 leading-relaxed text-xs sm:text-sm md:text-base">نقدم أفضل السيارات من أشهر الماركات العالمية مع ضمان الجودة</p>
             </div>
-            <div className="text-center card-hover p-6 md:p-8 rounded-2xl">
-              <div className="text-4xl md:text-6xl mb-4 md:mb-6 text-green-600">
+            <div className="text-center card-hover p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl">
+              <div className="text-3xl sm:text-4xl md:text-6xl mb-3 sm:mb-4 md:mb-6 text-green-600">
                 <i className="fas fa-dollar-sign"></i>
               </div>
-              <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 md:mb-4">أسعار تنافسية</h3>
-              <p className="text-gray-600 leading-relaxed text-sm md:text-base">أفضل الأسعار في السوق مع عروض وخصومات حصرية</p>
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-2 sm:mb-3 md:mb-4">أسعار تنافسية</h3>
+              <p className="text-gray-600 leading-relaxed text-xs sm:text-sm md:text-base">أفضل الأسعار في السوق مع عروض وخصومات حصرية</p>
             </div>
-            <div className="text-center card-hover p-6 md:p-8 rounded-2xl">
-              <div className="text-4xl md:text-6xl mb-4 md:mb-6 text-purple-600">
+            <div className="text-center card-hover p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl sm:col-span-2 lg:col-span-1">
+              <div className="text-3xl sm:text-4xl md:text-6xl mb-3 sm:mb-4 md:mb-6 text-purple-600">
                 <i className="fas fa-tools"></i>
               </div>
-              <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 md:mb-4">خدمة ما بعد البيع</h3>
-              <p className="text-gray-600 leading-relaxed text-sm md:text-base">خدمة عملاء متميزة وصيانة دورية لجميع السيارات</p>
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-2 sm:mb-3 md:mb-4">خدمة ما بعد البيع</h3>
+              <p className="text-gray-600 leading-relaxed text-xs sm:text-sm md:text-base">خدمة عملاء متميزة وصيانة دورية لجميع السيارات</p>
             </div>
           </div>
         </div>
@@ -587,13 +602,19 @@ export default function Home() {
       {/* CTA Section */}
       <section className="gradient-bg text-white section-padding">
         <div className="container-custom text-center">
-          <h2 className="text-2xl md:text-4xl font-bold mb-4 md:mb-6">جاهز لشراء سيارتك المفضلة؟</h2>
-          <p className="text-base md:text-xl mb-6 md:mb-8 opacity-90">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold mb-3 sm:mb-4 md:mb-6">جاهز لشراء سيارتك المفضلة؟</h2>
+          <p className="text-sm sm:text-base md:text-xl mb-4 sm:mb-6 md:mb-8 opacity-90">
             تواصل معنا الآن واحصل على أفضل العروض والخصومات
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
-            <button className="btn-primary text-sm md:text-lg px-6 md:px-8 py-3 md:py-4">اتصل بنا الآن</button>
-            <button className="btn-secondary text-sm md:text-lg px-6 md:px-8 py-3 md:py-4">احجز موعد</button>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 justify-center">
+            <button className="btn-primary text-xs sm:text-sm md:text-lg px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4">
+              <i className="fas fa-phone ml-1 sm:ml-2"></i>
+              اتصل بنا الآن
+            </button>
+            <button className="btn-secondary text-xs sm:text-sm md:text-lg px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4">
+              <i className="fas fa-calendar ml-1 sm:ml-2"></i>
+              احجز موعد
+            </button>
           </div>
         </div>
       </section>
@@ -601,113 +622,114 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-gray-900 text-white section-padding">
         <div className="container-custom">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-2xl font-bold mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            <div className="sm:col-span-2 lg:col-span-1">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4">
                 <i className="fas fa-car text-blue-600 ml-2"></i>
-                موقع السيارات المتميز
+                <span className="hidden sm:inline">موقع السيارات المتميز</span>
+                <span className="sm:hidden">موقع السيارات</span>
               </h3>
-              <p className="text-gray-400 mb-6">
+              <p className="text-gray-400 mb-4 sm:mb-6 text-sm sm:text-base">
                 أفضل موقع لبيع وشراء السيارات في الشرق الأوسط
               </p>
               
               {/* Social Media */}
               <div>
-                <h4 className="text-lg font-semibold mb-6 text-center">تابعنا على</h4>
-                <div className="grid grid-cols-3 gap-4 max-w-xs mx-auto">
-                  <a href="#" className="group bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 p-4 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                    <i className="fab fa-facebook-f text-white text-xl group-hover:scale-110 transition-transform duration-300"></i>
+                <h4 className="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-center sm:text-right">تابعنا على</h4>
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-4 max-w-xs mx-auto sm:max-w-none">
+                  <a href="#" className="group bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                    <i className="fab fa-facebook-f text-white text-lg sm:text-xl group-hover:scale-110 transition-transform duration-300"></i>
                   </a>
-                  <a href="#" className="group bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 p-4 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                    <i className="fab fa-twitter text-white text-xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                    <i className="fab fa-twitter text-white text-lg sm:text-xl group-hover:scale-110 transition-transform duration-300"></i>
                   </a>
-                  <a href="#" className="group bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 p-4 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                    <i className="fab fa-instagram text-white text-xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                    <i className="fab fa-instagram text-white text-lg sm:text-xl group-hover:scale-110 transition-transform duration-300"></i>
                   </a>
-                  <a href="#" className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 p-4 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                    <i className="fab fa-youtube text-white text-xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                    <i className="fab fa-youtube text-white text-lg sm:text-xl group-hover:scale-110 transition-transform duration-300"></i>
                   </a>
-                  <a href="#" className="group bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 p-4 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                    <i className="fab fa-linkedin-in text-white text-xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                    <i className="fab fa-linkedin-in text-white text-lg sm:text-xl group-hover:scale-110 transition-transform duration-300"></i>
                   </a>
-                  <a href="#" className="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 p-4 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                    <i className="fab fa-whatsapp text-white text-xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                    <i className="fab fa-whatsapp text-white text-lg sm:text-xl group-hover:scale-110 transition-transform duration-300"></i>
                   </a>
                 </div>
-                <div className="mt-6 text-center">
-                  <p className="text-gray-400 text-sm">تواصل معنا على جميع المنصات</p>
+                <div className="mt-4 sm:mt-6 text-center sm:text-right">
+                  <p className="text-gray-400 text-xs sm:text-sm">تواصل معنا على جميع المنصات</p>
                 </div>
               </div>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4">روابط سريعة</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors flex items-center">
-                  <i className="fas fa-angle-left mr-2"></i>
+              <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">روابط سريعة</h4>
+              <ul className="space-y-1 sm:space-y-2 text-gray-400">
+                <li><a href="/cars" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
                   السيارات الجديدة
                 </a></li>
-                <li><a href="#" className="hover:text-white transition-colors flex items-center">
-                  <i className="fas fa-angle-left mr-2"></i>
+                <li><a href="/cars" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
                   السيارات المستعملة
                 </a></li>
-                <li><a href="#" className="hover:text-white transition-colors flex items-center">
-                  <i className="fas fa-angle-left mr-2"></i>
+                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
                   خدمات التمويل
                 </a></li>
-                <li><a href="#" className="hover:text-white transition-colors flex items-center">
-                  <i className="fas fa-angle-left mr-2"></i>
+                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
                   الصيانة
                 </a></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4">خدماتنا</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors flex items-center">
-                  <i className="fas fa-angle-left mr-2"></i>
+              <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">خدماتنا</h4>
+              <ul className="space-y-1 sm:space-y-2 text-gray-400">
+                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
                   تقييم السيارات
                 </a></li>
-                <li><a href="#" className="hover:text-white transition-colors flex items-center">
-                  <i className="fas fa-angle-left mr-2"></i>
+                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
                   تأمين السيارات
                 </a></li>
-                <li><a href="#" className="hover:text-white transition-colors flex items-center">
-                  <i className="fas fa-angle-left mr-2"></i>
+                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
                   شحن السيارات
                 </a></li>
-                <li><a href="#" className="hover:text-white transition-colors flex items-center">
-                  <i className="fas fa-angle-left mr-2"></i>
+                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
                   استشارات مجانية
                 </a></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4">معلومات التواصل</h4>
-              <div className="space-y-3 text-gray-400">
+              <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">معلومات التواصل</h4>
+              <div className="space-y-2 sm:space-y-3 text-gray-400">
                 <div className="flex items-center">
-                  <i className="fas fa-phone text-blue-500 mr-3"></i>
-                  <p>+966 50 123 4567</p>
+                  <i className="fas fa-phone text-blue-500 mr-2 sm:mr-3 text-sm"></i>
+                  <p className="text-sm sm:text-base">+966 50 123 4567</p>
                 </div>
                 <div className="flex items-center">
-                  <i className="fas fa-envelope text-blue-500 mr-3"></i>
-                  <p>info@carsite.com</p>
+                  <i className="fas fa-envelope text-blue-500 mr-2 sm:mr-3 text-sm"></i>
+                  <p className="text-sm sm:text-base">info@carsite.com</p>
                 </div>
                 <div className="flex items-center">
-                  <i className="fas fa-map-marker-alt text-blue-500 mr-3"></i>
-                  <p>الرياض، المملكة العربية السعودية</p>
+                  <i className="fas fa-map-marker-alt text-blue-500 mr-2 sm:mr-3 text-sm"></i>
+                  <p className="text-sm sm:text-base">الرياض، المملكة العربية السعودية</p>
                 </div>
               </div>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8">
-            <div className="flex flex-col md:flex-row justify-between items-center">
-              <p className="text-gray-400 text-center md:text-right">
+          <div className="border-t border-gray-800 mt-6 sm:mt-8 pt-6 sm:pt-8">
+            <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
+              <p className="text-gray-400 text-center sm:text-right text-xs sm:text-sm">
                 © 2024 موقع السيارات المتميز. جميع الحقوق محفوظة
               </p>
-              <div className="flex items-center space-x-6 space-x-reverse mt-4 md:mt-0">
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">سياسة الخصوصية</a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">الشروط والأحكام</a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">اتفاقية الاستخدام</a>
+              <div className="flex items-center space-x-4 sm:space-x-6 space-x-reverse">
+                <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">سياسة الخصوصية</a>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">الشروط والأحكام</a>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">اتفاقية الاستخدام</a>
               </div>
             </div>
           </div>
