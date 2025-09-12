@@ -110,15 +110,19 @@ export default function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center overflow-hidden">
+      <section className="relative h-[60vh] md:min-h-screen flex items-center overflow-hidden">
         {/* Car Background Image */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 w-full h-full">
           <Image 
             src="/BMW-X5-2024-1.webp" 
             alt="Hero Car Background" 
             fill 
-            className="object-cover object-center"
+            className="object-cover w-full h-full"
+            style={{ 
+              objectPosition: 'center center'
+            }}
             priority
+            sizes="100vw"
           />
           {/* Dark Overlay for text readability */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/50 to-black/60"></div>
@@ -143,56 +147,56 @@ export default function Home() {
         </div>
 
         {/* Main Content */}
-        <div className="container-custom relative z-10 text-white py-8 md:py-16">
-          <div className="max-w-5xl mx-auto text-center space-y-6 md:space-y-10">
+        <div className="container-custom relative z-10 text-white py-4 md:py-16">
+          <div className="max-w-5xl mx-auto text-center space-y-4 md:space-y-10">
             
             {/* Welcome Text */}
             <div className="space-y-4 md:space-y-6 animate-fade-in">
               <div className="inline-block">
-                <span className="hero-welcome-text bg-white/20 backdrop-blur-sm text-white font-medium rounded-full border border-white/30 shadow-lg">
-                  <i className="fas fa-sparkles mr-2"></i>
+                <span className="hero-welcome-text bg-white/20 backdrop-blur-sm text-white font-medium rounded-full border border-white/30 shadow-lg px-3 py-1 md:px-4 md:py-2 text-xs md:text-sm">
+                  <i className="fas fa-sparkles mr-1 md:mr-2"></i>
                   مرحباً بكم في عالم السيارات المتميز
                 </span>
               </div>
               
-              <h1 className="hero-title font-bold leading-tight text-white text-shadow-glow animate-slide-up">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-white text-shadow-glow animate-slide-up">
                 <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
                   اعثر على سيارة احلامك
                 </span>
               </h1>
               
-              <p className="hero-subtitle text-white/90 leading-relaxed max-w-4xl mx-auto animate-slide-up-delayed font-medium">
+              <p className="text-sm md:text-lg lg:text-xl text-white/90 leading-relaxed max-w-4xl mx-auto animate-slide-up-delayed font-medium px-4">
                 أفضل مجموعة سيارات فاخرة واقتصادية في الشرق الأوسط مع خدمة متميزة وضمان شامل
               </p>
             </div>
 
-            {/* Stats Cards */}
-            <div className="hero-stats grid grid-cols-3 max-w-3xl mx-auto mb-6 animate-fade-in-delayed">
-              <div className="bg-white/15 backdrop-blur-sm p-3 rounded-2xl border border-white/20 text-center">
-                <div className="stat-number font-bold text-white">200+</div>
-                <div className="stat-label text-white/80">سيارة متاحة</div>
+            {/* Stats Cards - Hidden on mobile */}
+            <div className="hero-stats grid grid-cols-3 max-w-3xl mx-auto mb-4 md:mb-6 animate-fade-in-delayed gap-2 md:gap-4 hidden md:grid">
+              <div className="bg-white/15 backdrop-blur-sm p-2 md:p-3 rounded-xl md:rounded-2xl border border-white/20 text-center">
+                <div className="stat-number font-bold text-white text-sm md:text-base">200+</div>
+                <div className="stat-label text-white/80 text-xs md:text-sm">سيارة متاحة</div>
               </div>
-              <div className="bg-white/15 backdrop-blur-sm p-3 rounded-2xl border border-white/20 text-center">
-                <div className="stat-number font-bold text-white">1000+</div>
-                <div className="stat-label text-white/80">عميل راضي</div>
+              <div className="bg-white/15 backdrop-blur-sm p-2 md:p-3 rounded-xl md:rounded-2xl border border-white/20 text-center">
+                <div className="stat-number font-bold text-white text-sm md:text-base">1000+</div>
+                <div className="stat-label text-white/80 text-xs md:text-sm">عميل راضي</div>
               </div>
-              <div className="bg-white/15 backdrop-blur-sm p-3 rounded-2xl border border-white/20 text-center">
-                <div className="stat-number font-bold text-white">24/7</div>
-                <div className="stat-label text-white/80">خدمة دعم</div>
+              <div className="bg-white/15 backdrop-blur-sm p-2 md:p-3 rounded-xl md:rounded-2xl border border-white/20 text-center">
+                <div className="stat-number font-bold text-white text-sm md:text-base">24/7</div>
+                <div className="stat-label text-white/80 text-xs md:text-sm">خدمة دعم</div>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="hero-buttons flex flex-col sm:flex-row justify-center animate-fade-in-delayed">
-              <a href="/cars" className="hero-button bg-white text-blue-600 rounded-2xl font-bold hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-105 hover:-translate-y-1">
+            <div className="hero-buttons flex flex-col sm:flex-row justify-center animate-fade-in-delayed gap-3 md:gap-4 px-4">
+              <a href="/cars" className="hero-button bg-white text-blue-600 rounded-xl md:rounded-2xl font-bold hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-105 hover:-translate-y-1 py-3 px-6 text-sm md:text-base">
                 تصفح السيارات
               </a>
               
-              <a href="/sell-car" className="hero-button bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-2xl font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105">
+              <a href="/sell-car" className="hero-button bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl md:rounded-2xl font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 py-3 px-6 text-sm md:text-base">
                 بيع سيارتك
               </a>
               
-              <button className="hero-button bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-2xl font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105">
+              <button className="hero-button bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl md:rounded-2xl font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 py-3 px-6 text-sm md:text-base hidden md:block">
                 احجز تجربة قيادة
               </button>
             </div>

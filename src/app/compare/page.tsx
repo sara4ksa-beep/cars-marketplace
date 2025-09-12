@@ -156,7 +156,7 @@ export default function ComparePage() {
             <h2 className="text-2xl font-bold text-blue-800 mb-6 text-center">
               السيارات المختارة للمقارنة ({selectedCars.length}/4)
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 gap-4 md:gap-6">
               {selectedCars.map((car) => (
                 <div key={car.id} className="bg-white rounded-lg shadow-md overflow-hidden relative">
                   <button
@@ -222,7 +222,7 @@ export default function ComparePage() {
               <p className="text-gray-600">جرب تغيير كلمات البحث</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 gap-4 md:gap-6">
               {filteredCars.map((car) => {
                 const isSelected = selectedCars.find(c => c.id === car.id);
                 const canAdd = selectedCars.length < 4;

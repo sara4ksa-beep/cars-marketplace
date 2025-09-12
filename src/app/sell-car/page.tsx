@@ -224,12 +224,12 @@ export default function SellCarPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-16">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-8 md:py-16">
         <div className="container-custom text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">
             بيع سيارتك معنا
           </h1>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+          <p className="text-base md:text-xl text-blue-100 max-w-2xl mx-auto px-4">
             املأ النموذج أدناه لعرض سيارتك على موقعنا والوصول إلى آلاف المشترين المحتملين
           </p>
         </div>
@@ -237,13 +237,13 @@ export default function SellCarPage() {
 
       {/* Tab Navigation */}
       {/* تم حذف التبويب الثاني */}
-      <div className="container-custom py-8">
+      <div className="container-custom py-4 md:py-8">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-lg shadow-md p-2 mb-8">
+          <div className="bg-white rounded-lg shadow-md p-2 mb-6 md:mb-8">
             <div className="flex">
               <button
                 onClick={() => setActiveTab('form')}
-                className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all duration-300 bg-blue-600 text-white`}
+                className={`flex-1 py-2 md:py-3 px-4 md:px-6 rounded-lg font-medium transition-all duration-300 bg-blue-600 text-white text-sm md:text-base`}
               >
                 إضافة سيارة للبيع
               </button>
@@ -257,15 +257,15 @@ export default function SellCarPage() {
         {/* تم حذف سكشن السيارات المعروضة للبيع */}
         {/* Form Section فقط */}
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-xl p-8">
-            <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="bg-white rounded-2xl shadow-xl p-4 md:p-8">
+            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
               {/* Basic Car Information */}
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+              <div className="space-y-4 md:space-y-6">
+                <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 text-center">
                   معلومات السيارة الأساسية
                 </h2>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       عنوان السيارة *
@@ -276,7 +276,7 @@ export default function SellCarPage() {
                       value={formData.carTitle}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="مثال: تويوتا كامري 2020 ممتازة"
                     />
                   </div>
@@ -290,7 +290,7 @@ export default function SellCarPage() {
                       value={formData.brand}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="">اختر الماركة</option>
                       {/* العلامات اليابانية */}

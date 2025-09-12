@@ -219,12 +219,12 @@ export default function CarsPage() {
 
       {/* Featured Cars Section */}
       {featuredCars.length > 0 && (
-        <section className="py-8 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
+        <section className="py-6 md:py-8 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
           <div className="container mx-auto px-4">
-            <h2 className="text-2xl md:text-3xl font-bold text-blue-800 mb-6 text-center">السيارات المميزة</h2>
-            <div className="flex gap-6 overflow-x-auto pb-2 snap-x">
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-blue-800 mb-4 md:mb-6 text-center">السيارات المميزة</h2>
+            <div className="flex gap-4 md:gap-6 overflow-x-auto pb-2 snap-x">
               {featuredCars.map((car) => (
-                <div key={car.id} className="min-w-[320px] max-w-xs card-hover bg-white rounded-xl shadow-lg border border-blue-100 hover:border-blue-300 snap-center flex-shrink-0 flex flex-col">
+                <div key={car.id} className="min-w-[280px] md:min-w-[320px] max-w-xs card-hover bg-white rounded-xl shadow-lg border border-blue-100 hover:border-blue-300 snap-center flex-shrink-0 flex flex-col">
                   <div className="h-40 relative rounded-t-xl overflow-hidden">
                     <Image
                       src={car.imageUrl || '/default-car.jpg'}
@@ -266,33 +266,33 @@ export default function CarsPage() {
       )}
 
       {/* Simple Header */}
-      <section className="bg-white shadow-md py-12">
+      <section className="bg-white shadow-md py-6 md:py-12">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">السيارات المتاحة</h1>
-            <p className="text-gray-600 mb-2">تصفح مجموعة واسعة من السيارات المتاحة للبيع</p>
-            <p className="text-blue-600 font-medium">
+          <div className="text-center mb-6 md:mb-8">
+            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">السيارات المتاحة</h1>
+            <p className="text-sm md:text-base text-gray-600 mb-2">تصفح مجموعة واسعة من السيارات المتاحة للبيع</p>
+            <p className="text-sm md:text-base text-blue-600 font-medium">
               {filteredCars.length} {filteredCars.length === 1 ? 'سيارة' : filteredCars.length === 2 ? 'سيارتان' : filteredCars.length < 11 ? 'سيارات' : 'سيارة'} متاحة للبيع
             </p>
           </div>
 
           {/* Search and Filter */}
           <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
               <div>
                 <input
                   type="text"
                   placeholder="ابحث عن سيارة..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
                 <select
                   value={selectedBrand}
                   onChange={(e) => setSelectedBrand(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">كافة الماركات</option>
                   {brands.map(brand => (
@@ -308,7 +308,7 @@ export default function CarsPage() {
       </section>
 
       {/* Cars Grid */}
-      <section className="py-12">
+      <section className="py-6 md:py-12">
         <div className="container mx-auto px-4">
           {filteredCars.length === 0 ? (
             <div className="text-center py-12">
@@ -422,30 +422,30 @@ export default function CarsPage() {
       </section>
 
       {/* Enhanced Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-gray-900 text-white py-8 md:py-12">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h3 className="text-3xl font-bold mb-4">موقع السيارات</h3>
-            <p className="text-gray-400 mb-8 text-lg">أفضل موقع لبيع وشراء السيارات</p>
+            <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4">موقع السيارات</h3>
+            <p className="text-gray-400 mb-6 md:mb-8 text-base md:text-lg">أفضل موقع لبيع وشراء السيارات</p>
             
             {/* Enhanced Social Media */}
-            <div className="mb-8">
-              <h4 className="text-xl font-semibold mb-6">تابعنا على</h4>
-              <div className="flex justify-center space-x-6 space-x-reverse">
-                <a href="#" className="group bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 p-4 rounded-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
-                  <i className="fab fa-facebook-f text-white text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+            <div className="mb-6 md:mb-8">
+              <h4 className="text-lg md:text-xl font-semibold mb-4 md:mb-6">تابعنا على</h4>
+              <div className="flex justify-center space-x-4 md:space-x-6 space-x-reverse">
+                <a href="#" className="group bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 p-3 md:p-4 rounded-xl md:rounded-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
+                  <i className="fab fa-facebook-f text-white text-lg md:text-2xl group-hover:scale-110 transition-transform duration-300"></i>
                 </a>
-                <a href="#" className="group bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 p-4 rounded-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
-                  <i className="fab fa-twitter text-white text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+                <a href="#" className="group bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 p-3 md:p-4 rounded-xl md:rounded-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
+                  <i className="fab fa-twitter text-white text-lg md:text-2xl group-hover:scale-110 transition-transform duration-300"></i>
                 </a>
-                <a href="#" className="group bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 p-4 rounded-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
-                  <i className="fab fa-instagram text-white text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+                <a href="#" className="group bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 p-3 md:p-4 rounded-xl md:rounded-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
+                  <i className="fab fa-instagram text-white text-lg md:text-2xl group-hover:scale-110 transition-transform duration-300"></i>
                 </a>
-                <a href="#" className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 p-4 rounded-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
-                  <i className="fab fa-youtube text-white text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+                <a href="#" className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 p-3 md:p-4 rounded-xl md:rounded-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
+                  <i className="fab fa-youtube text-white text-lg md:text-2xl group-hover:scale-110 transition-transform duration-300"></i>
                 </a>
-                <a href="#" className="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 p-4 rounded-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
-                  <i className="fab fa-whatsapp text-white text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+                <a href="#" className="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 p-3 md:p-4 rounded-xl md:rounded-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
+                  <i className="fab fa-whatsapp text-white text-lg md:text-2xl group-hover:scale-110 transition-transform duration-300"></i>
                 </a>
               </div>
             </div>
