@@ -15,8 +15,6 @@ export default function Header() {
             <div className="w-10 h-10 md:w-14 md:h-14 bg-white rounded-lg md:rounded-xl flex items-center justify-center group-hover:bg-blue-50 transition-all duration-300">
               <i className="fas fa-car text-blue-600 text-lg md:text-2xl"></i>
             </div>
-            {/* Logo text for mobile */}
-            <span className="md:hidden text-sm font-bold">موقع السيارات</span>
           </Link>
 
           {/* Navigation Links - Desktop */}

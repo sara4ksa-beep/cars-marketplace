@@ -162,8 +162,7 @@ export default function Home() {
               
               <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-white text-shadow-glow animate-slide-up px-2">
                 <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
-                  <span className="hidden sm:inline">اعثر على سيارة احلامك</span>
-                  <span className="sm:hidden">سيارة أحلامك</span>
+                  اعثر على سيارة احلامك
                 </span>
               </h1>
               
@@ -241,9 +240,6 @@ export default function Home() {
                         className="object-cover"
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                       />
-                      <div className="absolute top-2 right-2 sm:top-3 sm:right-3 bg-red-500 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-bold shadow-lg">
-                        جديد
-                      </div>
                     </div>
                     <div className="p-2 sm:p-3 md:p-5">
                       <h3 className="text-xs sm:text-sm md:text-lg font-bold text-gray-800 mb-1 sm:mb-2 line-clamp-2">{car.name}</h3>
