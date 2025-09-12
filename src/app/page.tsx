@@ -372,11 +372,11 @@ export default function Home() {
       {/* Testimonials Carousel Section */}
       <section className="section-padding bg-gradient-to-br from-blue-50 to-purple-50">
         <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-3 md:mb-4">
             آراء عملائنا
           </h2>
-            <p className="text-gray-600 text-lg">ماذا يقول عملاؤنا عنا</p>
+            <p className="text-gray-600 text-base md:text-lg">ماذا يقول عملاؤنا عنا</p>
           </div>
           
           {/* Desktop: Three Testimonials Grid */}
@@ -464,7 +464,7 @@ export default function Home() {
           <div className="lg:hidden">
             <div className="relative max-w-4xl mx-auto">
               {/* Main Testimonial Display */}
-              <div className="bg-white p-12 rounded-3xl shadow-2xl border border-blue-100 relative overflow-hidden">
+              <div className="bg-white p-6 md:p-12 rounded-3xl shadow-2xl border border-blue-100 relative overflow-hidden">
                 {/* Background Pattern */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -translate-y-16 translate-x-16"></div>
                 <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-50 rounded-full translate-y-12 -translate-x-12"></div>
@@ -477,21 +477,21 @@ export default function Home() {
                 {/* Testimonial Content */}
                 <div className="relative z-10 text-center">
                   {/* Rating Stars */}
-                  <div className="flex justify-center mb-6">
+                  <div className="flex justify-center mb-4 md:mb-6">
                     {[...Array(5)].map((_, i) => (
-                      <i key={i} className={`fas fa-star text-3xl mx-1 ${i < testimonials[currentTestimonial].rating ? 'text-yellow-400' : 'text-gray-300'}`}></i>
+                      <i key={i} className={`fas fa-star text-2xl md:text-3xl mx-1 ${i < testimonials[currentTestimonial].rating ? 'text-yellow-400' : 'text-gray-300'}`}></i>
                     ))}
                   </div>
                   
                   {/* Comment */}
-                  <p className="text-gray-700 text-xl md:text-2xl italic mb-8 leading-relaxed">
+                  <p className="text-gray-700 text-base md:text-xl lg:text-2xl italic mb-6 md:mb-8 leading-relaxed">
                     "{testimonials[currentTestimonial].comment}"
                   </p>
                   
                   {/* Customer Info */}
-                  <div className="border-t border-gray-200 pt-6">
-                    <div className="font-bold text-blue-800 text-xl mb-2">{testimonials[currentTestimonial].name}</div>
-                    <div className="text-gray-500 text-lg">اشترى {testimonials[currentTestimonial].car}</div>
+                  <div className="border-t border-gray-200 pt-4 md:pt-6">
+                    <div className="font-bold text-blue-800 text-lg md:text-xl mb-2">{testimonials[currentTestimonial].name}</div>
+                    <div className="text-gray-500 text-base md:text-lg">اشترى {testimonials[currentTestimonial].car}</div>
                   </div>
                 </div>
               </div>
@@ -553,30 +553,30 @@ export default function Home() {
       {/* Features Section */}
       <section className="section-padding bg-white">
         <div className="container-custom">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
+          <h2 className="text-2xl md:text-4xl font-bold text-center mb-8 md:mb-12 text-gray-800">
             لماذا تختارنا؟
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center card-hover p-8 rounded-2xl">
-              <div className="text-6xl mb-6 text-blue-600">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div className="text-center card-hover p-6 md:p-8 rounded-2xl">
+              <div className="text-4xl md:text-6xl mb-4 md:mb-6 text-blue-600">
                 <i className="fas fa-trophy"></i>
               </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">جودة عالية</h3>
-              <p className="text-gray-600 leading-relaxed">نقدم أفضل السيارات من أشهر الماركات العالمية مع ضمان الجودة</p>
+              <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 md:mb-4">جودة عالية</h3>
+              <p className="text-gray-600 leading-relaxed text-sm md:text-base">نقدم أفضل السيارات من أشهر الماركات العالمية مع ضمان الجودة</p>
             </div>
-            <div className="text-center card-hover p-8 rounded-2xl">
-              <div className="text-6xl mb-6 text-green-600">
+            <div className="text-center card-hover p-6 md:p-8 rounded-2xl">
+              <div className="text-4xl md:text-6xl mb-4 md:mb-6 text-green-600">
                 <i className="fas fa-dollar-sign"></i>
               </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">أسعار تنافسية</h3>
-              <p className="text-gray-600 leading-relaxed">أفضل الأسعار في السوق مع عروض وخصومات حصرية</p>
+              <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 md:mb-4">أسعار تنافسية</h3>
+              <p className="text-gray-600 leading-relaxed text-sm md:text-base">أفضل الأسعار في السوق مع عروض وخصومات حصرية</p>
             </div>
-            <div className="text-center card-hover p-8 rounded-2xl">
-              <div className="text-6xl mb-6 text-purple-600">
+            <div className="text-center card-hover p-6 md:p-8 rounded-2xl">
+              <div className="text-4xl md:text-6xl mb-4 md:mb-6 text-purple-600">
                 <i className="fas fa-tools"></i>
               </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">خدمة ما بعد البيع</h3>
-              <p className="text-gray-600 leading-relaxed">خدمة عملاء متميزة وصيانة دورية لجميع السيارات</p>
+              <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 md:mb-4">خدمة ما بعد البيع</h3>
+              <p className="text-gray-600 leading-relaxed text-sm md:text-base">خدمة عملاء متميزة وصيانة دورية لجميع السيارات</p>
             </div>
           </div>
         </div>
@@ -587,13 +587,13 @@ export default function Home() {
       {/* CTA Section */}
       <section className="gradient-bg text-white section-padding">
         <div className="container-custom text-center">
-          <h2 className="text-4xl font-bold mb-6">جاهز لشراء سيارتك المفضلة؟</h2>
-          <p className="text-xl mb-8 opacity-90">
+          <h2 className="text-2xl md:text-4xl font-bold mb-4 md:mb-6">جاهز لشراء سيارتك المفضلة؟</h2>
+          <p className="text-base md:text-xl mb-6 md:mb-8 opacity-90">
             تواصل معنا الآن واحصل على أفضل العروض والخصومات
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="btn-primary text-lg px-8 py-4">اتصل بنا الآن</button>
-            <button className="btn-secondary text-lg px-8 py-4">احجز موعد</button>
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
+            <button className="btn-primary text-sm md:text-lg px-6 md:px-8 py-3 md:py-4">اتصل بنا الآن</button>
+            <button className="btn-secondary text-sm md:text-lg px-6 md:px-8 py-3 md:py-4">احجز موعد</button>
           </div>
         </div>
       </section>
