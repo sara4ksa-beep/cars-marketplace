@@ -28,54 +28,8 @@ interface Car {
 }
 
 export default function Home() {
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const testimonials = [
-    {
-      name: "أحمد محمد",
-      comment: "خدمة ممتازة وسيارات عالية الجودة. أنصح بشدة!",
-      rating: 5,
-      car: "مرسيدس C-Class"
-    },
-    {
-      name: "سارة أحمد",
-      comment: "تجربة رائعة من البداية للنهاية. فريق محترف جداً.",
-      rating: 5,
-      car: "بي إم دبليو X5"
-    },
-    {
-      name: "محمد علي",
-      comment: "أسعار منافسة وجودة عالية. سأتعامل معهم مرة أخرى.",
-      rating: 4,
-      car: "أودي A4"
-    },
-    {
-      name: "فاطمة حسن",
-      comment: "أفضل تجربة شراء سيارة في حياتي. خدمة لا تُنسى!",
-      rating: 5,
-      car: "لكزس ES"
-    },
-    {
-      name: "علي محمود",
-      comment: "أسعار معقولة وسيارات ممتازة. أنصح الجميع.",
-      rating: 5,
-      car: "تويوتا كامري"
-    }
-  ];
-
-  // Auto-play testimonials
-  useEffect(() => {
-    if (isAutoPlaying) {
-      const interval = setInterval(() => {
-        setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-      }, 5000); // Change every 5 seconds
-
-      return () => clearInterval(interval);
-    }
-  }, [isAutoPlaying]);
 
   // جلب السيارات من قاعدة البيانات
   useEffect(() => {
@@ -172,21 +126,6 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Stats Cards - Hidden on mobile */}
-            <div className="hero-stats grid grid-cols-3 max-w-3xl mx-auto mb-4 md:mb-6 animate-fade-in-delayed gap-2 md:gap-4 hidden md:grid">
-              <div className="bg-white/15 backdrop-blur-sm p-2 md:p-3 rounded-xl md:rounded-2xl border border-white/20 text-center">
-                <div className="stat-number font-bold text-white text-sm md:text-base">200+</div>
-                <div className="stat-label text-white/80 text-xs md:text-sm">سيارة متاحة</div>
-              </div>
-              <div className="bg-white/15 backdrop-blur-sm p-2 md:p-3 rounded-xl md:rounded-2xl border border-white/20 text-center">
-                <div className="stat-number font-bold text-white text-sm md:text-base">1000+</div>
-                <div className="stat-label text-white/80 text-xs md:text-sm">عميل راضي</div>
-              </div>
-              <div className="bg-white/15 backdrop-blur-sm p-2 md:p-3 rounded-xl md:rounded-2xl border border-white/20 text-center">
-                <div className="stat-number font-bold text-white text-sm md:text-base">24/7</div>
-                <div className="stat-label text-white/80 text-xs md:text-sm">خدمة دعم</div>
-              </div>
-            </div>
 
             {/* Action Buttons */}
             <div className="hero-buttons flex flex-col sm:flex-row justify-center animate-fade-in-delayed gap-3 sm:gap-4 md:gap-6 px-4">
@@ -202,10 +141,6 @@ export default function Home() {
                 <span className="sm:hidden">بيع</span>
               </a>
               
-              <button className="hero-button bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl md:rounded-2xl font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 py-4 sm:py-5 px-6 sm:px-8 text-sm sm:text-base md:text-lg hidden lg:block">
-                <i className="fas fa-calendar-check ml-2"></i>
-                احجز تجربة قيادة
-              </button>
             </div>
           </div>
         </div>
@@ -231,7 +166,7 @@ export default function Home() {
             <>
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
                 {displayedCars.map((car) => (
-                  <div key={car.id} className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl transform hover:scale-105">
+                  <a key={car.id} href={`/cars/${car.id}`} className="block bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl transform hover:scale-105 cursor-pointer">
                     <div className="h-32 sm:h-40 md:h-56 relative">
                       <Image
                         src={car.imageUrl || '/default-car.jpg'}
@@ -305,16 +240,13 @@ export default function Home() {
                       <div className="text-green-600 font-bold text-xs sm:text-sm md:text-lg mb-2 sm:mb-3">{car.price.toLocaleString()} ريال</div>
                       
                       <div className="flex justify-center">
-                        <a
-                          href={`/cars/${car.id}`}
-                          className="w-full bg-blue-500 text-white py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg hover:bg-blue-600 transition-colors text-center text-xs sm:text-sm font-medium"
-                        >
+                        <div className="w-full bg-blue-500 text-white py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg hover:bg-blue-600 transition-colors text-center text-xs sm:text-sm font-medium">
                           <i className="fas fa-eye ml-1"></i>
                           عرض التفاصيل
-                        </a>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </a>
                 ))}
               </div>
               
@@ -341,186 +273,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials Carousel Section */}
-      <section className="section-padding bg-gradient-to-br from-blue-50 to-purple-50">
-        <div className="container-custom">
-          <div className="text-center mb-6 sm:mb-8 md:mb-12">
-            <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-gray-800 mb-2 sm:mb-3 md:mb-4">
-            آراء عملائنا
-          </h2>
-            <p className="text-gray-600 text-sm sm:text-base md:text-lg">ماذا يقول عملاؤنا عنا</p>
-          </div>
-          
-          {/* Desktop: Three Testimonials Grid */}
-          <div className="hidden lg:block">
-            <div className="relative max-w-6xl mx-auto">
-              {/* Three Testimonials Display */}
-              <div className="grid grid-cols-3 gap-8">
-                {[0, 1, 2].map((offset) => {
-                  const index = (currentTestimonial + offset) % testimonials.length;
-                  const testimonial = testimonials[index];
-                  return (
-                    <div key={index} className="bg-white p-8 rounded-3xl shadow-2xl border border-blue-100 relative overflow-hidden transform transition-all duration-500 hover:scale-105">
-                      {/* Background Pattern */}
-                      <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-full -translate-y-12 translate-x-12"></div>
-                      <div className="absolute bottom-0 left-0 w-16 h-16 bg-purple-50 rounded-full translate-y-8 -translate-x-8"></div>
-                      
-                      {/* Quote Icon */}
-                      <div className="absolute top-6 right-6 text-blue-200 text-4xl">
-                        <i className="fas fa-quote-right"></i>
-                      </div>
-                      
-                      {/* Testimonial Content */}
-                      <div className="relative z-10 text-center">
-                        {/* Rating Stars */}
-                        <div className="flex justify-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                            <i key={i} className={`fas fa-star text-xl mx-1 ${i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'}`}></i>
-                          ))}
-                        </div>
-                        
-                        {/* Comment */}
-                        <p className="text-gray-700 text-lg italic mb-6 leading-relaxed">
-                          "{testimonial.comment}"
-                        </p>
-                        
-                        {/* Customer Info */}
-                        <div className="border-t border-gray-200 pt-4">
-                          <div className="font-bold text-blue-800 text-lg mb-1">{testimonial.name}</div>
-                          <div className="text-gray-500 text-sm">اشترى {testimonial.car}</div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              
-              {/* Navigation Arrows */}
-              <button
-                onClick={() => setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm p-4 rounded-full shadow-lg hover:bg-white transition-all duration-300 hover:scale-110 border border-gray-200"
-              >
-                <i className="fas fa-chevron-right text-blue-600 text-xl"></i>
-              </button>
-              
-              <button
-                onClick={() => setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm p-4 rounded-full shadow-lg hover:bg-white transition-all duration-300 hover:scale-110 border border-gray-200"
-              >
-                <i className="fas fa-chevron-left text-blue-600 text-xl"></i>
-              </button>
-              
-              {/* Auto-play Toggle */}
-              <div className="absolute top-4 left-4">
-                <button
-                  onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-                  className={`p-3 rounded-full transition-all duration-300 ${
-                    isAutoPlaying 
-                      ? 'bg-green-500 text-white hover:bg-green-600' 
-                      : 'bg-gray-300 text-gray-600 hover:bg-gray-400'
-                  }`}
-                  title={isAutoPlaying ? 'إيقاف التشغيل التلقائي' : 'تشغيل التلقائي'}
-                >
-                  <i className={`fas ${isAutoPlaying ? 'fa-pause' : 'fa-play'} text-sm`}></i>
-                </button>
-              </div>
-              
-              {/* Testimonial Counter */}
-              <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium text-gray-600">
-                {currentTestimonial + 1} / {testimonials.length}
-              </div>
-            </div>
-          </div>
-          
-          {/* Mobile: Single Testimonial */}
-          <div className="lg:hidden">
-            <div className="relative max-w-4xl mx-auto">
-              {/* Main Testimonial Display */}
-              <div className="bg-white p-4 sm:p-6 md:p-12 rounded-2xl sm:rounded-3xl shadow-2xl border border-blue-100 relative overflow-hidden">
-                {/* Background Pattern */}
-                <div className="absolute top-0 right-0 w-20 h-20 sm:w-32 sm:h-32 bg-blue-50 rounded-full -translate-y-10 sm:-translate-y-16 translate-x-10 sm:translate-x-16"></div>
-                <div className="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-purple-50 rounded-full translate-y-8 sm:translate-y-12 -translate-x-8 sm:-translate-x-12"></div>
-                
-                {/* Quote Icon */}
-                <div className="absolute top-4 right-4 sm:top-8 sm:right-8 text-blue-200 text-3xl sm:text-6xl">
-                  <i className="fas fa-quote-right"></i>
-                </div>
-                
-                {/* Testimonial Content */}
-                <div className="relative z-10 text-center">
-                  {/* Rating Stars */}
-                  <div className="flex justify-center mb-3 sm:mb-4 md:mb-6">
-                    {[...Array(5)].map((_, i) => (
-                      <i key={i} className={`fas fa-star text-lg sm:text-2xl md:text-3xl mx-1 ${i < testimonials[currentTestimonial].rating ? 'text-yellow-400' : 'text-gray-300'}`}></i>
-                    ))}
-                  </div>
-                  
-                  {/* Comment */}
-                  <p className="text-gray-700 text-sm sm:text-base md:text-xl lg:text-2xl italic mb-4 sm:mb-6 md:mb-8 leading-relaxed">
-                    "{testimonials[currentTestimonial].comment}"
-                  </p>
-                  
-                  {/* Customer Info */}
-                  <div className="border-t border-gray-200 pt-3 sm:pt-4 md:pt-6">
-                    <div className="font-bold text-blue-800 text-base sm:text-lg md:text-xl mb-1 sm:mb-2">{testimonials[currentTestimonial].name}</div>
-                    <div className="text-gray-500 text-sm sm:text-base md:text-lg">اشترى {testimonials[currentTestimonial].car}</div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Navigation Dots */}
-              <div className="flex justify-center mt-8 space-x-3 space-x-reverse">
-                {testimonials.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentTestimonial(index)}
-                    className={`w-4 h-4 rounded-full transition-all duration-300 ${
-                      index === currentTestimonial 
-                        ? 'bg-blue-600 scale-125' 
-                        : 'bg-gray-300 hover:bg-gray-400'
-                    }`}
-                  />
-                ))}
-              </div>
-              
-              {/* Navigation Arrows */}
-              <button
-                onClick={() => setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm p-4 rounded-full shadow-lg hover:bg-white transition-all duration-300 hover:scale-110 border border-gray-200"
-              >
-                <i className="fas fa-chevron-right text-blue-600 text-xl"></i>
-              </button>
-              
-              <button
-                onClick={() => setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm p-4 rounded-full shadow-lg hover:bg-white transition-all duration-300 hover:scale-110 border border-gray-200"
-              >
-                <i className="fas fa-chevron-left text-blue-600 text-xl"></i>
-              </button>
-              
-              {/* Auto-play Toggle */}
-              <div className="absolute top-4 left-4">
-                <button
-                  onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-                  className={`p-3 rounded-full transition-all duration-300 ${
-                    isAutoPlaying 
-                      ? 'bg-green-500 text-white hover:bg-green-600' 
-                      : 'bg-gray-300 text-gray-600 hover:bg-gray-400'
-                  }`}
-                  title={isAutoPlaying ? 'إيقاف التشغيل التلقائي' : 'تشغيل التلقائي'}
-                >
-                  <i className={`fas ${isAutoPlaying ? 'fa-pause' : 'fa-play'} text-sm`}></i>
-                </button>
-              </div>
-              
-              {/* Testimonial Counter */}
-              <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium text-gray-600">
-                {currentTestimonial + 1} / {testimonials.length}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Features Section */}
       <section className="section-padding bg-white">

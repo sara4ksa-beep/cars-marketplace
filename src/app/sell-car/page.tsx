@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Header from '../components/Header';
 
 interface Car {
   id: number;
@@ -222,7 +223,10 @@ export default function SellCarPage() {
   const selectedCountry = gulfCountries.find(country => country.code === formData.countryCode);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <Header />
+      
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-6 md:py-16">
         <div className="container-custom text-center">
@@ -663,6 +667,123 @@ export default function SellCarPage() {
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white section-padding">
+        <div className="container-custom">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            <div className="sm:col-span-2 lg:col-span-1">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4">
+                <i className="fas fa-car text-blue-600 ml-2"></i>
+                <span className="hidden sm:inline">موقع السيارات المتميز</span>
+                <span className="sm:hidden">موقع السيارات</span>
+              </h3>
+              <p className="text-gray-400 mb-4 sm:mb-6 text-sm sm:text-base">
+                أفضل موقع لبيع وشراء السيارات في الشرق الأوسط
+              </p>
+              
+              {/* Social Media */}
+              <div>
+                <h4 className="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-center sm:text-right">تابعنا على</h4>
+                <div className="flex flex-wrap justify-center sm:justify-start gap-4 sm:gap-6">
+                  <a href="#" className="group text-blue-400 hover:text-blue-300 transition-all duration-300 transform hover:scale-110">
+                    <i className="fab fa-facebook-f text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  </a>
+                  <a href="#" className="group text-sky-400 hover:text-sky-300 transition-all duration-300 transform hover:scale-110">
+                    <i className="fab fa-twitter text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  </a>
+                  <a href="#" className="group text-pink-400 hover:text-pink-300 transition-all duration-300 transform hover:scale-110">
+                    <i className="fab fa-instagram text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  </a>
+                  <a href="#" className="group text-red-400 hover:text-red-300 transition-all duration-300 transform hover:scale-110">
+                    <i className="fab fa-youtube text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  </a>
+                  <a href="#" className="group text-blue-500 hover:text-blue-400 transition-all duration-300 transform hover:scale-110">
+                    <i className="fab fa-linkedin-in text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  </a>
+                  <a href="#" className="group text-green-400 hover:text-green-300 transition-all duration-300 transform hover:scale-110">
+                    <i className="fab fa-whatsapp text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  </a>
+                </div>
+                <div className="mt-4 sm:mt-6 text-center sm:text-right">
+                  <p className="text-gray-400 text-xs sm:text-sm">تواصل معنا على جميع المنصات</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">روابط سريعة</h4>
+              <ul className="space-y-1 sm:space-y-2 text-gray-400">
+                <li><a href="/cars" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
+                  السيارات الجديدة
+                </a></li>
+                <li><a href="/cars" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
+                  السيارات المستعملة
+                </a></li>
+                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
+                  خدمات التمويل
+                </a></li>
+                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
+                  الصيانة
+                </a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">خدماتنا</h4>
+              <ul className="space-y-1 sm:space-y-2 text-gray-400">
+                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
+                  تقييم السيارات
+                </a></li>
+                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
+                  تأمين السيارات
+                </a></li>
+                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
+                  شحن السيارات
+                </a></li>
+                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                  <i className="fas fa-angle-left mr-2 text-xs"></i>
+                  استشارات مجانية
+                </a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">معلومات التواصل</h4>
+              <div className="space-y-2 sm:space-y-3 text-gray-400">
+                <div className="flex items-center">
+                  <i className="fas fa-phone text-blue-500 mr-2 sm:mr-3 text-sm"></i>
+                  <p className="text-sm sm:text-base">+966 50 123 4567</p>
+                </div>
+                <div className="flex items-center">
+                  <i className="fas fa-envelope text-blue-500 mr-2 sm:mr-3 text-sm"></i>
+                  <p className="text-sm sm:text-base">info@carsite.com</p>
+                </div>
+                <div className="flex items-center">
+                  <i className="fas fa-map-marker-alt text-blue-500 mr-2 sm:mr-3 text-sm"></i>
+                  <p className="text-sm sm:text-base">الرياض، المملكة العربية السعودية</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 mt-6 sm:mt-8 pt-6 sm:pt-8">
+            <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
+              <p className="text-gray-400 text-center sm:text-right text-xs sm:text-sm">
+                © 2024 موقع السيارات المتميز. جميع الحقوق محفوظة
+              </p>
+              <div className="flex items-center space-x-4 sm:space-x-6 space-x-reverse">
+                <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">سياسة الخصوصية</a>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">الشروط والأحكام</a>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">اتفاقية الاستخدام</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 } 

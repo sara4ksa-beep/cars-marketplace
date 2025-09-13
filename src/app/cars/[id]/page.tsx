@@ -94,8 +94,13 @@ export default function CarDetailsPage() {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await fetch(`/api/cars/${carId}`);
+        console.log('Fetching car details for ID:', carId);
+        const response = await fetch(`/api/cars/${carId}`, {
+          cache: 'no-store' // Ensure fresh data
+        });
         const data = await response.json();
+        
+        console.log('API Response:', data);
         
         if (data.success) {
           setCar(data.car);
@@ -103,6 +108,7 @@ export default function CarDetailsPage() {
           setError('لم يتم العثور على السيارة');
         }
       } catch (error) {
+        console.error('Error fetching car details:', error);
         setError('حدث خطأ في تحميل بيانات السيارة');
       } finally {
         setLoading(false);
@@ -120,8 +126,8 @@ export default function CarDetailsPage() {
         <Header />
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600 text-lg">جاري تحميل تفاصيل السيارة...</p>
+            <div className="animate-spin rounded-full h-24 w-24 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600 text-lg">جاري تحميل سيارتك...</p>
             <p className="text-gray-500 text-sm mt-2">يرجى الانتظار</p>
           </div>
         </div>
@@ -156,16 +162,93 @@ export default function CarDetailsPage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-8 sm:py-12 md:py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 text-center">
+      {/* Hero Section - Ultra Wide */}
+      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white py-6 sm:py-12 md:py-16 lg:py-20 relative overflow-hidden min-h-[40vh] sm:min-h-[50vh] w-full">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 right-10 w-40 h-40 sm:w-60 sm:h-60 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 left-10 w-32 h-32 sm:w-48 sm:h-48 bg-blue-300 rounded-full blur-2xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 sm:w-36 sm:h-36 bg-indigo-300 rounded-full blur-xl"></div>
+        </div>
+        
+        <div className="w-full px-1 sm:px-2 relative z-10">
+          <div className="w-full text-center">
+            {/* Car Brand Badge */}
+            <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 mb-6 sm:mb-8">
+              <i className="fas fa-car text-blue-200 ml-2 text-base sm:text-lg"></i>
+              <span className="text-base sm:text-lg font-medium text-blue-100">
+                {getBrandName(car.brand)}
+              </span>
+            </div>
+            
+            {/* Car Name */}
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
               {car.name}
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-blue-100 text-center">
-              {getBrandName(car.brand)} • {car.year}
-            </p>
+            
+            {/* Car Year */}
+            <div className="flex items-center justify-center mb-6 sm:mb-8">
+              <i className="fas fa-calendar text-blue-200 ml-2 text-base sm:text-lg"></i>
+              <span className="text-base sm:text-lg md:text-xl text-blue-100 font-medium">
+                {car.year}
+              </span>
+            </div>
+            
+            {/* Price Badge */}
+            <div className="inline-flex items-center bg-green-500/90 backdrop-blur-sm rounded-2xl px-8 py-4 shadow-xl mb-6 sm:mb-8">
+              <i className="fas fa-tag text-white ml-2 text-base sm:text-lg"></i>
+              <span className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
+                {car.price.toLocaleString()} ريال
+              </span>
+            </div>
+            
+            {/* Book Now Button */}
+            <div className="mb-4 sm:mb-6">
+              <button
+                onClick={() => router.push(`/booking/${carId}`)}
+                className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-8 py-3 sm:px-10 sm:py-4 rounded-xl font-semibold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                <i className="fas fa-calendar-check ml-2"></i>
+                احجزها الآن
+              </button>
+            </div>
+            
+            {/* Quick Stats - Hidden as requested */}
+            {/* <div className="w-full px-1">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 text-center">
+                  <i className="fas fa-tachometer-alt text-blue-200 text-xl sm:text-2xl mb-2"></i>
+                  <p className="text-sm sm:text-base text-blue-100 font-medium">
+                    {car.mileage ? `${car.mileage.toLocaleString()} كم` : 'غير محدد'}
+                  </p>
+                </div>
+                
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 text-center">
+                  <i className="fas fa-gas-pump text-blue-200 text-xl sm:text-2xl mb-2"></i>
+                  <p className="text-sm sm:text-base text-blue-100 font-medium">
+                    {car.fuelType === 'gasoline' ? 'بنزين' : 
+                     car.fuelType === 'diesel' ? 'ديزل' : 
+                     car.fuelType === 'hybrid' ? 'هجين' : 
+                     car.fuelType === 'electric' ? 'كهربائي' : 'غير محدد'}
+                  </p>
+                </div>
+                
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 text-center">
+                  <i className="fas fa-cog text-blue-200 text-xl sm:text-2xl mb-2"></i>
+                  <p className="text-sm sm:text-base text-blue-100 font-medium">
+                    {car.transmission === 'automatic' ? 'أوتوماتيك' : 
+                     car.transmission === 'manual' ? 'يدوي' : 'غير محدد'}
+                  </p>
+                </div>
+                
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 text-center">
+                  <i className="fas fa-tint text-blue-200 text-xl sm:text-2xl mb-2"></i>
+                  <p className="text-sm sm:text-base text-blue-100 font-medium">
+                    {car.color || 'غير محدد'}
+                  </p>
+                </div>
+              </div>
+            </div> */}
           </div>
         </div>
       </section>

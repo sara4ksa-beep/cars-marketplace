@@ -224,7 +224,7 @@ export default function CarsPage() {
             <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-blue-800 mb-3 sm:mb-4 md:mb-6 text-center">السيارات المميزة</h2>
             <div className="flex gap-3 sm:gap-4 md:gap-6 overflow-x-auto pb-2 snap-x">
               {featuredCars.map((car) => (
-                <div key={car.id} className="min-w-[260px] sm:min-w-[280px] md:min-w-[320px] max-w-xs card-hover bg-white rounded-xl shadow-lg border border-blue-100 hover:border-blue-300 snap-center flex-shrink-0 flex flex-col">
+                <a key={car.id} href={`/cars/${car.id}`} className="block min-w-[260px] sm:min-w-[280px] md:min-w-[320px] max-w-xs card-hover bg-white rounded-xl shadow-lg border border-blue-100 hover:border-blue-300 snap-center flex-shrink-0 flex flex-col cursor-pointer">
                   <div className="h-36 sm:h-40 relative rounded-t-xl overflow-hidden">
                     <Image
                       src={car.imageUrl || '/default-car.jpg'}
@@ -250,16 +250,13 @@ export default function CarsPage() {
                       {car.year}
                     </p>
                     <div className="mt-auto">
-                      <a
-                        href={`/cars/${car.id}`}
-                        className="btn-primary block w-full text-center text-xs sm:text-sm py-2"
-                      >
+                      <div className="btn-primary block w-full text-center text-xs sm:text-sm py-2">
                         <i className="fas fa-eye ml-1"></i>
                         عرض التفاصيل
-                      </a>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           </div>
@@ -351,7 +348,7 @@ export default function CarsPage() {
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
               {filteredCars.map((car) => (
-                <div key={car.id} className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl transform hover:scale-105">
+                <a key={car.id} href={`/cars/${car.id}`} className="block bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl transform hover:scale-105 cursor-pointer">
                   <div className="h-32 sm:h-40 md:h-56 relative">
                     <Image
                       src={car.imageUrl || '/default-car.jpg'}
@@ -367,16 +364,13 @@ export default function CarsPage() {
                     <div className="text-green-600 font-bold text-xs sm:text-sm md:text-lg mb-2 sm:mb-3">{car.price.toLocaleString()} ريال</div>
                     
                     <div className="flex justify-center">
-                      <a
-                        href={`/cars/${car.id}`}
-                        className="w-full bg-blue-500 text-white py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg hover:bg-blue-600 transition-colors text-center text-xs sm:text-sm font-medium"
-                      >
+                      <div className="w-full bg-blue-500 text-white py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg hover:bg-blue-600 transition-colors text-center text-xs sm:text-sm font-medium">
                         <i className="fas fa-eye ml-1"></i>
                         عرض التفاصيل
-                      </a>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           )}
