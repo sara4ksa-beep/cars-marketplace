@@ -90,15 +90,6 @@ export default function Home() {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hero-background-blob-xl bg-blue-400/10 rounded-full blur-3xl"></div>
         </div>
         
-        {/* Floating Elements - Hidden on mobile */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none hidden md:block">
-          <div className="absolute top-1/4 right-20 opacity-30">
-            <i className="fas fa-car text-white hero-floating-icon-large animate-float"></i>
-          </div>
-          <div className="absolute bottom-1/4 left-20 opacity-20">
-            <i className="fas fa-road text-white hero-floating-icon animate-float-delayed"></i>
-          </div>
-        </div>
 
         {/* Main Content */}
         <div className="container-custom relative z-10 text-white py-4 md:py-16">
