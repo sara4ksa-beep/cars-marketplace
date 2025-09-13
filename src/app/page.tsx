@@ -102,17 +102,10 @@ export default function Home() {
 
         {/* Main Content */}
         <div className="container-custom relative z-10 text-white py-4 md:py-16">
-          <div className="max-w-5xl mx-auto text-center space-y-3 md:space-y-6 lg:space-y-10">
+          <div className="max-w-5xl mx-auto text-center space-y-3 md:space-y-6 lg:space-y-10 -mt-8 md:-mt-12 lg:-mt-16">
             
             {/* Welcome Text */}
             <div className="space-y-3 md:space-y-4 lg:space-y-6 animate-fade-in">
-              <div className="inline-block">
-                <span className="hero-welcome-text bg-white/20 backdrop-blur-sm text-white font-medium rounded-full border border-white/30 shadow-lg px-3 py-1 md:px-4 md:py-2 text-xs md:text-sm">
-                  <i className="fas fa-sparkles mr-1 md:mr-2"></i>
-                  <span className="hidden sm:inline">مرحباً بكم في عالم السيارات المتميز</span>
-                  <span className="sm:hidden">مرحباً بكم</span>
-                </span>
-              </div>
               
               <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-white text-shadow-glow animate-slide-up px-2">
                 <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
@@ -300,7 +293,11 @@ export default function Home() {
                 <i className="fas fa-tools"></i>
               </div>
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-2 sm:mb-3 md:mb-4">خدمة ما بعد البيع</h3>
-              <p className="text-gray-600 leading-relaxed text-xs sm:text-sm md:text-base">خدمة عملاء متميزة وصيانة دورية لجميع السيارات</p>
+              <p className="text-gray-600 leading-relaxed text-xs sm:text-sm md:text-base mb-4">خدمة عملاء متميزة وصيانة دورية لجميع السيارات</p>
+              <a href="/contact" className="inline-block bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium">
+                <i className="fas fa-phone ml-1"></i>
+                اتصل بنا الآن
+              </a>
             </div>
           </div>
         </div>
@@ -308,25 +305,6 @@ export default function Home() {
 
 
 
-      {/* CTA Section */}
-      <section className="gradient-bg text-white section-padding">
-        <div className="container-custom text-center">
-          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold mb-3 sm:mb-4 md:mb-6">جاهز لشراء سيارتك المفضلة؟</h2>
-          <p className="text-sm sm:text-base md:text-xl mb-4 sm:mb-6 md:mb-8 opacity-90">
-            تواصل معنا الآن واحصل على أفضل العروض والخصومات
-          </p>
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 justify-center">
-            <button className="btn-primary text-xs sm:text-sm md:text-lg px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4">
-              <i className="fas fa-phone ml-1 sm:ml-2"></i>
-              اتصل بنا الآن
-            </button>
-            <button className="btn-secondary text-xs sm:text-sm md:text-lg px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4">
-              <i className="fas fa-calendar ml-1 sm:ml-2"></i>
-              احجز موعد
-            </button>
-          </div>
-        </div>
-      </section>
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white section-padding">
@@ -346,23 +324,29 @@ export default function Home() {
               <div>
                 <h4 className="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-center sm:text-right">تابعنا على</h4>
                 <div className="flex flex-wrap justify-center sm:justify-start gap-4 sm:gap-6">
-                  <a href="#" className="group text-blue-400 hover:text-blue-300 transition-all duration-300 transform hover:scale-110">
-                    <i className="fab fa-facebook-f text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+                    <i className="fab fa-facebook-f text-xl sm:text-2xl"></i>
                   </a>
-                  <a href="#" className="group text-sky-400 hover:text-sky-300 transition-all duration-300 transform hover:scale-110">
-                    <i className="fab fa-twitter text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group bg-sky-500 hover:bg-sky-600 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+                    <i className="fab fa-twitter text-xl sm:text-2xl"></i>
                   </a>
-                  <a href="#" className="group text-pink-400 hover:text-pink-300 transition-all duration-300 transform hover:scale-110">
-                    <i className="fab fa-instagram text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+                    <i className="fab fa-instagram text-xl sm:text-2xl"></i>
                   </a>
-                  <a href="#" className="group text-red-400 hover:text-red-300 transition-all duration-300 transform hover:scale-110">
-                    <i className="fab fa-youtube text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group bg-red-600 hover:bg-red-700 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+                    <i className="fab fa-youtube text-xl sm:text-2xl"></i>
                   </a>
-                  <a href="#" className="group text-blue-500 hover:text-blue-400 transition-all duration-300 transform hover:scale-110">
-                    <i className="fab fa-linkedin-in text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group bg-blue-700 hover:bg-blue-800 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+                    <i className="fab fa-linkedin-in text-xl sm:text-2xl"></i>
                   </a>
-                  <a href="#" className="group text-green-400 hover:text-green-300 transition-all duration-300 transform hover:scale-110">
-                    <i className="fab fa-whatsapp text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group bg-green-500 hover:bg-green-600 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+                    <i className="fab fa-whatsapp text-xl sm:text-2xl"></i>
+                  </a>
+                  <a href="#" className="group bg-gray-800 hover:bg-gray-900 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+                    <i className="fab fa-github text-xl sm:text-2xl"></i>
+                  </a>
+                  <a href="#" className="group bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+                    <i className="fab fa-telegram text-xl sm:text-2xl"></i>
                   </a>
                 </div>
                 <div className="mt-4 sm:mt-6 text-center sm:text-right">
@@ -433,7 +417,7 @@ export default function Home() {
           <div className="border-t border-gray-800 mt-6 sm:mt-8 pt-6 sm:pt-8">
             <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
               <p className="text-gray-400 text-center sm:text-right text-xs sm:text-sm">
-                © 2024 موقع السيارات المتميز. جميع الحقوق محفوظة
+                © 2025 موقع السيارات المتميز. جميع الحقوق محفوظة
               </p>
               <div className="flex items-center space-x-4 sm:space-x-6 space-x-reverse">
                 <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">سياسة الخصوصية</a>
