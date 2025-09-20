@@ -673,10 +673,12 @@ export default function SellCarPage() {
         <div className="container-custom">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             <div className="sm:col-span-2 lg:col-span-1">
-              <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4">
-                <i className="fas fa-car text-blue-600 ml-2"></i>
-                <span className="hidden sm:inline">موقع السيارات المتميز</span>
-                <span className="sm:hidden">موقع السيارات</span>
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 flex items-center">
+                <img 
+                  src="/loc.png" 
+                  alt="موقع السيارات المتميز" 
+                  className="w-8 h-8 sm:w-10 sm:h-10"
+                />
               </h3>
               <p className="text-gray-400 mb-4 sm:mb-6 text-sm sm:text-base">
                 أفضل موقع لبيع وشراء السيارات في الشرق الأوسط
@@ -757,11 +759,11 @@ export default function SellCarPage() {
               <div className="space-y-2 sm:space-y-3 text-gray-400">
                 <div className="flex items-center">
                   <i className="fas fa-phone text-blue-500 mr-2 sm:mr-3 text-sm"></i>
-                  <p className="text-sm sm:text-base">+966 50 123 4567</p>
+                  <p className="text-sm sm:text-base">0551781111</p>
                 </div>
                 <div className="flex items-center">
                   <i className="fas fa-envelope text-blue-500 mr-2 sm:mr-3 text-sm"></i>
-                  <p className="text-sm sm:text-base">info@carsite.com</p>
+                  <p className="text-sm sm:text-base">info@abrajsa.com</p>
                 </div>
                 <div className="flex items-center">
                   <i className="fas fa-map-marker-alt text-blue-500 mr-2 sm:mr-3 text-sm"></i>

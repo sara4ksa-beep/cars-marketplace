@@ -5,6 +5,11 @@ export const metadata: Metadata = {
   title: "موقع السيارات المتميز | أفضل السيارات في الشرق الأوسط",
   description: "اكتشف أفضل السيارات الفاخرة والاقتصادية في الشرق الأوسط. نقدم لك أحدث الموديلات وأفضل الأسعار مع خدمة عملاء متميزة.",
   keywords: "سيارات, سيارات فاخرة, سيارات اقتصادية, شراء سيارات, بيع سيارات",
+  icons: {
+    icon: '/loc.png',
+    shortcut: '/loc.png',
+    apple: '/loc.png',
+  },
 };
 
 export default function RootLayout({

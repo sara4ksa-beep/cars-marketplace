@@ -13,8 +13,12 @@ export default function Header() {
           <nav className="flex items-center justify-between py-3 md:py-4">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2 md:space-x-3 space-x-reverse group">
-              <div className="w-10 h-10 md:w-14 md:h-14 bg-white rounded-lg md:rounded-xl flex items-center justify-center group-hover:bg-blue-50 transition-all duration-300">
-                <i className="fas fa-car text-blue-600 text-lg md:text-2xl"></i>
+              <div className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center group-hover:scale-105 transition-all duration-300">
+                <img 
+                  src="/loc.png" 
+                  alt="موقع السيارات المتميز" 
+                  className="w-full h-full object-contain"
+                />
               </div>
             </Link>
 
@@ -30,7 +34,7 @@ export default function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="px-3 md:px-4 py-2 rounded-lg font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 text-sm md:text-base"
+                  className="px-3 md:px-4 py-2 rounded-lg font-bold hover:bg-blue-600 hover:text-white transition-all duration-300 text-sm md:text-base"
                 >
                   {item.label}
             </Link>
@@ -41,7 +45,7 @@ export default function Header() {
           <div className="flex items-center space-x-2 md:space-x-4 space-x-reverse">
             <Link 
               href="/login" 
-              className="hidden sm:flex items-center bg-white text-blue-500 px-4 md:px-6 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-all duration-300 text-sm md:text-base"
+              className="hidden sm:flex items-center bg-white text-blue-500 px-4 md:px-6 py-2 rounded-lg font-bold hover:bg-blue-50 transition-all duration-300 text-sm md:text-base"
             >
               <span className="hidden md:inline">تسجيل الدخول</span>
               <span className="md:hidden">دخول</span>
@@ -108,7 +112,7 @@ export default function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="group flex items-center py-3 px-4 rounded-xl hover:scale-105 transition-all duration-300 font-medium text-sm md:text-base bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20"
+                  className="group flex items-center py-3 px-4 rounded-xl hover:scale-105 transition-all duration-300 font-bold text-sm md:text-base bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20"
                   onClick={() => setIsMenuOpen(false)}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >

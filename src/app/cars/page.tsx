@@ -384,9 +384,11 @@ export default function CarsPage() {
             {/* Brand Section */}
             <div className="text-center sm:text-right sm:col-span-2 lg:col-span-1">
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3 flex items-center justify-center sm:justify-start">
-                <i className="fas fa-car text-blue-500 ml-2"></i>
-                <span className="hidden sm:inline">موقع السيارات</span>
-                <span className="sm:hidden">موقع السيارات</span>
+                <img 
+                  src="/loc.png" 
+                  alt="موقع السيارات المتميز" 
+                  className="w-8 h-8 sm:w-10 sm:h-10"
+                />
               </h3>
               <p className="text-gray-400 text-xs sm:text-sm md:text-base mb-3 sm:mb-4">أفضل موقع لبيع وشراء السيارات في الشرق الأوسط</p>
               
@@ -394,11 +396,11 @@ export default function CarsPage() {
               <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm">
                 <div className="flex items-center justify-center sm:justify-start">
                   <i className="fas fa-phone text-blue-500 ml-2 text-xs"></i>
-                  <span>966+ 50 123 4567</span>
+                  <span>0551781111</span>
                 </div>
                 <div className="flex items-center justify-center sm:justify-start">
                   <i className="fas fa-envelope text-blue-500 ml-2 text-xs"></i>
-                  <span>info@carsite.com</span>
+                  <span>info@abrajsa.com</span>
                 </div>
               </div>
             </div>
