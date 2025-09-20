@@ -385,7 +385,7 @@ export default function CarsPage() {
             <div className="text-center sm:text-right sm:col-span-2 lg:col-span-1">
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3 flex items-center justify-center sm:justify-start">
                 <img 
-                  src="/loc.png" 
+                  src="/newlogo1.png" 
                   alt="موقع السيارات المتميز" 
                   className="w-8 h-8 sm:w-10 sm:h-10"
                 />

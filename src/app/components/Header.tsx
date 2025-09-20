@@ -15,7 +15,7 @@ export default function Header() {
             <Link href="/" className="flex items-center space-x-2 md:space-x-3 space-x-reverse group">
               <div className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center group-hover:scale-105 transition-all duration-300">
                 <img 
-                  src="/loc.png" 
+                  src="/newlogo1.png" 
                   alt="موقع السيارات المتميز" 
                   className="w-full h-full object-contain"
                 />

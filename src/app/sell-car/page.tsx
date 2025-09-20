@@ -675,7 +675,7 @@ export default function SellCarPage() {
             <div className="sm:col-span-2 lg:col-span-1">
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 flex items-center">
                 <img 
-                  src="/loc.png" 
+                  src="/newlogo1.png" 
                   alt="موقع السيارات المتميز" 
                   className="w-8 h-8 sm:w-10 sm:h-10"
                 />

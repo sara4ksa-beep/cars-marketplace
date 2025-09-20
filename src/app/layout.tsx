@@ -6,9 +6,9 @@ export const metadata: Metadata = {
   description: "اكتشف أفضل السيارات الفاخرة والاقتصادية في الشرق الأوسط. نقدم لك أحدث الموديلات وأفضل الأسعار مع خدمة عملاء متميزة.",
   keywords: "سيارات, سيارات فاخرة, سيارات اقتصادية, شراء سيارات, بيع سيارات",
   icons: {
-    icon: '/loc.png',
-    shortcut: '/loc.png',
-    apple: '/loc.png',
+    icon: '/newlogo1.png',
+    shortcut: '/newlogo1.png',
+    apple: '/newlogo1.png',
   },
 };
 
