@@ -68,7 +68,7 @@ export default function Home() {
         {/* Car Background Image */}
         <div className="absolute inset-0 w-full h-full">
           <Image 
-            src="/BMW-X5-2024-1.webp" 
+            src="/mercc.jpg" 
             alt="Hero Car Background" 
             fill 
             className="object-cover w-full h-full"
