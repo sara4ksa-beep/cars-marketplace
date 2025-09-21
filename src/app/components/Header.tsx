@@ -26,7 +26,7 @@ export default function Header() {
             <div className="hidden lg:flex items-center space-x-6 md:space-x-8 space-x-reverse">
               {[
                 { href: '/', label: 'الرئيسية' },
-                { href: '/cars', label: 'السيارات' },
+                { href: '/cars', label: 'سيارات مميزة' },
                 { href: '/compare', label: 'مقارنة السيارات' },
                 { href: '/sell-car', label: 'بيع سيارتك' },
                 { href: '/contact', label: 'اتصل بنا' }
@@ -104,7 +104,7 @@ export default function Header() {
             <div className="space-y-2">
               {[
                 { href: '/', label: 'الرئيسية', icon: 'fas fa-home', color: 'from-blue-500 to-blue-600' },
-                { href: '/cars', label: 'السيارات', icon: 'fas fa-car', color: 'from-green-500 to-green-600' },
+                { href: '/cars', label: 'سيارات مميزة', icon: 'fas fa-car', color: 'from-green-500 to-green-600' },
                 { href: '/compare', label: 'مقارنة السيارات', icon: 'fas fa-balance-scale', color: 'from-purple-500 to-purple-600' },
                 { href: '/sell-car', label: 'بيع سيارتك', icon: 'fas fa-plus-circle', color: 'from-orange-500 to-orange-600' },
                 { href: '/contact', label: 'اتصل بنا', icon: 'fas fa-phone', color: 'from-red-500 to-red-600' }
