@@ -294,8 +294,40 @@ export default function Home() {
         </div>
       </section>
 
-
-
+      {/* CTA Section */}
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+        <div className="container-custom">
+          <div className="text-center max-w-4xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 sm:mb-10">
+              اطلب معرض السيارات الإلكتروني الآن
+            </h2>
+            <div className="flex justify-center">
+              <a 
+                href="https://new-mall.com/VqXaplv" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center bg-white text-blue-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                اطلب الان
+              </a>
+            </div>
+            <div className="mt-8 sm:mt-10 flex flex-wrap justify-center gap-6 sm:gap-8 text-blue-200">
+              <div className="flex items-center">
+                <i className="fas fa-check-circle ml-2"></i>
+                <span>ضمان الجودة</span>
+              </div>
+              <div className="flex items-center">
+                <i className="fas fa-check-circle ml-2"></i>
+                <span>أسعار تنافسية</span>
+              </div>
+              <div className="flex items-center">
+                <i className="fas fa-check-circle ml-2"></i>
+                <span>خدمة عملاء متميزة</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white section-padding">
