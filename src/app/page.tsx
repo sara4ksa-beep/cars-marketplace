@@ -311,18 +311,10 @@ export default function Home() {
                 اطلب الان
               </a>
             </div>
-            <div className="mt-8 sm:mt-10 flex flex-wrap justify-center gap-6 sm:gap-8 text-blue-200">
+            <div className="mt-8 sm:mt-10 flex justify-center text-blue-200">
               <div className="flex items-center">
                 <i className="fas fa-check-circle ml-2"></i>
                 <span>ضمان الجودة</span>
-              </div>
-              <div className="flex items-center">
-                <i className="fas fa-check-circle ml-2"></i>
-                <span>أسعار تنافسية</span>
-              </div>
-              <div className="flex items-center">
-                <i className="fas fa-check-circle ml-2"></i>
-                <span>خدمة عملاء متميزة</span>
               </div>
             </div>
           </div>
