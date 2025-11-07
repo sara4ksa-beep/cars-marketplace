@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Image from 'next/image';
+import AuctionBadge from '../components/AuctionBadge';
+import { SaleType } from '@prisma/client';
 
 interface Car {
   id: number;
@@ -20,11 +22,17 @@ interface Car {
   isAvailable: boolean;
   createdAt: string;
   featured: boolean;
+  saleType?: 'DIRECT_SALE' | 'AUCTION';
+  currentBid?: number | null;
+  auctionEndDate?: string | null;
+  isActiveAuction?: boolean;
+  bidCount?: number;
 }
 
 export default function CarsPage() {
   const [selectedBrand, setSelectedBrand] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [saleTypeFilter, setSaleTypeFilter] = useState<'all' | 'DIRECT_SALE' | 'AUCTION'>('all');
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -93,7 +101,10 @@ export default function CarsPage() {
     const fetchCars = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/cars');
+        const url = saleTypeFilter !== 'all' 
+          ? `/api/cars?saleType=${saleTypeFilter}`
+          : '/api/cars';
+        const response = await fetch(url);
         const data = await response.json();
         if (data.success) {
           setCars(data.cars);
@@ -111,7 +122,7 @@ export default function CarsPage() {
     };
 
     fetchCars();
-  }, []);
+  }, [saleTypeFilter]);
 
   // استخراج السيارات المميزة
   const featuredCars = cars.filter(car => car.featured);
@@ -224,8 +235,8 @@ export default function CarsPage() {
             <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-blue-800 mb-3 sm:mb-4 md:mb-6 text-center">السيارات المميزة</h2>
             <div className="flex gap-3 sm:gap-4 md:gap-6 overflow-x-auto pb-2 snap-x">
               {featuredCars.map((car) => (
-                <a key={car.id} href={`/cars/${car.id}`} className="block min-w-[260px] sm:min-w-[280px] md:min-w-[320px] max-w-xs card-hover bg-white rounded-xl shadow-lg border border-blue-100 hover:border-blue-300 snap-center flex-shrink-0 flex flex-col cursor-pointer">
-                  <div className="h-36 sm:h-40 relative rounded-t-xl overflow-hidden">
+                <a key={car.id} href={`/cars/${car.id}`} className="block min-w-[260px] sm:min-w-[280px] md:min-w-[320px] max-w-xs card-modern snap-center flex-shrink-0 flex flex-col cursor-pointer group">
+                  <div className="card-image-wrapper">
                     <Image
                       src={car.imageUrl || '/default-car.jpg'}
                       alt={car.name}
@@ -233,25 +244,26 @@ export default function CarsPage() {
                       className="object-cover"
                       sizes="(max-width: 640px) 260px, (max-width: 768px) 280px, 320px"
                     />
-                    <div className="absolute top-2 right-2 bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-bold">
+                    <div className="absolute top-3 right-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg">
+                      <i className="fas fa-star ml-1"></i>
                       مميز
                     </div>
                   </div>
-                  <div className="p-3 sm:p-4 flex flex-col gap-2 flex-1">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-semibold">
+                  <div className="p-4 sm:p-5 flex flex-col gap-3 flex-1">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="badge-modern badge-primary">
                         {getBrandName(car.brand)}
                       </span>
-                      <span className="text-green-600 font-bold text-sm sm:text-lg">{car.price.toLocaleString()} ريال</span>
+                      <span className="text-green-600 font-bold text-base sm:text-lg">{car.price.toLocaleString()} ريال</span>
                     </div>
-                    <h3 className="text-sm sm:text-lg font-bold text-gray-800 mb-1 truncate">{car.name}</h3>
-                    <p className="text-gray-600 text-xs sm:text-sm mb-2 flex items-center">
-                      <i className="fas fa-calendar text-gray-400 ml-1 text-xs"></i>
+                    <h3 className="text-sm sm:text-lg font-bold text-gray-800 mb-2 truncate group-hover:text-blue-600 transition-colors">{car.name}</h3>
+                    <p className="text-gray-600 text-xs sm:text-sm mb-3 flex items-center">
+                      <i className="fas fa-calendar text-gray-400 ml-1.5 text-xs"></i>
                       {car.year}
                     </p>
                     <div className="mt-auto">
-                      <div className="btn-primary block w-full text-center text-xs sm:text-sm py-2">
-                        <i className="fas fa-eye ml-1"></i>
+                      <div className="btn-primary block w-full text-center text-sm py-2.5">
+                        <i className="fas fa-eye ml-1.5"></i>
                         عرض التفاصيل
                       </div>
                     </div>
@@ -275,22 +287,23 @@ export default function CarsPage() {
           </div>
 
           {/* Search and Filter */}
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              <div>
+          <div className="max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+              <div className="relative">
+                <i className="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                 <input
                   type="text"
                   placeholder="ابحث عن سيارة..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mobile-form-input"
+                  className="input-modern pr-11"
                 />
               </div>
               <div>
                 <select
                   value={selectedBrand}
                   onChange={(e) => setSelectedBrand(e.target.value)}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mobile-form-input"
+                  className="select-modern"
                 >
                   <option value="">كافة الماركات</option>
                   {brands.map(brand => (
@@ -298,6 +311,17 @@ export default function CarsPage() {
                       {brand.name}
                     </option>
                   ))}
+                </select>
+              </div>
+              <div>
+                <select
+                  value={saleTypeFilter}
+                  onChange={(e) => setSaleTypeFilter(e.target.value as any)}
+                  className="select-modern"
+                >
+                  <option value="all">كل أنواع البيع</option>
+                  <option value="DIRECT_SALE">بيع مباشر</option>
+                  <option value="AUCTION">مزاد</option>
                 </select>
               </div>
             </div>
@@ -324,54 +348,83 @@ export default function CarsPage() {
                     : 'جرب العودة لاحقاً أو أضف سيارتك للبيع'
                   }
                 </p>
-                <div className="space-y-2 sm:space-y-3">
+                <div className="space-y-3 sm:space-y-4">
                   <button 
                     onClick={() => {
                       setSearchTerm('');
                       setSelectedBrand('');
                     }}
-                    className="block w-full bg-blue-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
+                    className="btn-primary w-full"
                   >
-                    <i className="fas fa-refresh ml-1"></i>
+                    <i className="fas fa-refresh ml-1.5"></i>
                     إظهار كافة السيارات
                   </button>
                   <a 
                     href="/sell-car" 
-                    className="block w-full bg-green-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-green-700 transition-colors text-center text-sm sm:text-base"
+                    className="block w-full bg-gradient-to-r from-green-600 to-green-500 text-white px-6 py-3.5 rounded-xl hover:from-green-700 hover:to-green-600 transition-all duration-300 text-center font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 touch-target"
                   >
-                    <i className="fas fa-plus ml-1"></i>
+                    <i className="fas fa-plus ml-1.5"></i>
                     أضف سيارتك للبيع
                   </a>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
-              {filteredCars.map((car) => (
-                <a key={car.id} href={`/cars/${car.id}`} className="block bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl transform hover:scale-105 cursor-pointer">
-                  <div className="h-32 sm:h-40 md:h-56 relative">
-                    <Image
-                      src={car.imageUrl || '/default-car.jpg'}
-                      alt={car.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                    />
-                  </div>
-                  <div className="p-2 sm:p-3 md:p-5">
-                    <h3 className="text-xs sm:text-sm md:text-lg font-bold text-gray-800 mb-1 sm:mb-2 line-clamp-2">{car.name}</h3>
-                    <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">{getBrandName(car.brand)} • {car.year}</p>
-                    <div className="text-green-600 font-bold text-xs sm:text-sm md:text-lg mb-2 sm:mb-3">{car.price.toLocaleString()} ريال</div>
-                    
-                    <div className="flex justify-center">
-                      <div className="w-full bg-blue-500 text-white py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg hover:bg-blue-600 transition-colors text-center text-xs sm:text-sm font-medium">
-                        <i className="fas fa-eye ml-1"></i>
-                        عرض التفاصيل
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
+              {filteredCars.map((car) => {
+                const isAuction = car.saleType === 'AUCTION';
+                const displayPrice = isAuction && car.currentBid ? car.currentBid : car.price;
+                const href = isAuction ? `/auctions/${car.id}` : `/cars/${car.id}`;
+                
+                return (
+                  <a key={car.id} href={href} className="card-modern group cursor-pointer relative">
+                    {car.saleType && (
+                      <div className="absolute top-3 left-3 z-10">
+                        <AuctionBadge 
+                          saleType={car.saleType as SaleType} 
+                          isActive={car.isActiveAuction} 
+                        />
+                      </div>
+                    )}
+                    <div className="card-image-wrapper">
+                      <Image
+                        src={car.imageUrl || '/default-car.jpg'}
+                        alt={car.name}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                      />
+                    </div>
+                    <div className="p-4 sm:p-5">
+                      <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">{car.name}</h3>
+                      <p className="text-gray-600 text-xs sm:text-sm mb-3">{getBrandName(car.brand)} • {car.year}</p>
+                      <div className={`font-bold text-base sm:text-lg md:text-xl mb-3 ${isAuction ? 'text-orange-600' : 'text-green-600'}`}>
+                        {displayPrice.toLocaleString()} ريال
+                        {isAuction && car.currentBid && (
+                          <span className="text-xs text-gray-500 mr-1 font-normal">(مزايدة)</span>
+                        )}
+                      </div>
+                      {isAuction && car.bidCount !== undefined && car.bidCount > 0 && (
+                        <div className="text-xs text-gray-500 mb-3 flex items-center">
+                          <i className="fas fa-gavel ml-1.5"></i>
+                          {car.bidCount} {car.bidCount === 1 ? 'مزايدة' : 'مزايدة'}
+                        </div>
+                      )}
+                      
+                      <div className="flex justify-center">
+                        <div className={`w-full text-white py-2.5 px-4 rounded-xl transition-all duration-300 text-center text-sm font-semibold shadow-md group-hover:shadow-lg ${
+                          isAuction 
+                            ? 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700' 
+                            : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'
+                        }`}>
+                          <i className={`fas ${isAuction ? 'fa-gavel' : 'fa-eye'} ml-1.5`}></i>
+                          {isAuction ? 'عرض المزاد' : 'عرض التفاصيل'}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
-              ))}
+                  </a>
+                );
+              })}
             </div>
           )}
         </div>

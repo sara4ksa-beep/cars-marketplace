@@ -10,12 +10,12 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-blue-500 text-white shadow-lg sticky top-0 z-40">
+      <header className="bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg sticky top-0 z-40 backdrop-blur-sm">
         <div className="container-custom">
           <nav className="flex items-center justify-between py-3 md:py-4">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2 md:space-x-3 space-x-reverse group">
-              <div className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center group-hover:scale-105 transition-all duration-300">
+              <div className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <img 
                   src="/newlogo1.png" 
                   alt="موقع السيارات المتميز" 
@@ -25,10 +25,11 @@ export default function Header() {
             </Link>
 
             {/* Navigation Links - Desktop */}
-            <div className="hidden lg:flex items-center space-x-6 md:space-x-8 space-x-reverse">
+            <div className="hidden lg:flex items-center space-x-4 md:space-x-6 space-x-reverse">
               {[
                 { href: '/', label: 'الرئيسية' },
                 { href: '/cars', label: 'السيارات' },
+                { href: '/auctions', label: 'المزادات', icon: 'fas fa-gavel', highlight: true },
                 { href: '/compare', label: 'مقارنة السيارات' },
                 { href: '/sell-car', label: 'بيع سيارتك' },
                 { href: '/contact', label: 'اتصل بنا' }
@@ -36,9 +37,17 @@ export default function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="px-3 md:px-4 py-2 rounded-lg font-bold hover:bg-blue-600 hover:text-white transition-all duration-300 text-sm md:text-base"
+                  className={`px-4 py-2.5 rounded-xl font-bold transition-all duration-300 text-sm md:text-base relative group ${
+                    item.highlight
+                      ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-md hover:shadow-lg'
+                      : 'hover:bg-white/10 hover:backdrop-blur-sm'
+                  } ${pathname === item.href ? 'bg-white/10 backdrop-blur-sm' : ''}`}
                 >
+                  {item.icon && <i className={`${item.icon} ml-1.5`}></i>}
                   {item.label}
+                  {pathname === item.href && !item.highlight && (
+                    <span className="absolute bottom-0 right-0 left-0 h-0.5 bg-white rounded-full"></span>
+                  )}
             </Link>
             ))}
           </div>
@@ -47,8 +56,9 @@ export default function Header() {
           <div className="flex items-center space-x-2 md:space-x-4 space-x-reverse">
             <Link 
               href="/login" 
-              className="hidden sm:flex items-center bg-white text-blue-500 px-4 md:px-6 py-2 rounded-lg font-bold hover:bg-blue-50 transition-all duration-300 text-sm md:text-base"
+              className="hidden sm:flex items-center bg-white text-blue-600 px-4 md:px-6 py-2.5 rounded-xl font-bold hover:bg-blue-50 transition-all duration-300 text-sm md:text-base shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95"
             >
+              <i className="fas fa-sign-in-alt ml-1.5"></i>
               <span className="hidden md:inline">تسجيل الدخول</span>
               <span className="md:hidden">دخول</span>
             </Link>
@@ -56,13 +66,13 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 transition-all duration-300"
+              className="lg:hidden w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 touch-target"
               aria-label="فتح القائمة"
             >
-              <div className="w-5 h-5 md:w-6 md:h-6 flex flex-col justify-center space-y-1">
-                <span className="block h-0.5 w-5 md:w-6 bg-white"></span>
-                <span className="block h-0.5 w-5 md:w-6 bg-white"></span>
-                <span className="block h-0.5 w-5 md:w-6 bg-white"></span>
+              <div className={`w-6 h-6 flex flex-col justify-center space-y-1.5 transition-all duration-300 ${isMenuOpen ? 'rotate-90' : ''}`}>
+                <span className={`block h-0.5 w-6 bg-white transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+                <span className={`block h-0.5 w-6 bg-white transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`}></span>
+                <span className={`block h-0.5 w-6 bg-white transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
               </div>
             </button>
           </div>
@@ -80,21 +90,21 @@ export default function Header() {
 
       {/* Mobile Sidebar - Side Sliding */}
       <div 
-        className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gradient-to-br from-blue-600 to-blue-700 shadow-2xl z-50 lg:hidden transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 shadow-2xl z-50 lg:hidden transform transition-transform duration-300 ease-out ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col h-full">
           {/* Sidebar Header */}
-          <div className="flex items-center justify-between p-4 border-b border-blue-500/30">
+          <div className="flex items-center justify-between p-5 border-b border-white/20">
             <h3 className="text-lg font-bold text-white flex items-center">
               <i className="fas fa-bars ml-2"></i>
               القائمة الرئيسية
             </h3>
             <button
               onClick={() => setIsMenuOpen(false)}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-all duration-300 hover:scale-110"
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/20 hover:bg-white/30 transition-all duration-300 hover:scale-110 active:scale-95 touch-target"
               aria-label="إغلاق القائمة"
             >
               <i className="fas fa-times text-white text-lg"></i>
@@ -107,6 +117,7 @@ export default function Header() {
               {[
                 { href: '/', label: 'الرئيسية', icon: 'fas fa-home', color: 'from-blue-500 to-blue-600' },
                 { href: '/cars', label: 'السيارات', icon: 'fas fa-car', color: 'from-green-500 to-green-600' },
+                { href: '/auctions', label: 'المزادات', icon: 'fas fa-gavel', color: 'from-orange-500 to-red-600' },
                 { href: '/compare', label: 'مقارنة السيارات', icon: 'fas fa-balance-scale', color: 'from-purple-500 to-purple-600' },
                 { href: '/sell-car', label: 'بيع سيارتك', icon: 'fas fa-plus-circle', color: 'from-orange-500 to-orange-600' },
                 { href: '/contact', label: 'اتصل بنا', icon: 'fas fa-phone', color: 'from-red-500 to-red-600' }
@@ -114,25 +125,29 @@ export default function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="group flex items-center py-3 px-4 rounded-xl hover:scale-105 transition-all duration-300 font-bold text-sm md:text-base bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20"
+                  className={`group flex items-center py-3.5 px-4 rounded-xl transition-all duration-300 font-bold text-sm md:text-base backdrop-blur-sm border ${
+                    pathname === item.href 
+                      ? 'bg-white/25 border-white/40 scale-105' 
+                      : 'bg-white/10 hover:bg-white/20 border-white/20 hover:scale-105'
+                  }`}
                   onClick={() => setIsMenuOpen(false)}
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  <div className={`w-10 h-10 rounded-lg bg-gradient-to-r ${item.color} flex items-center justify-center ml-3 group-hover:scale-110 transition-transform duration-300`}>
-                    <i className={`${item.icon} text-white text-sm`}></i>
+                  <div className={`w-11 h-11 rounded-xl bg-gradient-to-r ${item.color} flex items-center justify-center ml-3 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
+                    <i className={`${item.icon} text-white text-base`}></i>
                   </div>
-                  <span className="text-white group-hover:text-blue-100 transition-colors duration-300">{item.label}</span>
-                  <i className="fas fa-chevron-left text-white/60 group-hover:text-white/80 transition-colors duration-300 mr-auto"></i>
+                  <span className="text-white group-hover:text-blue-100 transition-colors duration-300 flex-1">{item.label}</span>
+                  <i className="fas fa-chevron-left text-white/60 group-hover:text-white/90 transition-colors duration-300"></i>
                 </Link>
               ))}
             </div>
           </div>
 
           {/* Login Section */}
-          <div className="p-4 border-t border-blue-500/30">
+          <div className="p-4 border-t border-white/20">
             <Link 
               href="/login" 
-              className="flex items-center justify-center py-3 px-4 bg-gradient-to-r from-white to-blue-50 text-blue-600 rounded-xl font-bold text-center hover:from-blue-50 hover:to-white hover:scale-105 transition-all duration-300 text-sm md:text-base shadow-lg"
+              className="flex items-center justify-center py-3.5 px-4 bg-gradient-to-r from-white to-blue-50 text-blue-600 rounded-xl font-bold text-center hover:from-blue-50 hover:to-white hover:scale-105 active:scale-95 transition-all duration-300 text-sm md:text-base shadow-lg touch-target"
               onClick={() => setIsMenuOpen(false)}
             >
               <i className="fas fa-sign-in-alt ml-2"></i>
@@ -154,11 +169,12 @@ export default function Header() {
       </div>
 
       {/* Mobile Bottom Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-gray-100 border-t border-gray-200 z-50 md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 md:hidden shadow-lg backdrop-blur-sm">
         <div className="flex items-center justify-around h-16">
           {[
             { href: '/', label: 'الرئيسية', icon: 'fas fa-home' },
             { href: '/cars', label: 'السيارات', icon: 'fas fa-car' },
+            { href: '/auctions', label: 'المزادات', icon: 'fas fa-gavel' },
             { href: '/sell-car', label: 'بيع سيارتك', icon: 'fas fa-plus-circle' },
             { href: '/login', label: 'دخول', icon: 'fas fa-sign-in-alt' }
           ].map((item) => {
@@ -167,14 +183,14 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center justify-center flex-1 h-full transition-all duration-200 ${
+                className={`flex flex-col items-center justify-center flex-1 h-full transition-all duration-300 touch-target ${
                   isActive 
-                    ? 'bg-blue-50 text-blue-600' 
-                    : 'text-gray-600 hover:text-gray-800'
+                    ? 'bg-blue-50 text-blue-600 scale-105' 
+                    : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
                 }`}
               >
-                <i className={`${item.icon} text-xl mb-1 ${isActive ? 'text-blue-600' : 'text-gray-600'}`}></i>
-                <span className={`text-xs font-medium ${isActive ? 'text-blue-600' : 'text-gray-600'}`}>
+                <i className={`${item.icon} text-xl mb-1 transition-all duration-300 ${isActive ? 'text-blue-600 scale-110' : 'text-gray-600'}`}></i>
+                <span className={`text-xs font-bold transition-all duration-300 ${isActive ? 'text-blue-600' : 'text-gray-600'}`}>
                   {item.label}
                 </span>
               </Link>

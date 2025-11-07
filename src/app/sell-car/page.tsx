@@ -52,7 +52,13 @@ export default function SellCarPage() {
     phoneNumber: '',
     email: '',
     location: '',
-    images: [] as File[]
+    images: [] as File[],
+    saleType: 'DIRECT_SALE' as 'DIRECT_SALE' | 'AUCTION',
+    reservePrice: '',
+    bidIncrement: '500',
+    auctionStartDate: '',
+    auctionEndDate: '',
+    autoExtendMinutes: '5',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -180,7 +186,7 @@ export default function SellCarPage() {
       console.log('Final uploaded images from Cloudinary:', uploadedImages);
 
       // تجهيز البيانات للإرسال
-      const payload = {
+      const payload: any = {
         name: formData.carTitle,
         brand: formData.brand,
         year: Number(formData.year),
@@ -196,7 +202,17 @@ export default function SellCarPage() {
         contactPhone: formData.countryCode + formData.phoneNumber, // دمج كود الدولة مع رقم الهاتف
         contactLocation: formData.location,
         contactEmail: formData.email,
+        saleType: formData.saleType,
       };
+
+      // Add auction fields if it's an auction
+      if (formData.saleType === 'AUCTION') {
+        payload.reservePrice = formData.reservePrice ? Number(formData.reservePrice) : null;
+        payload.bidIncrement = Number(formData.bidIncrement);
+        payload.auctionStartDate = formData.auctionStartDate;
+        payload.auctionEndDate = formData.auctionEndDate;
+        payload.autoExtendMinutes = Number(formData.autoExtendMinutes);
+      }
 
       console.log('Sending car data:', payload);
 
@@ -263,6 +279,45 @@ export default function SellCarPage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl p-4 md:p-8">
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-8">
+              {/* Sale Type Selection */}
+              <div className="space-y-4 md:space-y-6">
+                <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 text-center">
+                  نوع البيع
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, saleType: 'DIRECT_SALE' })}
+                    className={`p-5 rounded-xl border-2 transition-all duration-300 touch-target ${
+                      formData.saleType === 'DIRECT_SALE'
+                        ? 'border-blue-500 bg-blue-50 shadow-md scale-105'
+                        : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-center mb-2">
+                      <i className="fas fa-tag text-2xl text-blue-600 ml-2"></i>
+                    </div>
+                    <h3 className="font-bold text-gray-800 mb-1">بيع مباشر</h3>
+                    <p className="text-sm text-gray-600">سعر ثابت للبيع المباشر</p>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, saleType: 'AUCTION' })}
+                    className={`p-5 rounded-xl border-2 transition-all duration-300 touch-target ${
+                      formData.saleType === 'AUCTION'
+                        ? 'border-orange-500 bg-orange-50 shadow-md scale-105'
+                        : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-center mb-2">
+                      <i className="fas fa-gavel text-2xl text-orange-600 ml-2"></i>
+                    </div>
+                    <h3 className="font-bold text-gray-800 mb-1">مزاد</h3>
+                    <p className="text-sm text-gray-600">بيع بالمزايدة</p>
+                  </button>
+                </div>
+              </div>
+
               {/* Basic Car Information */}
               <div className="space-y-4 md:space-y-6">
                 <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 text-center">
@@ -280,7 +335,7 @@ export default function SellCarPage() {
                       value={formData.carTitle}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-form-input"
+                      className="input-modern"
                       placeholder="مثال: تويوتا كامري 2020 ممتازة"
                     />
                   </div>
@@ -294,7 +349,7 @@ export default function SellCarPage() {
                       value={formData.brand}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-form-input"
+                      className="select-modern"
                     >
                       <option value="">اختر الماركة</option>
                       {/* العلامات اليابانية */}
@@ -382,7 +437,7 @@ export default function SellCarPage() {
                       value={formData.year}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-form-input"
+                      className="select-modern"
                     >
                       <option value="">اختر السنة</option>
                       {Array.from({ length: 25 }, (_, i) => 2025 - i).map(year => (
@@ -393,7 +448,7 @@ export default function SellCarPage() {
 
                   <div className="mobile-form-group">
                     <label className="block text-sm font-medium text-gray-700 mb-2 mobile-form-label">
-                      السعر (ريال) *
+                      {formData.saleType === 'AUCTION' ? 'السعر الابتدائي (ريال) *' : 'السعر (ريال) *'}
                     </label>
                     <input
                       type="number"
@@ -401,9 +456,12 @@ export default function SellCarPage() {
                       value={formData.price}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-form-input"
-                      placeholder="مثال: 50000"
+                      className="input-modern"
+                      placeholder={formData.saleType === 'AUCTION' ? 'مثال: 50000 (سعر البداية)' : 'مثال: 50000'}
                     />
+                    {formData.saleType === 'AUCTION' && (
+                      <p className="text-xs text-gray-500 mt-1">هذا هو السعر الذي سيبدأ به المزاد</p>
+                    )}
                   </div>
 
                   <div className="mobile-form-group">
@@ -416,7 +474,7 @@ export default function SellCarPage() {
                       value={formData.mileage}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-form-input"
+                      className="input-modern"
                       placeholder="مثال: 50000"
                     />
                   </div>
@@ -430,7 +488,7 @@ export default function SellCarPage() {
                       value={formData.fuelType}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-form-input"
+                      className="select-modern"
                     >
                       <option value="">اختر نوع الوقود</option>
                       <option value="gasoline">بنزين</option>
@@ -449,7 +507,7 @@ export default function SellCarPage() {
                       value={formData.transmission}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-form-input"
+                      className="select-modern"
                     >
                       <option value="">اختر ناقل الحركة</option>
                       <option value="automatic">أوتوماتيك</option>
@@ -467,7 +525,7 @@ export default function SellCarPage() {
                       value={formData.color}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-form-input"
+                      className="input-modern"
                       placeholder="مثال: اسود"
                     />
                   </div>
@@ -483,7 +541,7 @@ export default function SellCarPage() {
                     onChange={handleInputChange}
                     required
                     rows={4}
-                    className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-form-input"
+                    className="textarea-modern"
                     placeholder="اكتب وصفاً مفصلاً للسيارة، الحالة، المميزات، العيوب إن وجدت..."
                   />
                 </div>
@@ -506,7 +564,7 @@ export default function SellCarPage() {
                       value={formData.contactName}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-form-input"
+                      className="input-modern"
                       placeholder="الاسم الكامل"
                     />
                   </div>
@@ -523,7 +581,7 @@ export default function SellCarPage() {
                           value={formData.phoneNumber}
                           onChange={handleInputChange}
                           required
-                          className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-form-input"
+                          className="input-modern"
                           placeholder={selectedCountry?.placeholder || '5xxxxxxxx'}
                           dir="ltr"
                         />
@@ -533,7 +591,7 @@ export default function SellCarPage() {
                           name="countryCode"
                           value={formData.countryCode}
                           onChange={handleInputChange}
-                          className="w-full px-2 md:px-3 py-2 md:py-3 text-xs md:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white min-w-[120px] md:min-w-[140px] mobile-form-input"
+                          className="select-modern min-w-[120px] md:min-w-[140px]"
                         >
                           {gulfCountries.map((country) => (
                             <option key={country.code} value={country.code}>
@@ -557,7 +615,7 @@ export default function SellCarPage() {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-form-input"
+                      className="input-modern"
                       placeholder="example@email.com"
                     />
                   </div>
@@ -572,12 +630,100 @@ export default function SellCarPage() {
                       value={formData.location}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-form-input"
+                      className="input-modern"
                       placeholder="مثال: الرياض"
                     />
                   </div>
                 </div>
               </div>
+
+              {/* Auction Fields */}
+              {formData.saleType === 'AUCTION' && (
+                <div className="space-y-4 md:space-y-6 bg-orange-50 p-4 md:p-6 rounded-xl border-2 border-orange-200">
+                  <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 text-center">
+                    إعدادات المزاد
+                  </h2>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
+                    <div className="mobile-form-group">
+                      <label className="block text-sm font-medium text-gray-700 mb-2 mobile-form-label">
+                        السعر الأدنى (ريال) (اختياري)
+                      </label>
+                      <input
+                        type="number"
+                        name="reservePrice"
+                        value={formData.reservePrice}
+                        onChange={handleInputChange}
+                        className="input-modern focus:ring-orange-500 focus:border-orange-500"
+                        placeholder="مثال: 45000"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">إذا لم يتم الوصول لهذا السعر، لن يتم البيع</p>
+                    </div>
+
+                    <div className="mobile-form-group">
+                      <label className="block text-sm font-medium text-gray-700 mb-2 mobile-form-label">
+                        زيادة المزايدة (ريال) *
+                      </label>
+                      <input
+                        type="number"
+                        name="bidIncrement"
+                        value={formData.bidIncrement}
+                        onChange={handleInputChange}
+                        required
+                        min="100"
+                        className="input-modern focus:ring-orange-500 focus:border-orange-500"
+                        placeholder="500"
+                      />
+                    </div>
+
+                    <div className="mobile-form-group">
+                      <label className="block text-sm font-medium text-gray-700 mb-2 mobile-form-label">
+                        تاريخ بداية المزاد *
+                      </label>
+                      <input
+                        type="datetime-local"
+                        name="auctionStartDate"
+                        value={formData.auctionStartDate}
+                        onChange={handleInputChange}
+                        required
+                        className="input-modern focus:ring-orange-500 focus:border-orange-500"
+                      />
+                    </div>
+
+                    <div className="mobile-form-group">
+                      <label className="block text-sm font-medium text-gray-700 mb-2 mobile-form-label">
+                        تاريخ نهاية المزاد *
+                      </label>
+                      <input
+                        type="datetime-local"
+                        name="auctionEndDate"
+                        value={formData.auctionEndDate}
+                        onChange={handleInputChange}
+                        required
+                        className="input-modern focus:ring-orange-500 focus:border-orange-500"
+                      />
+                    </div>
+
+                    <div className="mobile-form-group">
+                      <label className="block text-sm font-medium text-gray-700 mb-2 mobile-form-label">
+                        تمديد تلقائي (دقائق) *
+                      </label>
+                      <input
+                        type="number"
+                        name="autoExtendMinutes"
+                        value={formData.autoExtendMinutes}
+                        onChange={handleInputChange}
+                        required
+                        min="1"
+                        max="30"
+                        className="input-modern focus:ring-orange-500 focus:border-orange-500"
+                        placeholder="5"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">سيتم تمديد المزاد تلقائياً إذا تمت مزايدة في آخر هذه الدقائق</p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Images Upload */}
               <div className="space-y-4 md:space-y-6 mobile-form-section">
@@ -651,7 +797,7 @@ export default function SellCarPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 md:px-12 py-3 md:py-4 rounded-lg font-semibold text-sm md:text-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+                  className="btn-primary px-8 md:px-12 py-3.5 md:py-4 text-base md:text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   {isSubmitting ? (
                     <div className="flex items-center space-x-2 space-x-reverse">

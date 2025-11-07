@@ -25,6 +25,7 @@ interface Car {
   isAvailable: boolean;
   createdAt: string;
   featured: boolean;
+  saleType?: 'DIRECT_SALE' | 'AUCTION';
 }
 
 export default function Home() {
@@ -56,7 +57,7 @@ export default function Home() {
   }, []);
 
   // أخذ 8 سيارات فقط للعرض
-  const displayedCars = cars.slice(0, 8);
+  const displayedCars = cars.filter(car => car.saleType !== 'AUCTION').slice(0, 8);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -113,7 +114,7 @@ export default function Home() {
 
             {/* Action Buttons */}
             <div className="hero-buttons flex flex-col sm:flex-row justify-center animate-fade-in-delayed gap-3 sm:gap-4 md:gap-6 px-4">
-              <a href="/cars" className="hero-button bg-white text-blue-600 rounded-xl md:rounded-2xl font-bold hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-105 hover:-translate-y-1 py-4 sm:py-5 px-6 sm:px-8 text-sm sm:text-base md:text-lg">
+              <a href="/cars" className="bg-white text-blue-600 rounded-xl md:rounded-2xl font-semibold hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-105 active:scale-95 hover:-translate-y-1 py-4 sm:py-5 px-6 sm:px-8 text-sm sm:text-base md:text-lg touch-target">
                 <i className="fas fa-car ml-2"></i>
                 <span className="hidden sm:inline">تصفح السيارات</span>
                 <span className="sm:hidden">السيارات</span>
@@ -141,10 +142,10 @@ export default function Home() {
             </div>
           ) : displayedCars.length > 0 ? (
             <>
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
                 {displayedCars.map((car) => (
-                  <a key={car.id} href={`/cars/${car.id}`} className="block bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl transform hover:scale-105 cursor-pointer">
-                    <div className="h-32 sm:h-40 md:h-56 relative">
+                  <a key={car.id} href={`/cars/${car.id}`} className="card-modern group cursor-pointer">
+                    <div className="card-image-wrapper">
                       <Image
                         src={car.imageUrl || '/default-car.jpg'}
                         alt={car.name}
@@ -153,9 +154,9 @@ export default function Home() {
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                       />
                     </div>
-                    <div className="p-2 sm:p-3 md:p-5">
-                      <h3 className="text-xs sm:text-sm md:text-lg font-bold text-gray-800 mb-1 sm:mb-2 line-clamp-2">{car.name}</h3>
-                      <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">{car.brand === 'toyota' ? 'تويوتا' :
+                    <div className="p-4 sm:p-5">
+                      <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">{car.name}</h3>
+                      <p className="text-gray-600 text-xs sm:text-sm mb-3">{car.brand === 'toyota' ? 'تويوتا' :
                        car.brand === 'honda' ? 'هوندا' :
                        car.brand === 'nissan' ? 'نيسان' :
                        car.brand === 'bmw' ? 'بي إم دبليو' :
@@ -214,11 +215,11 @@ export default function Home() {
                        car.brand === 'lynk' ? 'لينك آند كو' :
                        car.brand === 'wuling' ? 'وولينغ' :
                        'علامة تجارية غير معروفة'} • {car.year}</p>
-                      <div className="text-green-600 font-bold text-xs sm:text-sm md:text-lg mb-2 sm:mb-3">{car.price.toLocaleString()} ريال</div>
+                      <div className="text-green-600 font-bold text-base sm:text-lg md:text-xl mb-4">{car.price.toLocaleString()} ريال</div>
                       
                       <div className="flex justify-center">
-                        <div className="w-full bg-blue-500 text-white py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg hover:bg-blue-600 transition-colors text-center text-xs sm:text-sm font-medium">
-                          <i className="fas fa-eye ml-1"></i>
+                        <div className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2.5 px-4 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 text-center text-sm font-semibold shadow-md group-hover:shadow-lg">
+                          <i className="fas fa-eye ml-1.5"></i>
                           عرض التفاصيل
                         </div>
                       </div>
@@ -229,7 +230,7 @@ export default function Home() {
               
               {/* عرض جميع السيارات */}
               <div className="text-center mt-12">
-                <a href="/cars" className="btn-primary inline-block px-6 py-2 text-sm">
+                <a href="/cars" className="btn-primary inline-block px-8 py-3.5 text-base">
                   <i className="fas fa-arrow-left ml-2"></i>
                   عرض جميع السيارات
                 </a>
@@ -257,47 +258,20 @@ export default function Home() {
           <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-center mb-6 sm:mb-8 md:mb-12 text-gray-800">
             لماذا تختارنا؟
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8 max-w-4xl mx-auto">
-            <div className="text-center card-hover p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl">
-              <div className="text-3xl sm:text-4xl md:text-6xl mb-3 sm:mb-4 md:mb-6 text-blue-600">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 md:gap-10 max-w-5xl mx-auto">
+            <div className="card-modern text-center p-6 sm:p-8 md:p-10">
+              <div className="text-4xl sm:text-5xl md:text-6xl mb-4 sm:mb-6 text-blue-600 transform group-hover:scale-110 transition-transform duration-300">
                 <i className="fas fa-trophy"></i>
               </div>
-              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-2 sm:mb-3 md:mb-4">جودة عالية</h3>
-              <p className="text-gray-600 leading-relaxed text-xs sm:text-sm md:text-base">نقدم أفضل السيارات من أشهر الماركات العالمية مع ضمان الجودة</p>
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-3 sm:mb-4">جودة عالية</h3>
+              <p className="text-gray-600 leading-relaxed text-sm sm:text-base md:text-lg">نقدم أفضل السيارات من أشهر الماركات العالمية مع ضمان الجودة</p>
             </div>
-            <div className="text-center card-hover p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl">
-              <div className="text-3xl sm:text-4xl md:text-6xl mb-3 sm:mb-4 md:mb-6 text-green-600">
+            <div className="card-modern text-center p-6 sm:p-8 md:p-10">
+              <div className="text-4xl sm:text-5xl md:text-6xl mb-4 sm:mb-6 text-green-600 transform group-hover:scale-110 transition-transform duration-300">
                 <i className="fas fa-dollar-sign"></i>
               </div>
-              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-2 sm:mb-3 md:mb-4">أسعار تنافسية</h3>
-              <p className="text-gray-600 leading-relaxed text-xs sm:text-sm md:text-base">أفضل الأسعار في السوق مع عروض وخصومات حصرية</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-        <div className="container-custom">
-          <div className="text-center max-w-4xl mx-auto">
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-8 sm:mb-10">
-              اطلب معرض السيارات الإلكتروني الآن
-            </h2>
-            <div className="flex justify-center">
-              <a 
-                href="https://new-mall.com/VqXaplv" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center bg-white text-blue-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-              >
-                اطلب الان
-              </a>
-            </div>
-            <div className="mt-8 sm:mt-10 flex justify-center text-blue-200">
-              <div className="flex items-center">
-                <i className="fas fa-check-circle ml-2"></i>
-                <span>ضمان الجودة</span>
-              </div>
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-3 sm:mb-4">أسعار تنافسية</h3>
+              <p className="text-gray-600 leading-relaxed text-sm sm:text-base md:text-lg">أفضل الأسعار في السوق مع عروض وخصومات حصرية</p>
             </div>
           </div>
         </div>

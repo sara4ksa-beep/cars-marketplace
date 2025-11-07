@@ -206,7 +206,7 @@ export default function CarDetailsPage() {
             <div className="mb-4 sm:mb-6">
               <button
                 onClick={() => router.push(`/booking/${carId}`)}
-                className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-8 py-3 sm:px-10 sm:py-4 rounded-xl font-semibold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+                className="bg-white/20 backdrop-blur-md hover:bg-white/30 text-white px-8 py-3.5 sm:px-10 sm:py-4 rounded-xl font-semibold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl touch-target"
               >
                 <i className="fas fa-calendar-check ml-2"></i>
                 احجزها الآن
@@ -262,22 +262,22 @@ export default function CarDetailsPage() {
               {/* Car Images */}
               <div className="space-y-3 sm:space-y-4 md:space-y-6">
                 {/* Main Image - Better mobile sizing */}
-                <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl overflow-hidden mobile-image-container">
+                <div className="card-modern overflow-hidden">
                   <div 
-                    className="h-48 sm:h-64 md:h-96 relative cursor-pointer group"
+                    className="card-image-wrapper cursor-pointer group"
                     onClick={() => setSelectedImageIndex(0)}
                   >
                     <Image 
                       src={car.imageUrl || '/default-car.jpg'} 
                       alt={car.name} 
                       fill 
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="object-cover"
                       sizes="(max-width: 768px) 100vw, 50vw"
                       priority
                     />
-                    {/* Click indicator for mobile */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
-                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full p-2 sm:p-3">
+                    {/* Click indicator */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center">
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 backdrop-blur-sm rounded-full p-3 sm:p-4 transform group-hover:scale-110">
                         <i className="fas fa-expand text-gray-700 text-lg sm:text-xl"></i>
                       </div>
                     </div>
@@ -341,47 +341,47 @@ export default function CarDetailsPage() {
               <div className="space-y-4 sm:space-y-6 md:space-y-8">
                 
                 {/* Price Section */}
-                <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 md:p-8">
-                  <div className="text-center mb-4 sm:mb-6">
-                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-600 mb-2">
+                <div className="card-modern p-6 sm:p-8">
+                  <div className="text-center mb-6">
+                    <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-green-600 mb-3">
                       {car.price.toLocaleString()} ريال
                     </div>
-                    <p className="text-gray-600 text-sm sm:text-base">السعر المطلوب</p>
+                    <p className="text-gray-600 text-base sm:text-lg">السعر المطلوب</p>
                   </div>
                   
                   <div className="text-center">
                     <button
                       onClick={() => router.push(`/booking/${carId}`)}
-                      className="w-full bg-blue-600 text-white py-2.5 sm:py-3 md:py-4 px-3 sm:px-4 md:px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-xs sm:text-sm md:text-base"
+                      className="btn-primary w-full"
                     >
-                      <i className="fas fa-calendar-check ml-1 sm:ml-2"></i>
+                      <i className="fas fa-calendar-check ml-2"></i>
                       احجزها الآن
                     </button>
                   </div>
                 </div>
 
                 {/* Car Specifications */}
-                <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 md:p-8">
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">مواصفات السيارة</h3>
+                <div className="card-modern p-6 sm:p-8">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-6">مواصفات السيارة</h3>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
-                    <div className="space-y-3 sm:space-y-4">
-                      <div className="flex justify-between items-center py-2 sm:py-3 border-b border-gray-200">
-                        <span className="text-gray-600 text-sm sm:text-base">الماركة</span>
-                        <span className="font-semibold text-sm sm:text-base">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center py-3 border-b border-gray-200 hover:bg-gray-50 px-2 rounded-lg transition-colors">
+                        <span className="text-gray-600 text-sm sm:text-base font-medium">الماركة</span>
+                        <span className="font-bold text-sm sm:text-base text-gray-800">
                           {getBrandName(car.brand)}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center py-2 sm:py-3 border-b border-gray-200">
-                        <span className="text-gray-600 text-sm sm:text-base">سنة الصنع</span>
-                        <span className="font-semibold text-sm sm:text-base">{car.year}</span>
+                      <div className="flex justify-between items-center py-3 border-b border-gray-200 hover:bg-gray-50 px-2 rounded-lg transition-colors">
+                        <span className="text-gray-600 text-sm sm:text-base font-medium">سنة الصنع</span>
+                        <span className="font-bold text-sm sm:text-base text-gray-800">{car.year}</span>
                       </div>
-                      <div className="flex justify-between items-center py-2 sm:py-3 border-b border-gray-200">
-                        <span className="text-gray-600 text-sm sm:text-base">اللون</span>
-                        <span className="font-semibold text-sm sm:text-base">
+                      <div className="flex justify-between items-center py-3 border-b border-gray-200 hover:bg-gray-50 px-2 rounded-lg transition-colors">
+                        <span className="text-gray-600 text-sm sm:text-base font-medium">اللون</span>
+                        <span className="font-bold text-sm sm:text-base text-gray-800">
                           {car.color ? (
                             <span className="flex items-center">
-                              <span className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-gray-300 ml-2"></span>
+                              <span className="w-4 h-4 rounded-full bg-gray-300 ml-2 border border-gray-400"></span>
                               {car.color}
                             </span>
                           ) : (
@@ -391,13 +391,13 @@ export default function CarDetailsPage() {
                       </div>
                     </div>
                     
-                    <div className="space-y-3 sm:space-y-4">
-                      <div className="flex justify-between items-center py-2 sm:py-3 border-b border-gray-200">
-                        <span className="text-gray-600 text-sm sm:text-base">المسافة المقطوعة</span>
-                        <span className="font-semibold text-sm sm:text-base">
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center py-3 border-b border-gray-200 hover:bg-gray-50 px-2 rounded-lg transition-colors">
+                        <span className="text-gray-600 text-sm sm:text-base font-medium">المسافة المقطوعة</span>
+                        <span className="font-bold text-sm sm:text-base text-gray-800">
                           {car.mileage ? (
                             <span className="flex items-center">
-                              <i className="fas fa-tachometer-alt text-blue-500 ml-1 sm:ml-2 text-xs sm:text-sm"></i>
+                              <i className="fas fa-tachometer-alt text-blue-500 ml-2 text-sm"></i>
                               {car.mileage.toLocaleString()} كم
                             </span>
                           ) : (
@@ -405,9 +405,9 @@ export default function CarDetailsPage() {
                           )}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center py-2 sm:py-3 border-b border-gray-200">
-                        <span className="text-gray-600 text-sm sm:text-base">نوع الوقود</span>
-                        <span className="font-semibold text-sm sm:text-base">
+                      <div className="flex justify-between items-center py-3 border-b border-gray-200 hover:bg-gray-50 px-2 rounded-lg transition-colors">
+                        <span className="text-gray-600 text-sm sm:text-base font-medium">نوع الوقود</span>
+                        <span className="font-bold text-sm sm:text-base text-gray-800">
                           {car.fuelType === 'gasoline' ? 'بنزين' : 
                            car.fuelType === 'diesel' ? 'ديزل' : 
                            car.fuelType === 'hybrid' ? 'هجين' : 
@@ -415,36 +415,36 @@ export default function CarDetailsPage() {
                            car.fuelType || 'غير محدد'}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center py-2 sm:py-3 border-b border-gray-200">
-                        <span className="text-gray-600 text-sm sm:text-base">ناقل الحركة</span>
-                        <span className="font-semibold text-sm sm:text-base">
+                      <div className="flex justify-between items-center py-3 border-b border-gray-200 hover:bg-gray-50 px-2 rounded-lg transition-colors">
+                        <span className="text-gray-600 text-sm sm:text-base font-medium">ناقل الحركة</span>
+                        <span className="font-bold text-sm sm:text-base text-gray-800">
                           {car.transmission === 'automatic' ? 'أوتوماتيك' : 
                            car.transmission === 'manual' ? 'يدوي' : 
                            car.transmission || 'غير محدد'}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center py-2 sm:py-3 border-b border-gray-200">
-                        <span className="text-gray-600 text-sm sm:text-base">الحالة</span>
-                        <span className="font-semibold text-green-600 text-sm sm:text-base">متاحة للبيع</span>
+                      <div className="flex justify-between items-center py-3 border-b border-gray-200 hover:bg-gray-50 px-2 rounded-lg transition-colors">
+                        <span className="text-gray-600 text-sm sm:text-base font-medium">الحالة</span>
+                        <span className="badge-modern badge-success">متاحة للبيع</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Car Description */}
-                <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 md:p-8">
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">وصف السيارة</h3>
+                <div className="card-modern p-6 sm:p-8">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-6">وصف السيارة</h3>
                   {car.description ? (
-                    <p className="text-gray-700 leading-relaxed text-sm sm:text-base md:text-lg">
+                    <p className="text-gray-700 leading-relaxed text-base sm:text-lg md:text-xl">
                       {car.description}
                     </p>
                   ) : (
-                    <div className="text-center py-4 sm:py-6 md:py-8">
-                      <div className="text-gray-400 text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">
+                    <div className="text-center py-8 sm:py-12">
+                      <div className="text-gray-400 text-4xl sm:text-5xl mb-4">
                         <i className="fas fa-file-alt"></i>
                       </div>
-                      <p className="text-gray-600 text-sm sm:text-base">لا يوجد وصف متاح للسيارة</p>
-                      <p className="text-gray-500 text-xs sm:text-sm mt-2">سيتم إضافة الوصف قريباً</p>
+                      <p className="text-gray-600 text-base sm:text-lg">لا يوجد وصف متاح للسيارة</p>
+                      <p className="text-gray-500 text-sm sm:text-base mt-2">سيتم إضافة الوصف قريباً</p>
                     </div>
                   )}
                 </div>
