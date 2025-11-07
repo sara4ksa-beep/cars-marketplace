@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <>
@@ -26,7 +28,7 @@ export default function Header() {
             <div className="hidden lg:flex items-center space-x-6 md:space-x-8 space-x-reverse">
               {[
                 { href: '/', label: 'الرئيسية' },
-                { href: '/cars', label: 'سيارات مميزة' },
+                { href: '/cars', label: 'السيارات' },
                 { href: '/compare', label: 'مقارنة السيارات' },
                 { href: '/sell-car', label: 'بيع سيارتك' },
                 { href: '/contact', label: 'اتصل بنا' }
@@ -104,7 +106,7 @@ export default function Header() {
             <div className="space-y-2">
               {[
                 { href: '/', label: 'الرئيسية', icon: 'fas fa-home', color: 'from-blue-500 to-blue-600' },
-                { href: '/cars', label: 'سيارات مميزة', icon: 'fas fa-car', color: 'from-green-500 to-green-600' },
+                { href: '/cars', label: 'السيارات', icon: 'fas fa-car', color: 'from-green-500 to-green-600' },
                 { href: '/compare', label: 'مقارنة السيارات', icon: 'fas fa-balance-scale', color: 'from-purple-500 to-purple-600' },
                 { href: '/sell-car', label: 'بيع سيارتك', icon: 'fas fa-plus-circle', color: 'from-orange-500 to-orange-600' },
                 { href: '/contact', label: 'اتصل بنا', icon: 'fas fa-phone', color: 'from-red-500 to-red-600' }
@@ -150,6 +152,36 @@ export default function Header() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Bottom Navigation Bar */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-gray-100 border-t border-gray-200 z-50 md:hidden">
+        <div className="flex items-center justify-around h-16">
+          {[
+            { href: '/', label: 'الرئيسية', icon: 'fas fa-home' },
+            { href: '/cars', label: 'السيارات', icon: 'fas fa-car' },
+            { href: '/sell-car', label: 'بيع سيارتك', icon: 'fas fa-plus-circle' },
+            { href: '/login', label: 'دخول', icon: 'fas fa-sign-in-alt' }
+          ].map((item) => {
+            const isActive = pathname === item.href || (item.href === '/cars' && pathname?.startsWith('/cars'));
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex flex-col items-center justify-center flex-1 h-full transition-all duration-200 ${
+                  isActive 
+                    ? 'bg-blue-50 text-blue-600' 
+                    : 'text-gray-600 hover:text-gray-800'
+                }`}
+              >
+                <i className={`${item.icon} text-xl mb-1 ${isActive ? 'text-blue-600' : 'text-gray-600'}`}></i>
+                <span className={`text-xs font-medium ${isActive ? 'text-blue-600' : 'text-gray-600'}`}>
+                  {item.label}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
     </>
   );
 } 

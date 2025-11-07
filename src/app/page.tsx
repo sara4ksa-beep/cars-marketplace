@@ -118,13 +118,6 @@ export default function Home() {
                 <span className="hidden sm:inline">تصفح السيارات</span>
                 <span className="sm:hidden">السيارات</span>
               </a>
-              
-              <a href="/sell-car" className="hero-button bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl md:rounded-2xl font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 py-4 sm:py-5 px-6 sm:px-8 text-sm sm:text-base md:text-lg">
-                <i className="fas fa-plus-circle ml-2"></i>
-                <span className="hidden sm:inline">بيع سيارتك</span>
-                <span className="sm:hidden">بيع</span>
-              </a>
-              
             </div>
           </div>
         </div>
@@ -264,7 +257,7 @@ export default function Home() {
           <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-center mb-6 sm:mb-8 md:mb-12 text-gray-800">
             لماذا تختارنا؟
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8 max-w-4xl mx-auto">
             <div className="text-center card-hover p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl">
               <div className="text-3xl sm:text-4xl md:text-6xl mb-3 sm:mb-4 md:mb-6 text-blue-600">
                 <i className="fas fa-trophy"></i>
@@ -278,17 +271,6 @@ export default function Home() {
               </div>
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-2 sm:mb-3 md:mb-4">أسعار تنافسية</h3>
               <p className="text-gray-600 leading-relaxed text-xs sm:text-sm md:text-base">أفضل الأسعار في السوق مع عروض وخصومات حصرية</p>
-            </div>
-            <div className="text-center card-hover p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl sm:col-span-2 lg:col-span-1">
-              <div className="text-3xl sm:text-4xl md:text-6xl mb-3 sm:mb-4 md:mb-6 text-purple-600">
-                <i className="fas fa-tools"></i>
-              </div>
-              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-2 sm:mb-3 md:mb-4">خدمة ما بعد البيع</h3>
-              <p className="text-gray-600 leading-relaxed text-xs sm:text-sm md:text-base mb-4">خدمة عملاء متميزة وصيانة دورية لجميع السيارات</p>
-              <a href="/contact" className="inline-block bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium">
-                <i className="fas fa-phone ml-1"></i>
-                اتصل بنا الآن
-              </a>
             </div>
           </div>
         </div>
