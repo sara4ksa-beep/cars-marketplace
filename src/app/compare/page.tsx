@@ -121,7 +121,19 @@ export default function ComparePage() {
         <Header />
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            {/* Square Loading Animation */}
+            <div className="flex items-center justify-center gap-2 mb-6">
+              {[...Array(9)].map((_, i) => (
+                <div
+                  key={i}
+                  className="w-4 h-4 bg-blue-600 rounded"
+                  style={{
+                    animation: `squareBounce 1.4s ease-in-out infinite`,
+                    animationDelay: `${i * 0.1}s`,
+                  }}
+                ></div>
+              ))}
+            </div>
             <p className="text-gray-600 text-lg">جاري تحميل السيارات...</p>
           </div>
         </div>

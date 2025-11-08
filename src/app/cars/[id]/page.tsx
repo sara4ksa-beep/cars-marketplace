@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Header from '../../components/Header';
+import CarDetailSkeleton from '../../components/CarDetailSkeleton';
 
 interface Car {
   id: number;
@@ -122,16 +123,10 @@ export default function CarDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <>
         <Header />
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-24 w-24 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600 text-lg">جاري تحميل سيارتك...</p>
-            <p className="text-gray-500 text-sm mt-2">يرجى الانتظار</p>
-          </div>
-        </div>
-      </div>
+        <CarDetailSkeleton />
+      </>
     );
   }
 

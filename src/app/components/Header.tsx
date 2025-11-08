@@ -1,12 +1,101 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
+  const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const checkAuth = async () => {
+    try {
+      const response = await fetch('/api/auth/verify');
+      const data = await response.json();
+      if (data.success) {
+        setUser(data.user);
+        // Cache user in localStorage
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('user', JSON.stringify(data.user));
+        }
+      } else {
+        setUser(null);
+        // Clear cache if not authenticated
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('user');
+        }
+      }
+    } catch (error) {
+      console.error('Auth check failed:', error);
+      setUser(null);
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('user');
+      }
+    }
+  };
+
+  useEffect(() => {
+    setMounted(true);
+    // Check localStorage first for immediate display
+    if (typeof window !== 'undefined') {
+      const cachedUser = localStorage.getItem('user');
+      if (cachedUser) {
+        try {
+          const parsedUser = JSON.parse(cachedUser);
+          setUser(parsedUser);
+        } catch (e) {
+          // Invalid cache, clear it
+          localStorage.removeItem('user');
+        }
+      }
+    }
+    // Then verify with server
+    checkAuth();
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsAccountDropdownOpen(false);
+      }
+    };
+
+    if (isAccountDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isAccountDropdownOpen]);
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      // Clear localStorage cache
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('user');
+      }
+      setUser(null);
+      setIsAccountDropdownOpen(false);
+      router.push('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Clear localStorage cache even on error
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('user');
+      }
+      setUser(null);
+      setIsAccountDropdownOpen(false);
+      router.push('/');
+    }
+  };
 
   return (
     <>
@@ -29,7 +118,6 @@ export default function Header() {
               {[
                 { href: '/', label: 'الرئيسية' },
                 { href: '/cars', label: 'السيارات' },
-                { href: '/auctions', label: 'المزادات', icon: 'fas fa-gavel', highlight: true },
                 { href: '/compare', label: 'مقارنة السيارات' },
                 { href: '/sell-car', label: 'بيع سيارتك' },
                 { href: '/contact', label: 'اتصل بنا' }
@@ -37,31 +125,100 @@ export default function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-4 py-2.5 rounded-xl font-bold transition-all duration-300 text-sm md:text-base relative group ${
-                    item.highlight
-                      ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-md hover:shadow-lg'
-                      : 'hover:bg-white/10 hover:backdrop-blur-sm'
-                  } ${pathname === item.href ? 'bg-white/10 backdrop-blur-sm' : ''}`}
+                  className={`px-4 py-2.5 rounded-xl font-bold transition-all duration-300 text-sm md:text-base relative group hover:bg-white/10 hover:backdrop-blur-sm ${
+                    pathname === item.href ? 'bg-white/10 backdrop-blur-sm' : ''
+                  }`}
                 >
-                  {item.icon && <i className={`${item.icon} ml-1.5`}></i>}
                   {item.label}
-                  {pathname === item.href && !item.highlight && (
+                  {pathname === item.href && (
                     <span className="absolute bottom-0 right-0 left-0 h-0.5 bg-white rounded-full"></span>
                   )}
             </Link>
             ))}
           </div>
 
-          {/* Login Button & Mobile Menu */}
+          {/* Login/Account Button & Mobile Menu */}
           <div className="flex items-center space-x-2 md:space-x-4 space-x-reverse">
-            <Link 
-              href="/login" 
-              className="hidden sm:flex items-center bg-white text-blue-600 px-4 md:px-6 py-2.5 rounded-xl font-bold hover:bg-blue-50 transition-all duration-300 text-sm md:text-base shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95"
-            >
-              <i className="fas fa-sign-in-alt ml-1.5"></i>
-              <span className="hidden md:inline">تسجيل الدخول</span>
-              <span className="md:hidden">دخول</span>
-            </Link>
+            {!mounted ? (
+              // Show login button during SSR to match server render
+              <Link 
+                href="/login" 
+                className="hidden sm:flex items-center bg-white text-blue-600 px-4 md:px-6 py-2.5 rounded-xl font-bold hover:bg-blue-50 transition-all duration-300 text-sm md:text-base shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95 min-w-[120px] md:min-w-[140px] justify-center"
+              >
+                <i className="fas fa-sign-in-alt ml-1.5"></i>
+                <span className="hidden md:inline">تسجيل الدخول</span>
+                <span className="md:hidden">دخول</span>
+              </Link>
+            ) : user ? (
+              <div className="hidden sm:block relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setIsAccountDropdownOpen(!isAccountDropdownOpen)}
+                  className="flex items-center bg-white text-blue-600 px-4 md:px-6 py-2.5 rounded-xl font-bold hover:bg-blue-50 transition-all duration-300 text-sm md:text-base shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95 min-w-[120px] md:min-w-[140px] justify-center"
+                >
+                  <i className="fas fa-user-circle ml-1.5"></i>
+                  <span className="hidden md:inline">{user.name}</span>
+                  <span className="md:hidden">حسابي</span>
+                  <i className={`fas fa-chevron-down mr-1.5 text-xs transition-transform duration-300 ${isAccountDropdownOpen ? 'rotate-180' : ''}`}></i>
+                </button>
+                
+                {/* Dropdown Menu */}
+                {isAccountDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50 backdrop-blur-sm">
+                    <div className="py-2">
+                      <Link
+                        href="/account"
+                        onClick={() => setIsAccountDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 transition-colors duration-200"
+                      >
+                        <i className="fas fa-chart-line text-blue-600 w-5"></i>
+                        <span className="font-medium">لوحة التحكم</span>
+                      </Link>
+                      <Link
+                        href="/account?tab=cars"
+                        onClick={() => setIsAccountDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 transition-colors duration-200"
+                      >
+                        <i className="fas fa-car text-blue-600 w-5"></i>
+                        <span className="font-medium">سياراتي</span>
+                      </Link>
+                      <Link
+                        href="/account?tab=bookings"
+                        onClick={() => setIsAccountDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 transition-colors duration-200"
+                      >
+                        <i className="fas fa-calendar-check text-blue-600 w-5"></i>
+                        <span className="font-medium">حجوزاتي</span>
+                      </Link>
+                      <Link
+                        href="/account?tab=bids"
+                        onClick={() => setIsAccountDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 transition-colors duration-200"
+                      >
+                        <i className="fas fa-gavel text-blue-600 w-5"></i>
+                        <span className="font-medium">مزايداتي</span>
+                      </Link>
+                      <div className="border-t border-gray-200 my-1"></div>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors duration-200"
+                      >
+                        <i className="fas fa-sign-out-alt w-5"></i>
+                        <span className="font-medium">تسجيل الخروج</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link 
+                href="/login" 
+                className="hidden sm:flex items-center bg-white text-blue-600 px-4 md:px-6 py-2.5 rounded-xl font-bold hover:bg-blue-50 transition-all duration-300 text-sm md:text-base shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95 min-w-[120px] md:min-w-[140px] justify-center"
+              >
+                <i className="fas fa-sign-in-alt ml-1.5"></i>
+                <span className="hidden md:inline">تسجيل الدخول</span>
+                <span className="md:hidden">دخول</span>
+              </Link>
+            )}
             
             {/* Mobile Menu Button */}
             <button
@@ -117,7 +274,6 @@ export default function Header() {
               {[
                 { href: '/', label: 'الرئيسية', icon: 'fas fa-home', color: 'from-blue-500 to-blue-600' },
                 { href: '/cars', label: 'السيارات', icon: 'fas fa-car', color: 'from-green-500 to-green-600' },
-                { href: '/auctions', label: 'المزادات', icon: 'fas fa-gavel', color: 'from-orange-500 to-red-600' },
                 { href: '/compare', label: 'مقارنة السيارات', icon: 'fas fa-balance-scale', color: 'from-purple-500 to-purple-600' },
                 { href: '/sell-car', label: 'بيع سيارتك', icon: 'fas fa-plus-circle', color: 'from-orange-500 to-orange-600' },
                 { href: '/contact', label: 'اتصل بنا', icon: 'fas fa-phone', color: 'from-red-500 to-red-600' }
@@ -143,16 +299,37 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Login Section */}
+          {/* Login/Account Section */}
           <div className="p-4 border-t border-white/20">
-            <Link 
-              href="/login" 
-              className="flex items-center justify-center py-3.5 px-4 bg-gradient-to-r from-white to-blue-50 text-blue-600 rounded-xl font-bold text-center hover:from-blue-50 hover:to-white hover:scale-105 active:scale-95 transition-all duration-300 text-sm md:text-base shadow-lg touch-target"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <i className="fas fa-sign-in-alt ml-2"></i>
-              تسجيل الدخول
-            </Link>
+            {!mounted ? (
+              // Show login button during SSR to match server render
+              <Link 
+                href="/login" 
+                className="flex items-center justify-center py-3.5 px-4 bg-gradient-to-r from-white to-blue-50 text-blue-600 rounded-xl font-bold text-center hover:from-blue-50 hover:to-white hover:scale-105 active:scale-95 transition-all duration-300 text-sm md:text-base shadow-lg touch-target"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <i className="fas fa-sign-in-alt ml-2"></i>
+                تسجيل الدخول
+              </Link>
+            ) : user ? (
+              <Link 
+                href="/account" 
+                className="flex items-center justify-center py-3.5 px-4 bg-gradient-to-r from-white to-blue-50 text-blue-600 rounded-xl font-bold text-center hover:from-blue-50 hover:to-white hover:scale-105 active:scale-95 transition-all duration-300 text-sm md:text-base shadow-lg touch-target"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <i className="fas fa-user-circle ml-2"></i>
+                {user.name}
+              </Link>
+            ) : (
+              <Link 
+                href="/login" 
+                className="flex items-center justify-center py-3.5 px-4 bg-gradient-to-r from-white to-blue-50 text-blue-600 rounded-xl font-bold text-center hover:from-blue-50 hover:to-white hover:scale-105 active:scale-95 transition-all duration-300 text-sm md:text-base shadow-lg touch-target"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <i className="fas fa-sign-in-alt ml-2"></i>
+                تسجيل الدخول
+              </Link>
+            )}
           </div>
 
           {/* Additional Info */}
@@ -174,11 +351,10 @@ export default function Header() {
           {[
             { href: '/', label: 'الرئيسية', icon: 'fas fa-home' },
             { href: '/cars', label: 'السيارات', icon: 'fas fa-car' },
-            { href: '/auctions', label: 'المزادات', icon: 'fas fa-gavel' },
             { href: '/sell-car', label: 'بيع سيارتك', icon: 'fas fa-plus-circle' },
-            { href: '/login', label: 'دخول', icon: 'fas fa-sign-in-alt' }
+            { href: (mounted && user) ? '/account' : '/login', label: (mounted && user) ? 'حسابي' : 'دخول', icon: (mounted && user) ? 'fas fa-user-circle' : 'fas fa-sign-in-alt' }
           ].map((item) => {
-            const isActive = pathname === item.href || (item.href === '/cars' && pathname?.startsWith('/cars'));
+            const isActive = pathname === item.href || (item.href === '/cars' && pathname?.startsWith('/cars')) || (item.href === '/account' && pathname?.startsWith('/account'));
             return (
               <Link
                 key={item.href}

@@ -27,8 +27,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-cairo bg-gray-50 pb-16 md:pb-0">
-        {children}
+      <body className="font-cairo pb-16 md:pb-0">
+        <div className="relative z-10">
+          {children}
+        </div>
       </body>
     </html>
   );

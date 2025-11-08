@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/database';
 import { CarStatus, SaleType } from '@prisma/client';
+import { verifyUserAuth } from '@/lib/userAuth';
 
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
+
+    // Check if user is logged in
+    const authResult = await verifyUserAuth(req);
+    const sellerId = authResult.success ? authResult.user!.id : null;
 
     const carData: any = {
       name: data.name,
@@ -24,6 +29,7 @@ export async function POST(req: NextRequest) {
       contactEmail: data.contactEmail,
       status: CarStatus.PENDING,
       saleType: data.saleType || SaleType.DIRECT_SALE,
+      sellerId: sellerId, // Link to user if logged in
     };
 
     // If it's an auction, add auction-specific fields

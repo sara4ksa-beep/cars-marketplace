@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
 import Header from '../components/Header';
 
@@ -66,6 +67,7 @@ export default function SellCarPage() {
   const [activeTab, setActiveTab] = useState<'form' | 'list'>('form');
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(false);
+  const [showThankYouModal, setShowThankYouModal] = useState(false);
 
   // جلب السيارات من قاعدة البيانات
   useEffect(() => {
@@ -209,7 +211,7 @@ export default function SellCarPage() {
       if (formData.saleType === 'AUCTION') {
         payload.reservePrice = formData.reservePrice ? Number(formData.reservePrice) : null;
         payload.bidIncrement = Number(formData.bidIncrement);
-        payload.auctionStartDate = formData.auctionStartDate;
+        payload.auctionStartDate = new Date().toISOString(); // Set to current date/time automatically
         payload.auctionEndDate = formData.auctionEndDate;
         payload.autoExtendMinutes = Number(formData.autoExtendMinutes);
       }
@@ -224,8 +226,7 @@ export default function SellCarPage() {
       const result = await res.json();
       setIsSubmitting(false);
       if (result.success) {
-        alert('تم إرسال السيارة بنجاح! سيتم عرضها بعد موافقة المشرف.');
-        router.push('/cars');
+        setShowThankYouModal(true);
       } else {
         alert('حدث خطأ أثناء الإضافة: ' + result.error);
       }
@@ -547,96 +548,6 @@ export default function SellCarPage() {
                 </div>
               </div>
 
-              {/* Contact Information */}
-              <div className="space-y-4 md:space-y-6 mobile-form-section">
-                <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 text-center">
-                  معلومات التواصل
-                </h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mobile-form-row">
-                  <div className="mobile-form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2 mobile-form-label">
-                      الاسم الكامل *
-                    </label>
-                    <input
-                      type="text"
-                      name="contactName"
-                      value={formData.contactName}
-                      onChange={handleInputChange}
-                      required
-                      className="input-modern"
-                      placeholder="الاسم الكامل"
-                    />
-                  </div>
-
-                  <div className="mobile-form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2 mobile-form-label">
-                      رقم الجوال *
-                    </label>
-                    <div className="flex gap-2 mobile-button-group-horizontal">
-                      <div className="flex-1">
-                        <input
-                          type="tel"
-                          name="phoneNumber"
-                          value={formData.phoneNumber}
-                          onChange={handleInputChange}
-                          required
-                          className="input-modern"
-                          placeholder={selectedCountry?.placeholder || '5xxxxxxxx'}
-                          dir="ltr"
-                        />
-                      </div>
-                      <div className="relative">
-                        <select
-                          name="countryCode"
-                          value={formData.countryCode}
-                          onChange={handleInputChange}
-                          className="select-modern min-w-[120px] md:min-w-[140px]"
-                        >
-                          {gulfCountries.map((country) => (
-                            <option key={country.code} value={country.code}>
-                              {country.flag} {country.code} {country.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    <div className="mt-1 text-sm text-gray-500">
-                      مثال: {formData.countryCode} {selectedCountry?.placeholder || '5xxxxxxxx'}
-                    </div>
-                  </div>
-
-                  <div className="mobile-form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2 mobile-form-label">
-                      البريد الإلكتروني
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="input-modern"
-                      placeholder="example@email.com"
-                    />
-                  </div>
-
-                  <div className="mobile-form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2 mobile-form-label">
-                      المدينة *
-                    </label>
-                    <input
-                      type="text"
-                      name="location"
-                      value={formData.location}
-                      onChange={handleInputChange}
-                      required
-                      className="input-modern"
-                      placeholder="مثال: الرياض"
-                    />
-                  </div>
-                </div>
-              </div>
-
               {/* Auction Fields */}
               {formData.saleType === 'AUCTION' && (
                 <div className="space-y-4 md:space-y-6 bg-orange-50 p-4 md:p-6 rounded-xl border-2 border-orange-200">
@@ -673,20 +584,6 @@ export default function SellCarPage() {
                         min="100"
                         className="input-modern focus:ring-orange-500 focus:border-orange-500"
                         placeholder="500"
-                      />
-                    </div>
-
-                    <div className="mobile-form-group">
-                      <label className="block text-sm font-medium text-gray-700 mb-2 mobile-form-label">
-                        تاريخ بداية المزاد *
-                      </label>
-                      <input
-                        type="datetime-local"
-                        name="auctionStartDate"
-                        value={formData.auctionStartDate}
-                        onChange={handleInputChange}
-                        required
-                        className="input-modern focus:ring-orange-500 focus:border-orange-500"
                       />
                     </div>
 
@@ -814,6 +711,90 @@ export default function SellCarPage() {
         </div>
       </div>
 
+      {/* Thank You Modal */}
+      {showThankYouModal && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => {
+            setShowThankYouModal(false);
+            router.push('/cars');
+          }}
+        >
+          <div 
+            className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8 transform transition-all duration-300 scale-100"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-center">
+              {/* Success Icon */}
+              <div className="mx-auto mb-6 w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
+                <i className="fas fa-check-circle text-green-600 text-5xl"></i>
+              </div>
+              
+              {/* Title */}
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+                شكراً لك!
+              </h2>
+              
+              {/* Message */}
+              <p className="text-gray-600 text-base md:text-lg mb-6 leading-relaxed">
+                تم إرسال طلب بيع السيارة بنجاح
+              </p>
+              <p className="text-gray-500 text-sm md:text-base mb-8">
+                سيتم مراجعة طلبك من قبل المشرف وعرض السيارة بعد الموافقة عليها
+              </p>
+              
+              {/* Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <button
+                  onClick={() => {
+                    setShowThankYouModal(false);
+                    router.push('/cars');
+                  }}
+                  className="btn-primary flex-1"
+                >
+                  <i className="fas fa-car ml-2"></i>
+                  عرض السيارات
+                </button>
+                <button
+                  onClick={() => {
+                    setShowThankYouModal(false);
+                    // Reset form
+                    setFormData({
+                      carTitle: '',
+                      brand: '',
+                      year: '',
+                      price: '',
+                      mileage: '',
+                      fuelType: '',
+                      transmission: '',
+                      color: '',
+                      description: '',
+                      contactName: '',
+                      countryCode: '+966',
+                      phoneNumber: '',
+                      email: '',
+                      location: '',
+                      images: [],
+                      saleType: 'DIRECT_SALE',
+                      reservePrice: '',
+                      bidIncrement: '500',
+                      auctionStartDate: '',
+                      auctionEndDate: '',
+                      autoExtendMinutes: '5',
+                    });
+                    setPreviewImages([]);
+                  }}
+                  className="btn-secondary flex-1"
+                >
+                  <i className="fas fa-plus ml-2"></i>
+                  إضافة سيارة أخرى
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Footer */}
       <footer className="bg-gray-900 text-white section-padding">
         <div className="container-custom">
@@ -834,23 +815,17 @@ export default function SellCarPage() {
               <div>
                 <h4 className="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-center sm:text-right">تابعنا على</h4>
                 <div className="flex flex-wrap justify-center sm:justify-start gap-4 sm:gap-6">
-                  <a href="#" className="group text-blue-400 hover:text-blue-300 transition-all duration-300 transform hover:scale-110">
-                    <i className="fab fa-facebook-f text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+                    <i className="fab fa-facebook-f text-xl sm:text-2xl"></i>
                   </a>
-                  <a href="#" className="group text-sky-400 hover:text-sky-300 transition-all duration-300 transform hover:scale-110">
-                    <i className="fab fa-twitter text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group bg-black hover:bg-gray-800 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+                    <i className="fab fa-x-twitter text-xl sm:text-2xl"></i>
                   </a>
-                  <a href="#" className="group text-pink-400 hover:text-pink-300 transition-all duration-300 transform hover:scale-110">
-                    <i className="fab fa-instagram text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+                    <i className="fab fa-instagram text-xl sm:text-2xl"></i>
                   </a>
-                  <a href="#" className="group text-red-400 hover:text-red-300 transition-all duration-300 transform hover:scale-110">
-                    <i className="fab fa-youtube text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
-                  </a>
-                  <a href="#" className="group text-blue-500 hover:text-blue-400 transition-all duration-300 transform hover:scale-110">
-                    <i className="fab fa-linkedin-in text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
-                  </a>
-                  <a href="#" className="group text-green-400 hover:text-green-300 transition-all duration-300 transform hover:scale-110">
-                    <i className="fab fa-whatsapp text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300"></i>
+                  <a href="#" className="group bg-red-600 hover:bg-red-700 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+                    <i className="fab fa-youtube text-xl sm:text-2xl"></i>
                   </a>
                 </div>
                 <div className="mt-4 sm:mt-6 text-center sm:text-right">
@@ -921,12 +896,12 @@ export default function SellCarPage() {
           <div className="border-t border-gray-800 mt-6 sm:mt-8 pt-6 sm:pt-8">
             <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
               <p className="text-gray-400 text-center sm:text-right text-xs sm:text-sm">
-                © 2024 موقع السيارات المتميز. جميع الحقوق محفوظة
+                © 2025 موقع السيارات المتميز. جميع الحقوق محفوظة
               </p>
               <div className="flex items-center space-x-4 sm:space-x-6 space-x-reverse">
-                <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">سياسة الخصوصية</a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">الشروط والأحكام</a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">اتفاقية الاستخدام</a>
+                <Link href="/privacy-policy" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">سياسة الخصوصية</Link>
+                <Link href="/terms" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">الشروط والأحكام</Link>
+                <Link href="/usage-agreement" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">اتفاقية الاستخدام</Link>
               </div>
             </div>
           </div>

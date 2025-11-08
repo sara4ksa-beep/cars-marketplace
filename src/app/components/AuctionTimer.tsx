@@ -47,10 +47,12 @@ export default function AuctionTimer({
       <div
         className={`flex items-center justify-center space-x-2 space-x-reverse ${className}`}
       >
-        <span className="text-red-600 font-bold text-sm md:text-base">
-          <i className="fas fa-times-circle ml-1"></i>
-          انتهى المزاد
-        </span>
+        <div className="bg-red-100 border-2 border-red-300 rounded-xl px-4 py-2">
+          <span className="text-red-700 font-bold text-sm md:text-base flex items-center">
+            <i className="fas fa-times-circle ml-2"></i>
+            انتهى المزاد
+          </span>
+        </div>
       </div>
     );
   }
@@ -63,35 +65,52 @@ export default function AuctionTimer({
   const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
   const isUrgent = timeRemaining < 3600000; // Less than 1 hour
+  const isVeryUrgent = timeRemaining < 300000; // Less than 5 minutes
 
   return (
     <div
-      className={`flex items-center justify-center space-x-2 space-x-reverse ${className} ${
-        isUrgent ? 'text-red-600' : 'text-gray-700'
-      }`}
+      className={`flex items-center justify-center space-x-2 space-x-reverse ${className}`}
     >
-      <div className="flex items-center space-x-1 space-x-reverse">
+      <div className="flex items-center space-x-2 space-x-reverse">
         {days > 0 && (
-          <div className="flex flex-col items-center bg-white/90 px-2 py-1 rounded-lg shadow-md">
-            <span className="text-xs font-bold">{days}</span>
-            <span className="text-xs text-gray-600">يوم</span>
+          <div className={`flex flex-col items-center px-3 py-2 rounded-xl shadow-lg font-bold transition-all duration-300 ${
+            isUrgent 
+              ? 'bg-gradient-to-br from-red-500 to-red-600 text-white animate-pulse' 
+              : 'bg-gradient-to-br from-orange-500 to-orange-600 text-white'
+          }`}>
+            <span className="text-lg md:text-xl">{days}</span>
+            <span className="text-xs opacity-90">يوم</span>
           </div>
         )}
-        <div className="flex flex-col items-center bg-white/90 px-2 py-1 rounded-lg shadow-md">
-          <span className="text-xs font-bold">{hours.toString().padStart(2, '0')}</span>
-          <span className="text-xs text-gray-600">ساعة</span>
+        <div className={`flex flex-col items-center px-3 py-2 rounded-xl shadow-lg font-bold transition-all duration-300 ${
+          isUrgent 
+            ? 'bg-gradient-to-br from-red-500 to-red-600 text-white' 
+            : 'bg-gradient-to-br from-orange-500 to-orange-600 text-white'
+        } ${isVeryUrgent ? 'animate-pulse' : ''}`}>
+          <span className="text-lg md:text-xl">{hours.toString().padStart(2, '0')}</span>
+          <span className="text-xs opacity-90">ساعة</span>
         </div>
-        <div className="flex flex-col items-center bg-white/90 px-2 py-1 rounded-lg shadow-md">
-          <span className="text-xs font-bold">{minutes.toString().padStart(2, '0')}</span>
-          <span className="text-xs text-gray-600">دقيقة</span>
+        <div className={`flex flex-col items-center px-3 py-2 rounded-xl shadow-lg font-bold transition-all duration-300 ${
+          isUrgent 
+            ? 'bg-gradient-to-br from-red-500 to-red-600 text-white' 
+            : 'bg-gradient-to-br from-orange-500 to-orange-600 text-white'
+        } ${isVeryUrgent ? 'animate-pulse' : ''}`}>
+          <span className="text-lg md:text-xl">{minutes.toString().padStart(2, '0')}</span>
+          <span className="text-xs opacity-90">دقيقة</span>
         </div>
-        <div className="flex flex-col items-center bg-white/90 px-2 py-1 rounded-lg shadow-md">
-          <span className="text-xs font-bold">{seconds.toString().padStart(2, '0')}</span>
-          <span className="text-xs text-gray-600">ثانية</span>
+        <div className={`flex flex-col items-center px-3 py-2 rounded-xl shadow-lg font-bold transition-all duration-300 ${
+          isUrgent 
+            ? 'bg-gradient-to-br from-red-500 to-red-600 text-white' 
+            : 'bg-gradient-to-br from-orange-500 to-orange-600 text-white'
+        } ${isVeryUrgent ? 'animate-pulse scale-110' : ''}`}>
+          <span className="text-lg md:text-xl">{seconds.toString().padStart(2, '0')}</span>
+          <span className="text-xs opacity-90">ثانية</span>
         </div>
       </div>
       {isUrgent && (
-        <i className="fas fa-exclamation-triangle animate-pulse"></i>
+        <div className="mr-2">
+          <i className={`fas fa-exclamation-triangle text-red-500 ${isVeryUrgent ? 'animate-pulse text-2xl' : 'text-lg'}`}></i>
+        </div>
       )}
     </div>
   );

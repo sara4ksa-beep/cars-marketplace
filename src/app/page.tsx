@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Header from './components/Header';
+import CarSkeleton from './components/CarSkeleton';
+import AuctionBadge from './components/AuctionBadge';
+import { SaleType } from '@prisma/client';
 
 // نوع البيانات للسيارة
 interface Car {
@@ -26,6 +30,10 @@ interface Car {
   createdAt: string;
   featured: boolean;
   saleType?: 'DIRECT_SALE' | 'AUCTION';
+  currentBid?: number | null;
+  auctionEndDate?: string | null;
+  isActiveAuction?: boolean;
+  bidCount?: number;
 }
 
 export default function Home() {
@@ -56,11 +64,11 @@ export default function Home() {
     fetchCars();
   }, []);
 
-  // أخذ 8 سيارات فقط للعرض
-  const displayedCars = cars.filter(car => car.saleType !== 'AUCTION').slice(0, 8);
+  // عرض جميع السيارات (بما في ذلك المزادات)
+  const displayedCars = cars;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen relative">
       {/* Header */}
       <Header />
 
@@ -129,111 +137,68 @@ export default function Home() {
       {/* Cars Section */}
       <section className="section-padding bg-white">
         <div className="container-custom">
-          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-center mb-6 sm:mb-8 md:mb-12 text-gray-800">
-            السيارات
-          </h2>
           {loading ? (
-            <div className="text-center py-8 sm:py-12">
-              <div className="text-4xl sm:text-6xl text-gray-300 mb-4">
-                <i className="fas fa-car"></i>
-              </div>
-              <h3 className="text-lg sm:text-2xl font-bold text-gray-600 mb-2">جاري تحميل السيارات...</h3>
-              <p className="text-gray-500 mb-6 text-sm sm:text-base">يرجى الانتظار قليلاً</p>
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
+              {[...Array(8)].map((_, index) => (
+                <CarSkeleton key={index} />
+              ))}
             </div>
           ) : displayedCars.length > 0 ? (
             <>
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
-                {displayedCars.map((car) => (
-                  <a key={car.id} href={`/cars/${car.id}`} className="card-modern group cursor-pointer">
-                    <div className="card-image-wrapper">
-                      <Image
-                        src={car.imageUrl || '/default-car.jpg'}
-                        alt={car.name}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                      />
-                    </div>
-                    <div className="p-4 sm:p-5">
-                      <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">{car.name}</h3>
-                      <p className="text-gray-600 text-xs sm:text-sm mb-3">{car.brand === 'toyota' ? 'تويوتا' :
-                       car.brand === 'honda' ? 'هوندا' :
-                       car.brand === 'nissan' ? 'نيسان' :
-                       car.brand === 'bmw' ? 'بي إم دبليو' :
-                       car.brand === 'mercedes' ? 'مرسيدس' :
-                       car.brand === 'audi' ? 'أودي' :
-                       car.brand === 'lexus' ? 'لكزس' :
-                       car.brand === 'hyundai' ? 'هيونداي' :
-                       car.brand === 'kia' ? 'كيا' :
-                       car.brand === 'ford' ? 'فورد' :
-                       car.brand === 'chevrolet' ? 'شيفروليه' :
-                       car.brand === 'tesla' ? 'تسلا' :
-                       car.brand === 'landrover' ? 'لاند روفر' :
-                       car.brand === 'cadillac' ? 'كاديلاك' :
-                       car.brand === 'volkswagen' ? 'فولكسفاغن' :
-                       car.brand === 'volvo' ? 'فولفو' :
-                       car.brand === 'infiniti' ? 'إنفينيتي' :
-                       car.brand === 'jaguar' ? 'جاكوار' :
-                       car.brand === 'porsche' ? 'بورش' :
-                       car.brand === 'maserati' ? 'مازيراتي' :
-                       car.brand === 'ferrari' ? 'فيراري' :
-                       car.brand === 'lamborghini' ? 'لامبورغيني' :
-                       car.brand === 'bentley' ? 'بنتلي' :
-                       car.brand === 'rollsroyce' ? 'رولز رويس' :
-                       car.brand === 'jeep' ? 'جيب' :
-                       car.brand === 'mitsubishi' ? 'ميتسوبيشي' :
-                       car.brand === 'mazda' ? 'مازدا' :
-                       car.brand === 'subaru' ? 'سوبارو' :
-                       car.brand === 'suzuki' ? 'سوزوكي' :
-                       car.brand === 'isuzu' ? 'إيسوزو' :
-                       car.brand === 'gmc' ? 'جي إم سي' :
-                       car.brand === 'buick' ? 'بيوك' :
-                       car.brand === 'lincoln' ? 'لينكولن' :
-                       car.brand === 'acura' ? 'أكورا' :
-                       car.brand === 'genesis' ? 'جينيسيس' :
-                       car.brand === 'mini' ? 'ميني' :
-                       car.brand === 'fiat' ? 'فيات' :
-                       car.brand === 'alfa' ? 'ألفا روميو' :
-                       car.brand === 'peugeot' ? 'بيجو' :
-                       car.brand === 'renault' ? 'رينو' :
-                       car.brand === 'citroen' ? 'ستروين' :
-                       car.brand === 'skoda' ? 'سكودا' :
-                       car.brand === 'seat' ? 'سيات' :
-                       car.brand === 'opel' ? 'أوبل' :
-                       car.brand === 'saab' ? 'ساب' :
-                       car.brand === 'dacia' ? 'داسيا' :
-                       car.brand === 'lada' ? 'لادا' :
-                       car.brand === 'geely' ? 'جيلي' :
-                       car.brand === 'chery' ? 'شيري' :
-                       car.brand === 'byd' ? 'بي واي دي' :
-                       car.brand === 'great wall' ? 'جريت وول' :
-                       car.brand === 'mg' ? 'إم جي' :
-                       car.brand === 'haval' ? 'هافال' :
-                       car.brand === 'changan' ? 'تشانجان' :
-                       car.brand === 'dongfeng' ? 'دونغ فينغ' :
-                       car.brand === 'gac' ? 'جي إيه سي' :
-                       car.brand === 'lynk' ? 'لينك آند كو' :
-                       car.brand === 'wuling' ? 'وولينغ' :
-                       'علامة تجارية غير معروفة'} • {car.year}</p>
-                      <div className="text-green-600 font-bold text-base sm:text-lg md:text-xl mb-4">{car.price.toLocaleString()} ريال</div>
-                      
-                      <div className="flex justify-center">
-                        <div className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2.5 px-4 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 text-center text-sm font-semibold shadow-md group-hover:shadow-lg">
-                          <i className="fas fa-eye ml-1.5"></i>
-                          عرض التفاصيل
+                {displayedCars.map((car) => {
+                  const isAuction = car.saleType === 'AUCTION';
+                  const displayPrice = isAuction && car.currentBid ? car.currentBid : car.price;
+                  const href = isAuction ? `/auctions/${car.id}` : `/cars/${car.id}`;
+                  
+                  return (
+                    <a key={car.id} href={href} className="card-modern group cursor-pointer relative">
+                      {car.saleType && (
+                        <div className="absolute top-3 left-3 z-10">
+                          <AuctionBadge 
+                            saleType={car.saleType as SaleType} 
+                            isActive={car.isActiveAuction} 
+                          />
+                        </div>
+                      )}
+                      <div className="card-image-wrapper">
+                        <Image
+                          src={car.imageUrl || '/default-car.jpg'}
+                          alt={car.name}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                        />
+                      </div>
+                      <div className="p-4 sm:p-5">
+                        <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 mb-4 line-clamp-2 group-hover:text-blue-600 transition-colors">{car.name}</h3>
+                        <div className={`font-bold text-base sm:text-lg md:text-xl mb-2 ${isAuction ? 'text-orange-600' : 'text-green-600'}`}>
+                          {displayPrice.toLocaleString()} ريال
+                          {isAuction && car.currentBid && (
+                            <span className="text-xs text-gray-500 mr-1 font-normal">(مزايدة)</span>
+                          )}
+                        </div>
+                        {isAuction && car.bidCount !== undefined && car.bidCount > 0 && (
+                          <div className="text-xs text-gray-500 mb-3 flex items-center">
+                            <i className="fas fa-gavel ml-1.5 text-orange-500"></i>
+                            {car.bidCount} {car.bidCount === 1 ? 'مزايدة' : 'مزايدات'}
+                          </div>
+                        )}
+                        
+                        <div className="flex justify-center">
+                          <div className={`w-full text-white py-2.5 px-4 rounded-xl transition-all duration-300 text-center text-sm font-semibold shadow-md group-hover:shadow-lg ${
+                            isAuction 
+                              ? 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700' 
+                              : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'
+                          }`}>
+                            <i className={`fas ${isAuction ? 'fa-gavel' : 'fa-eye'} ml-1.5`}></i>
+                            {isAuction ? 'عرض المزاد' : 'عرض التفاصيل'}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </a>
-                ))}
-              </div>
-              
-              {/* عرض جميع السيارات */}
-              <div className="text-center mt-12">
-                <a href="/cars" className="btn-primary inline-block px-8 py-3.5 text-base">
-                  <i className="fas fa-arrow-left ml-2"></i>
-                  عرض جميع السيارات
-                </a>
+                    </a>
+                  );
+                })}
               </div>
             </>
           ) : (
@@ -250,33 +215,6 @@ export default function Home() {
           )}
         </div>
       </section>
-
-
-      {/* Features Section */}
-      <section className="section-padding bg-white">
-        <div className="container-custom">
-          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-center mb-6 sm:mb-8 md:mb-12 text-gray-800">
-            لماذا تختارنا؟
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 md:gap-10 max-w-5xl mx-auto">
-            <div className="card-modern text-center p-6 sm:p-8 md:p-10">
-              <div className="text-4xl sm:text-5xl md:text-6xl mb-4 sm:mb-6 text-blue-600 transform group-hover:scale-110 transition-transform duration-300">
-                <i className="fas fa-trophy"></i>
-              </div>
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-3 sm:mb-4">جودة عالية</h3>
-              <p className="text-gray-600 leading-relaxed text-sm sm:text-base md:text-lg">نقدم أفضل السيارات من أشهر الماركات العالمية مع ضمان الجودة</p>
-            </div>
-            <div className="card-modern text-center p-6 sm:p-8 md:p-10">
-              <div className="text-4xl sm:text-5xl md:text-6xl mb-4 sm:mb-6 text-green-600 transform group-hover:scale-110 transition-transform duration-300">
-                <i className="fas fa-dollar-sign"></i>
-              </div>
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-3 sm:mb-4">أسعار تنافسية</h3>
-              <p className="text-gray-600 leading-relaxed text-sm sm:text-base md:text-lg">أفضل الأسعار في السوق مع عروض وخصومات حصرية</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Footer */}
       <footer className="bg-gray-900 text-white section-padding">
         <div className="container-custom">
@@ -381,9 +319,9 @@ export default function Home() {
                 © 2025 موقع السيارات المتميز. جميع الحقوق محفوظة
               </p>
               <div className="flex items-center space-x-4 sm:space-x-6 space-x-reverse">
-                <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">سياسة الخصوصية</a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">الشروط والأحكام</a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">اتفاقية الاستخدام</a>
+                <Link href="/privacy-policy" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">سياسة الخصوصية</Link>
+                <Link href="/terms" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">الشروط والأحكام</Link>
+                <Link href="/usage-agreement" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">اتفاقية الاستخدام</Link>
               </div>
             </div>
           </div>
