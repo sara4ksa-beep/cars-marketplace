@@ -3,12 +3,13 @@ import { prisma } from '@/lib/database';
 
 export async function GET(
   request: Request,
-  { params }: { params: { carId: string } }
+  { params }: { params: Promise<{ carId: string }> }
 ) {
   try {
+    const resolvedParams = await params;
     const bids = await prisma.bid.findMany({
       where: {
-        carId: parseInt(params.carId),
+        carId: parseInt(resolvedParams.carId),
       },
       include: {
         user: {

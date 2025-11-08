@@ -4,10 +4,11 @@ import { SaleType, CarStatus } from '@prisma/client';
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const carId = parseInt(params.id);
+    const resolvedParams = await params;
+    const carId = parseInt(resolvedParams.id);
 
     // Get the auction with all bids
     const auction = await prisma.car.findUnique({

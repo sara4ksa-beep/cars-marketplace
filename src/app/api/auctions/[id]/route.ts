@@ -4,12 +4,13 @@ import { SaleType, CarStatus } from '@prisma/client';
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params;
     const auction = await prisma.car.findUnique({
       where: {
-        id: parseInt(params.id),
+        id: parseInt(resolvedParams.id),
         saleType: SaleType.AUCTION,
       },
       include: {
@@ -82,9 +83,10 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params;
     const body = await request.json();
     const { reservePrice, bidIncrement, auctionEndDate, autoExtendMinutes } =
       body;
@@ -98,7 +100,7 @@ export async function PUT(
       updateData.autoExtendMinutes = autoExtendMinutes;
 
     const auction = await prisma.car.update({
-      where: { id: parseInt(params.id) },
+      where: { id: parseInt(resolvedParams.id) },
       data: updateData,
     });
 

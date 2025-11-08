@@ -4,7 +4,7 @@ import { verifyUserAuth } from '@/lib/userAuth';
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const authResult = await verifyUserAuth(req);
@@ -16,8 +16,9 @@ export async function PATCH(
       }, { status: 401 });
     }
 
+    const resolvedParams = await params;
     const userId = authResult.user!.id;
-    const carId = parseInt(params.id);
+    const carId = parseInt(resolvedParams.id);
 
     // التحقق من أن السيارة مملوكة للمستخدم
     const car = await prisma.car.findUnique({
@@ -107,7 +108,7 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const authResult = await verifyUserAuth(req);
@@ -119,8 +120,9 @@ export async function DELETE(
       }, { status: 401 });
     }
 
+    const resolvedParams = await params;
     const userId = authResult.user!.id;
-    const carId = parseInt(params.id);
+    const carId = parseInt(resolvedParams.id);
 
     // التحقق من أن السيارة مملوكة للمستخدم
     const car = await prisma.car.findUnique({

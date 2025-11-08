@@ -21,6 +21,10 @@ interface Car {
   images: string[];
   status: string;
   createdAt: string;
+  contactName: string | null;
+  contactPhone: string | null;
+  contactLocation: string | null;
+  contactEmail: string | null;
 }
 
 interface Booking {

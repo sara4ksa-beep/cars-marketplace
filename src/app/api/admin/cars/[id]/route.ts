@@ -5,7 +5,7 @@ import { CarStatus } from '@prisma/client';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const authResult = await verifyAdminAuth(req);
@@ -16,8 +16,9 @@ export async function GET(
       }, { status: 401 });
     }
 
+    const resolvedParams = await params;
     const car = await prisma.car.findUnique({
-      where: { id: parseInt(params.id) },
+      where: { id: parseInt(resolvedParams.id) },
       include: {
         seller: {
           select: {
@@ -95,7 +96,7 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const authResult = await verifyAdminAuth(req);
@@ -106,6 +107,7 @@ export async function PATCH(
       }, { status: 401 });
     }
 
+    const resolvedParams = await params;
     const body = await req.json();
     const {
       name,
@@ -149,7 +151,7 @@ export async function PATCH(
     if (featured !== undefined) updateData.featured = featured;
 
     const car = await prisma.car.update({
-      where: { id: parseInt(params.id) },
+      where: { id: parseInt(resolvedParams.id) },
       data: updateData,
     });
 
