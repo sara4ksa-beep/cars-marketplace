@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Header from '../components/Header';
 import Image from 'next/image';
 import Link from 'next/link';
+
 
 interface Car {
   id: number;
@@ -69,7 +70,7 @@ interface UserStats {
   totalBids: number;
 }
 
-export default function AccountPage() {
+function AccountPageContent() {
   const [cars, setCars] = useState<Car[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [bids, setBids] = useState<Bid[]>([]);
@@ -1054,6 +1055,21 @@ export default function AccountPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AccountPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">جاري التحميل...</p>
+        </div>
+      </div>
+    }>
+      <AccountPageContent />
+    </Suspense>
   );
 }
 
