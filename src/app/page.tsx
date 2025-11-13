@@ -247,43 +247,30 @@ export default function Home() {
             <div>
               <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">روابط سريعة</h4>
               <ul className="space-y-1 sm:space-y-2 text-gray-400">
-                <li><a href="/cars" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
-                  <i className="fas fa-angle-left mr-2 text-xs"></i>
-                  السيارات الجديدة
-                </a></li>
-                <li><a href="/cars" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
-                  <i className="fas fa-angle-left mr-2 text-xs"></i>
-                  السيارات المستعملة
-                </a></li>
-                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
-                  <i className="fas fa-angle-left mr-2 text-xs"></i>
-                  خدمات التمويل
-                </a></li>
-                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
-                  <i className="fas fa-angle-left mr-2 text-xs"></i>
-                  الصيانة
-                </a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">خدماتنا</h4>
-              <ul className="space-y-1 sm:space-y-2 text-gray-400">
-                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
-                  <i className="fas fa-angle-left mr-2 text-xs"></i>
-                  تقييم السيارات
-                </a></li>
-                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
-                  <i className="fas fa-angle-left mr-2 text-xs"></i>
-                  تأمين السيارات
-                </a></li>
-                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
-                  <i className="fas fa-angle-left mr-2 text-xs"></i>
-                  شحن السيارات
-                </a></li>
-                <li><a href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
-                  <i className="fas fa-angle-left mr-2 text-xs"></i>
-                  استشارات مجانية
-                </a></li>
+                <li>
+                  <Link href="/cars" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                    <i className="fas fa-angle-left mr-2 text-xs"></i>
+                    السيارات
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/sell-car" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                    <i className="fas fa-angle-left mr-2 text-xs"></i>
+                    بيع سيارة
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/about" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                    <i className="fas fa-angle-left mr-2 text-xs"></i>
+                    من نحن
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact" className="hover:text-white transition-colors flex items-center text-sm sm:text-base">
+                    <i className="fas fa-angle-left mr-2 text-xs"></i>
+                    اتصل بنا
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
@@ -296,10 +283,6 @@ export default function Home() {
                 <div className="flex items-center">
                   <i className="fas fa-envelope text-blue-500 mr-2 sm:mr-3 text-sm"></i>
                   <p className="text-sm sm:text-base">info@abrajsa.com</p>
-                </div>
-                <div className="flex items-center">
-                  <i className="fas fa-map-marker-alt text-blue-500 mr-2 sm:mr-3 text-sm"></i>
-                  <p className="text-sm sm:text-base">الرياض، المملكة العربية السعودية</p>
                 </div>
               </div>
             </div>
