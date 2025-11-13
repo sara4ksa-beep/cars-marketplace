@@ -199,7 +199,6 @@ export async function POST(req: NextRequest) {
     // The checkout URL is in transaction.url (not redirect.url which is the return URL)
     const paymentRedirectUrl = 
       tapCharge.transaction?.url || 
-      tapCharge.url ||
       tapCharge.redirect?.url ||
       (tapCharge.transaction && typeof tapCharge.transaction === 'string' ? tapCharge.transaction : null);
 
