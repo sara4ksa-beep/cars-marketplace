@@ -49,23 +49,6 @@ export default function BidHistory({ bids, className = '' }: BidHistoryProps) {
             }`}
           >
             <div className="flex items-center space-x-4 space-x-reverse">
-              <div
-                className={`w-14 h-14 rounded-xl flex items-center justify-center font-bold text-lg shadow-md ${
-                  index === 0
-                    ? 'bg-gradient-to-br from-orange-500 to-red-500 text-white'
-                    : index === 1
-                    ? 'bg-gradient-to-br from-gray-400 to-gray-500 text-white'
-                    : index === 2
-                    ? 'bg-gradient-to-br from-amber-400 to-amber-500 text-white'
-                    : 'bg-gray-300 text-gray-700'
-                }`}
-              >
-                {index === 0 ? (
-                  <i className="fas fa-trophy"></i>
-                ) : (
-                  <span>{index + 1}</span>
-                )}
-              </div>
               <div>
                 <div className="font-bold text-gray-800 text-base flex items-center">
                   {bid.user.name}
@@ -78,7 +61,7 @@ export default function BidHistory({ bids, className = '' }: BidHistoryProps) {
                 </div>
                 <div className="text-xs text-gray-500 mt-1 flex items-center">
                   <i className="fas fa-clock ml-1.5"></i>
-                  {new Date(bid.createdAt).toLocaleString('ar-SA', {
+                  {new Date(bid.createdAt).toLocaleString('ka-GE', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',

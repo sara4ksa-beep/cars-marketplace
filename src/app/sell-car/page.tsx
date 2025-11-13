@@ -211,7 +211,8 @@ export default function SellCarPage() {
       if (formData.saleType === 'AUCTION') {
         payload.reservePrice = formData.reservePrice ? Number(formData.reservePrice) : null;
         payload.bidIncrement = Number(formData.bidIncrement);
-        payload.auctionStartDate = new Date().toISOString(); // Set to current date/time automatically
+        // Auction starts immediately
+        payload.auctionStartDate = new Date().toISOString();
         payload.auctionEndDate = formData.auctionEndDate;
         payload.autoExtendMinutes = Number(formData.autoExtendMinutes);
       }
@@ -599,6 +600,7 @@ export default function SellCarPage() {
                         required
                         className="input-modern focus:ring-orange-500 focus:border-orange-500"
                       />
+                      <p className="text-xs text-gray-500 mt-1">سيبدأ المزاد فوراً وينتهي في التاريخ المحدد</p>
                     </div>
 
                     <div className="mobile-form-group">

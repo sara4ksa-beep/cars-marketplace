@@ -42,15 +42,22 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      const startDate = data.auctionStartDate
-        ? new Date(data.auctionStartDate)
-        : new Date();
+      // Auction starts immediately
+      const startDate = new Date();
       const endDate = new Date(data.auctionEndDate);
 
-      // Validate that end date is after start date
+      // Validate that end date is valid
+      if (isNaN(endDate.getTime())) {
+        return NextResponse.json(
+          { success: false, error: 'Invalid auction end date' },
+          { status: 400 }
+        );
+      }
+
+      // Validate that end date is after start date (now)
       if (endDate <= startDate) {
         return NextResponse.json(
-          { success: false, error: 'Auction end date must be after start date' },
+          { success: false, error: 'Auction end date must be in the future' },
           { status: 400 }
         );
       }

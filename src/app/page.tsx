@@ -174,16 +174,7 @@ export default function Home() {
                         <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 mb-4 line-clamp-2 group-hover:text-blue-600 transition-colors">{car.name}</h3>
                         <div className={`font-bold text-base sm:text-lg md:text-xl mb-2 ${isAuction ? 'text-orange-600' : 'text-green-600'}`}>
                           {displayPrice.toLocaleString()} ريال
-                          {isAuction && car.currentBid && (
-                            <span className="text-xs text-gray-500 mr-1 font-normal">(مزايدة)</span>
-                          )}
                         </div>
-                        {isAuction && car.bidCount !== undefined && car.bidCount > 0 && (
-                          <div className="text-xs text-gray-500 mb-3 flex items-center">
-                            <i className="fas fa-gavel ml-1.5 text-orange-500"></i>
-                            {car.bidCount} {car.bidCount === 1 ? 'مزايدة' : 'مزايدات'}
-                          </div>
-                        )}
                         
                         <div className="flex justify-center">
                           <div className={`w-full text-white py-2.5 px-4 rounded-xl transition-all duration-300 text-center text-sm font-semibold shadow-md group-hover:shadow-lg ${

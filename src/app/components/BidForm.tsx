@@ -27,9 +27,7 @@ export default function BidForm({
   userId,
   className = '',
 }: BidFormProps) {
-  const [bidAmount, setBidAmount] = useState(minBid);
-  const [maxBid, setMaxBid] = useState('');
-  const [isAutoBid, setIsAutoBid] = useState(false);
+  const [bidAmount, setBidAmount] = useState<number | ''>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -53,15 +51,31 @@ export default function BidForm({
       
       if (data.success) {
         setDepositStatus(data);
+      } else {
+        // If API returns error (e.g., user not authenticated), set default status
+        setDepositStatus({
+          hasDeposit: false,
+          isGrandfathered: false,
+          deposit: null,
+        });
       }
     } catch (err) {
       console.error('Error checking deposit status:', err);
+      // On error, set default status so UI can still render
+      setDepositStatus({
+        hasDeposit: false,
+        isGrandfathered: false,
+        deposit: null,
+      });
     } finally {
       setCheckingDeposit(false);
     }
   };
 
-  const handleCreateDeposit = async () => {
+  const handleCreateDeposit = async (e?: React.MouseEvent, testMode: boolean = false) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    
     if (!userId) {
       setError('يجب تسجيل الدخول أولاً');
       return;
@@ -71,26 +85,48 @@ export default function BidForm({
       setProcessingPayment(true);
       setError(null);
       
+      console.log('Creating deposit for carId:', carId, testMode ? '(TEST MODE)' : '');
+      
       const response = await fetch('/api/payments/create-deposit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ carId }),
+        body: JSON.stringify({ carId, testMode }),
       });
 
       const data = await response.json();
+      console.log('Deposit creation response:', data);
 
-      if (data.success && data.charge?.redirectUrl) {
-        // Redirect to Tap payment page
-        window.location.href = data.charge.redirectUrl;
+      if (data.success) {
+        if (data.testMode) {
+          // Test mode: Just refresh the page to show updated deposit status
+          console.log('🧪 Test mode: Payment bypassed, refreshing page...');
+          setSuccess(true);
+          // Refresh the page after a short delay to show the success message
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        } else if (data.charge?.redirectUrl) {
+          // Real payment: Redirect to Tap payment page
+          console.log('Redirecting to:', data.charge.redirectUrl);
+          window.location.href = data.charge.redirectUrl;
+        } else {
+          // Success but no redirect URL (shouldn't happen)
+          setSuccess(true);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        }
       } else {
-        setError(data.error || 'فشل في إنشاء عملية الدفع');
+        const errorMsg = data.error || 'فشل في إنشاء عملية الدفع';
+        console.error('Deposit creation failed:', errorMsg, data);
+        setError(errorMsg);
+        setProcessingPayment(false);
       }
     } catch (err: any) {
-      setError('حدث خطأ في الاتصال بالخادم');
       console.error('Error creating deposit:', err);
-    } finally {
+      setError('حدث خطأ في الاتصال بالخادم');
       setProcessingPayment(false);
     }
   };
@@ -107,14 +143,9 @@ export default function BidForm({
       return;
     }
 
-    if (bidAmount < minBid) {
+    const bidValue = bidAmount === '' ? 0 : bidAmount;
+    if (bidValue < minBid) {
       setError(`المزايدة يجب أن تكون على الأقل ${minBid.toLocaleString()} ريال`);
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (isAutoBid && maxBid && parseFloat(maxBid) < bidAmount) {
-      setError('الحد الأقصى للمزايدة يجب أن يكون أكبر من أو يساوي مبلغ المزايدة');
       setIsSubmitting(false);
       return;
     }
@@ -128,9 +159,7 @@ export default function BidForm({
         body: JSON.stringify({
           carId,
           userId,
-          amount: bidAmount,
-          maxBid: isAutoBid && maxBid ? parseFloat(maxBid) : null,
-          isAutoBid,
+          amount: bidValue,
         }),
       });
 
@@ -138,9 +167,7 @@ export default function BidForm({
 
       if (data.success) {
         setSuccess(true);
-        setBidAmount(minBid + bidIncrement);
-        setMaxBid('');
-        setIsAutoBid(false);
+        setBidAmount('');
         if (onBidPlaced) {
           setTimeout(() => {
             onBidPlaced();
@@ -229,8 +256,18 @@ export default function BidForm({
           </label>
           <input
             type="number"
-            value={bidAmount}
-            onChange={(e) => setBidAmount(parseFloat(e.target.value) || 0)}
+            value={bidAmount === '' ? '' : bidAmount}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value === '') {
+                setBidAmount('');
+              } else {
+                const numValue = parseFloat(value);
+                if (!isNaN(numValue)) {
+                  setBidAmount(numValue);
+                }
+              }
+            }}
             min={minBid}
             step={bidIncrement}
             required
@@ -248,7 +285,7 @@ export default function BidForm({
                 type="button"
                 onClick={() => setBidAmount(amount)}
                 className={`px-4 py-3 rounded-xl text-sm font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
-                  bidAmount === amount
+                  bidAmount !== '' && bidAmount === amount
                     ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
                     : 'bg-gray-100 hover:bg-gray-200 text-gray-700 hover:shadow-md'
                 }`}
@@ -258,41 +295,6 @@ export default function BidForm({
             ))}
           </div>
         </div>
-
-        <div className="flex items-center space-x-3 space-x-reverse p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-200">
-          <input
-            type="checkbox"
-            id="autoBid"
-            checked={isAutoBid}
-            onChange={(e) => setIsAutoBid(e.target.checked)}
-            className="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500 cursor-pointer"
-          />
-          <label htmlFor="autoBid" className="text-sm font-semibold text-gray-700 cursor-pointer flex items-center flex-1">
-            <i className="fas fa-robot text-purple-600 ml-2"></i>
-            مزايدة تلقائية (حد أقصى)
-          </label>
-        </div>
-
-        {isAutoBid && (
-          <div className="p-4 bg-purple-50 rounded-xl border-2 border-purple-200">
-            <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center">
-              <i className="fas fa-arrow-up text-purple-600 ml-2"></i>
-              الحد الأقصى للمزايدة (ريال)
-            </label>
-            <input
-              type="number"
-              value={maxBid}
-              onChange={(e) => setMaxBid(e.target.value)}
-              min={bidAmount}
-              className="w-full px-5 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 font-bold bg-white"
-              placeholder="مثال: 100000"
-            />
-            <p className="text-xs text-gray-600 mt-2 flex items-center">
-              <i className="fas fa-info-circle text-purple-500 ml-1.5"></i>
-              سيتم المزايدة تلقائياً حتى يصل إلى هذا الحد
-            </p>
-          </div>
-        )}
 
         <button
           type="submit"
@@ -340,22 +342,60 @@ export default function BidForm({
             </p>
           </div>
           
-          <button
-            onClick={handleCreateDeposit}
-            disabled={processingPayment}
-            className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 px-6 rounded-xl font-bold hover:from-orange-600 hover:to-red-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-2xl transform hover:scale-105 active:scale-95 text-lg"
-          >
-            {processingPayment ? (
-              <span className="flex items-center justify-center">
-                <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin ml-3"></div>
-                جاري المعالجة...
-              </span>
-            ) : (
-              <span className="flex items-center justify-center">
-                <i className="fas fa-credit-card ml-3 text-xl"></i>
-                دفع 200 ريال كتأكيد
-              </span>
+          <div className="space-y-3">
+            <button
+              type="button"
+              onClick={(e) => handleCreateDeposit(e, false)}
+              disabled={processingPayment}
+              className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 px-6 rounded-xl font-bold hover:from-orange-600 hover:to-red-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-2xl transform hover:scale-105 active:scale-95 text-lg"
+            >
+              {processingPayment ? (
+                <span className="flex items-center justify-center">
+                  <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin ml-3"></div>
+                  جاري المعالجة...
+                </span>
+              ) : (
+                <span className="flex items-center justify-center">
+                  <i className="fas fa-credit-card ml-3 text-xl"></i>
+                  دفع 200 ريال كتأكيد
+                </span>
+              )}
+            </button>
+            
+            {/* Test Mode Button - Only show in development/localhost */}
+            {(typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) && (
+              <button
+                type="button"
+                onClick={(e) => handleCreateDeposit(e, true)}
+                disabled={processingPayment}
+                className="w-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white py-3 px-6 rounded-xl font-bold hover:from-purple-600 hover:to-indigo-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl text-sm"
+              >
+                {processingPayment ? (
+                  <span className="flex items-center justify-center">
+                    <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin ml-2"></div>
+                    جاري المعالجة...
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center">
+                    <i className="fas fa-flask ml-2"></i>
+                    🧪 تجربة بدون دفع (Test Mode)
+                  </span>
+                )}
+              </button>
             )}
+          </div>
+        </div>
+      )}
+
+      {userId && !checkingDeposit && !depositStatus && (
+        <div className="mt-6 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-xl text-yellow-800 text-sm text-center shadow-md">
+          <i className="fas fa-exclamation-triangle ml-2 text-yellow-600"></i>
+          <span className="font-semibold">حدث خطأ في التحقق من حالة التأكيد. يرجى المحاولة مرة أخرى.</span>
+          <button
+            onClick={checkDepositStatus}
+            className="mt-3 block w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg font-bold transition-colors"
+          >
+            إعادة المحاولة
           </button>
         </div>
       )}

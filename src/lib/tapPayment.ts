@@ -25,9 +25,13 @@ export interface TapChargeRequest {
   redirect?: {
     url: string;
   };
+  post?: {
+    url: string;
+  };
   metadata?: {
     [key: string]: string;
   };
+  description?: string;
 }
 
 export interface TapChargeResponse {
@@ -84,10 +88,33 @@ export async function createTapCharge(
 
     return response.data;
   } catch (error: any) {
-    console.error('Error creating Tap charge:', error.response?.data || error.message);
-    throw new Error(
-      error.response?.data?.message || 'Failed to create Tap charge'
-    );
+    const errorData = error.response?.data;
+    const errors = errorData?.errors || [];
+    
+    console.error('Error creating Tap charge:', {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      errors: errors,
+      fullResponse: JSON.stringify(errorData, null, 2),
+      requestData: JSON.stringify(request, null, 2),
+    });
+    
+    // Provide more detailed error message
+    let errorMessage = 'Failed to create Tap charge';
+    if (errors && errors.length > 0) {
+      const firstError = errors[0];
+      errorMessage = firstError.message || firstError.code || errorMessage;
+      if (firstError.field) {
+        errorMessage = `${firstError.field}: ${errorMessage}`;
+      }
+    } else if (errorData?.message) {
+      errorMessage = errorData.message;
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+    
+    throw new Error(errorMessage);
   }
 }
 

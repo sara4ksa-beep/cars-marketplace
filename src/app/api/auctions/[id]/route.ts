@@ -18,6 +18,7 @@ export async function GET(
           orderBy: {
             amount: 'desc',
           },
+          take: 50, // Limit to top 50 bids for performance
           include: {
             user: {
               select: {
@@ -60,15 +61,44 @@ export async function GET(
       const startDate = new Date(auction.auctionStartDate);
       const endDate = new Date(auction.auctionEndDate);
       
-      hasStarted = startDate <= now;
+      // Since auctions start immediately, if start date exists and end date is in the future, consider it started
+      // Only check if start date is explicitly in the future (more than 1 hour) for manual scheduling
+      const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
       hasEnded = endDate <= now;
+      
+      // If start date is more than 1 hour in the future, it's scheduled for later
+      if (startDate > oneHourFromNow) {
+        hasStarted = false;
+      } else {
+        // Otherwise, consider it started (auctions start immediately)
+        hasStarted = true;
+      }
+      
       isActive = hasStarted && !hasEnded;
     } else if (!auction.auctionEndDate) {
       // If endDate is not set, consider it as not started yet (pending setup)
       hasStarted = false;
       hasEnded = false;
       isActive = false;
+    } else if (auction.auctionEndDate && !auction.auctionStartDate) {
+      // If only end date is set, consider it started (for backwards compatibility)
+      const endDate = new Date(auction.auctionEndDate);
+      hasStarted = true;
+      hasEnded = endDate <= now;
+      isActive = !hasEnded;
     }
+
+    // Format bids for frontend (include user info)
+    const recentBids = auction.bids.map(bid => ({
+      id: bid.id,
+      amount: bid.amount,
+      isAutoBid: bid.isAutoBid,
+      createdAt: bid.createdAt.toISOString(),
+      user: {
+        id: bid.user.id,
+        name: bid.user.name,
+      },
+    }));
 
     return NextResponse.json({
       success: true,
@@ -77,6 +107,8 @@ export async function GET(
         currentBid: auction.currentBid || auction.price,
         highestBidder: highestBid?.user || null,
         bidCount: auction.bids.length,
+        recentBids: recentBids,
+        isActiveAuction: isActive,
         isActive,
         hasStarted,
         hasEnded,

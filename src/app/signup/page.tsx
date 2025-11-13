@@ -48,8 +48,8 @@ export default function SignUpPage() {
       const data = await response.json();
 
       if (data.success) {
-        // Redirect to account dashboard
-        router.push('/account');
+        // Redirect to main page
+        router.push('/');
       } else {
         setError(data.error || 'حدث خطأ في إنشاء الحساب');
       }
