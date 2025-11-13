@@ -14,11 +14,15 @@ export async function GET(req: NextRequest) {
     }
 
     const { searchParams } = new URL(req.url);
-    const status = searchParams.get('status') as BidDepositStatus | null;
+    const statusParam = searchParams.get('status');
 
     const where: any = {};
-    if (status && status !== 'all') {
-      where.status = status;
+    if (statusParam && statusParam !== 'all') {
+      // Validate that the status is a valid BidDepositStatus
+      const validStatuses: BidDepositStatus[] = ['PENDING', 'PAID', 'REFUNDED', 'APPLIED_TO_PURCHASE'];
+      if (validStatuses.includes(statusParam as BidDepositStatus)) {
+        where.status = statusParam as BidDepositStatus;
+      }
     }
 
     const deposits = await prisma.bidDeposit.findMany({
