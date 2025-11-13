@@ -1,4 +1,5 @@
 import axios from 'axios';
+import crypto from 'crypto';
 
 const TAP_SECRET_KEY = process.env.TAP_SECRET_KEY;
 const TAP_PUBLISHABLE_KEY = process.env.TAP_PUBLISHABLE_KEY;
@@ -198,9 +199,6 @@ export function verifyTapWebhook(
   }
 
   try {
-    // Import crypto module for HMAC
-    const crypto = require('crypto');
-    
     // Create HMAC-SHA256 hash of the payload
     const hmac = crypto.createHmac('sha256', webhookSecret);
     hmac.update(payload);

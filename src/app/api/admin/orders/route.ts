@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/database';
-import { getAdminFromRequest } from '@/lib/auth';
+import { verifyAdminAuth } from '@/lib/auth';
 import { OrderStatus } from '@prisma/client';
 
 // GET - Get all orders (admin only)
 export async function GET(request: NextRequest) {
   try {
-    const admin = await getAdminFromRequest(request);
-    if (!admin) {
+    const authResult = await verifyAdminAuth(request);
+    if (!authResult.success) {
       return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
+        { success: false, error: authResult.error },
         { status: 401 }
       );
     }
@@ -101,10 +101,10 @@ export async function GET(request: NextRequest) {
 // PATCH - Update order status (admin only)
 export async function PATCH(request: NextRequest) {
   try {
-    const admin = await getAdminFromRequest(request);
-    if (!admin) {
+    const authResult = await verifyAdminAuth(request);
+    if (!authResult.success) {
       return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
+        { success: false, error: authResult.error },
         { status: 401 }
       );
     }
