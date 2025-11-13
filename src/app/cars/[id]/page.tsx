@@ -20,6 +20,7 @@ interface Car {
   imageUrl: string | null;
   images: string[];
   isAvailable: boolean;
+  saleType?: 'DIRECT_SALE' | 'AUCTION';
   createdAt: string;
 }
 
@@ -197,11 +198,20 @@ export default function CarDetailsPage() {
               </span>
             </div>
             
-            {/* Book Now Button */}
-            <div className="mb-4 sm:mb-6">
+            {/* Action Buttons */}
+            <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
+              {car.saleType === 'DIRECT_SALE' && car.isAvailable ? (
+                <button
+                  onClick={() => router.push(`/checkout/${carId}`)}
+                  className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-8 py-3.5 sm:px-10 sm:py-4 rounded-xl font-semibold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl touch-target flex items-center justify-center"
+                >
+                  <i className="fas fa-shopping-cart ml-2"></i>
+                  شراء الآن
+                </button>
+              ) : null}
               <button
                 onClick={() => router.push(`/booking/${carId}`)}
-                className="bg-white/20 backdrop-blur-md hover:bg-white/30 text-white px-8 py-3.5 sm:px-10 sm:py-4 rounded-xl font-semibold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl touch-target"
+                className="bg-white/20 backdrop-blur-md hover:bg-white/30 text-white px-8 py-3.5 sm:px-10 sm:py-4 rounded-xl font-semibold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl touch-target flex items-center justify-center"
               >
                 <i className="fas fa-calendar-check ml-2"></i>
                 احجزها الآن

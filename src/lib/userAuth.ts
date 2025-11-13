@@ -50,5 +50,13 @@ export async function verifyUserAuth(req: NextRequest) {
   }
 }
 
+export async function getUserFromRequest(req: NextRequest) {
+  const authResult = await verifyUserAuth(req);
+  if (!authResult.success) {
+    return null;
+  }
+  return authResult.user;
+}
+
 
 

@@ -8,6 +8,7 @@ import AuctionTimer from '../../components/AuctionTimer';
 import BidForm from '../../components/BidForm';
 import BidHistory from '../../components/BidHistory';
 import AuctionBadge from '../../components/AuctionBadge';
+import CarDetailSkeleton from '../../components/CarDetailSkeleton';
 import { SaleType } from '@prisma/client';
 
 interface Auction {
@@ -115,20 +116,10 @@ export default function AuctionDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen relative">
+      <>
         <Header />
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="inline-block relative mb-6">
-              <div className="animate-spin rounded-full h-24 w-24 border-4 border-orange-200 border-t-orange-600"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <i className="fas fa-gavel text-orange-600 text-3xl"></i>
-              </div>
-            </div>
-            <p className="text-gray-600 text-lg font-medium">جاري تحميل المزاد...</p>
-          </div>
-        </div>
-      </div>
+        <CarDetailSkeleton />
+      </>
     );
   }
 
@@ -164,32 +155,42 @@ export default function AuctionDetailPage() {
 
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-6 md:py-16">
-        <div className="container-custom">
-          <div className="flex items-center justify-between mb-6 md:mb-8">
+        <div className="container-custom text-center">
+          <div className="flex items-center justify-center mb-4 md:mb-6">
             <AuctionBadge saleType={SaleType.AUCTION} isActive={auction.isActiveAuction} />
+          </div>
+          <h1 className="text-xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">
+            {auction.name}
+          </h1>
+          <p className="text-sm md:text-xl text-blue-100 max-w-2xl mx-auto px-4 mb-6 md:mb-8">
+            {getBrandName(auction.brand)} • {auction.year}
+          </p>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="container-custom py-3 md:py-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Back Button */}
+          <div className="mb-4 md:mb-8">
             <button
               onClick={() => router.push('/cars')}
-              className="bg-white/20 hover:bg-white/30 backdrop-blur-md px-4 md:px-6 py-2 md:py-3 rounded-lg transition-all duration-300 border border-white/30"
+              className="bg-white rounded-lg shadow-md px-4 md:px-6 py-2 md:py-3 text-gray-700 hover:bg-gray-50 transition-all duration-300 flex items-center gap-2"
             >
-              <i className="fas fa-arrow-right ml-2"></i>
-              العودة للسيارات
+              <i className="fas fa-arrow-right"></i>
+              <span>العودة للسيارات</span>
             </button>
           </div>
 
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">
-              {auction.name}
-            </h1>
-            <p className="text-sm md:text-xl text-blue-100 mb-6 md:mb-8 flex items-center justify-center">
-              <i className="fas fa-car ml-3"></i>
-              {getBrandName(auction.brand)} • {auction.year}
-            </p>
-
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+            {/* Left Column - Images and Details */}
+            <div className="lg:col-span-2 space-y-6 md:space-y-8">
+            {/* Auction Stats */}
             {auction.auctionEndDate && (
-              <div className="bg-white/20 backdrop-blur-md rounded-2xl p-4 md:p-6 mb-6 md:mb-8 border border-white/30">
-                <div className="text-center">
-                  <p className="text-sm md:text-base text-blue-100 mb-4 flex items-center justify-center">
-                    <i className="fas fa-clock ml-2"></i>
+              <div className="bg-white rounded-2xl shadow-xl p-4 md:p-8">
+                <div className="text-center mb-6">
+                  <p className="text-sm md:text-base text-gray-700 mb-4 flex items-center justify-center">
+                    <i className="fas fa-clock ml-2 text-orange-600"></i>
                     {auction.isActiveAuction ? 'الوقت المتبقي للمزاد' : auction.hasEnded ? 'انتهى المزاد' : 'يبدأ المزاد خلال'}
                   </p>
                   <AuctionTimer 
@@ -197,50 +198,49 @@ export default function AuctionDetailPage() {
                     startDate={auction.auctionStartDate}
                   />
                 </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 md:p-6 text-center border border-blue-200">
+                    <div className="mb-2 md:mb-3">
+                      <i className="fas fa-tag text-2xl md:text-3xl text-blue-600"></i>
+                    </div>
+                    <p className="text-xs md:text-sm text-gray-600 mb-2 md:mb-3 font-semibold">السعر الحالي</p>
+                    <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-blue-600">
+                      {(auction.currentBid || auction.price).toLocaleString()}
+                    </p>
+                    <p className="text-xs md:text-sm text-gray-500 mt-1">ريال</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-4 md:p-6 text-center border border-orange-200">
+                    <div className="mb-2 md:mb-3">
+                      <i className="fas fa-gavel text-2xl md:text-3xl text-orange-600"></i>
+                    </div>
+                    <p className="text-xs md:text-sm text-gray-600 mb-2 md:mb-3 font-semibold">عدد المزايدات</p>
+                    <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-orange-600">{auction.bidCount}</p>
+                    <p className="text-xs md:text-sm text-gray-500 mt-1">مزايدة</p>
+                  </div>
+                  {auction.reservePrice ? (
+                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 md:p-6 text-center border border-purple-200">
+                      <div className="mb-2 md:mb-3">
+                        <i className="fas fa-lock text-2xl md:text-3xl text-purple-600"></i>
+                      </div>
+                      <p className="text-xs md:text-sm text-gray-600 mb-2 md:mb-3 font-semibold">السعر الأدنى</p>
+                      <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-purple-600">
+                        {auction.reservePrice.toLocaleString()}
+                      </p>
+                      <p className="text-xs md:text-sm text-gray-500 mt-1">ريال</p>
+                    </div>
+                  ) : (
+                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-4 md:p-6 text-center border border-gray-200">
+                      <div className="mb-2 md:mb-3">
+                        <i className="fas fa-info-circle text-2xl md:text-3xl text-gray-400"></i>
+                      </div>
+                      <p className="text-xs md:text-sm text-gray-600 mb-2 md:mb-3 font-semibold">بدون سعر أدنى</p>
+                      <p className="text-sm text-gray-500">أي مزايدة مقبولة</p>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-              <div className="bg-white/20 backdrop-blur-md rounded-xl p-4 md:p-6 text-center border border-white/30">
-                <div className="mb-2 md:mb-3">
-                  <i className="fas fa-tag text-2xl md:text-3xl text-blue-200"></i>
-                </div>
-                <p className="text-xs md:text-sm text-blue-100 mb-2 md:mb-3 font-semibold">السعر الحالي</p>
-                <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-white">
-                  {(auction.currentBid || auction.price).toLocaleString()}
-                </p>
-                <p className="text-xs md:text-sm text-blue-200 mt-1">ريال</p>
-              </div>
-              <div className="bg-white/20 backdrop-blur-md rounded-xl p-4 md:p-6 text-center border border-white/30">
-                <div className="mb-2 md:mb-3">
-                  <i className="fas fa-gavel text-2xl md:text-3xl text-blue-200"></i>
-                </div>
-                <p className="text-xs md:text-sm text-blue-100 mb-2 md:mb-3 font-semibold">عدد المزايدات</p>
-                <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-white">{auction.bidCount}</p>
-                <p className="text-xs md:text-sm text-blue-200 mt-1">مزايدة</p>
-              </div>
-              {auction.reservePrice && (
-                <div className="bg-white/20 backdrop-blur-md rounded-xl p-4 md:p-6 text-center border border-white/30">
-                  <div className="mb-2 md:mb-3">
-                    <i className="fas fa-lock text-2xl md:text-3xl text-blue-200"></i>
-                  </div>
-                  <p className="text-xs md:text-sm text-blue-100 mb-2 md:mb-3 font-semibold">السعر الأدنى</p>
-                  <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-white">
-                    {auction.reservePrice.toLocaleString()}
-                  </p>
-                  <p className="text-xs md:text-sm text-blue-200 mt-1">ريال</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="container-custom py-8 md:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
-          {/* Left Column - Images and Details */}
-          <div className="lg:col-span-2 space-y-6 md:space-y-8">
             {/* Images */}
             <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
               <div className="relative h-80 md:h-96 bg-gradient-to-br from-gray-100 to-gray-200">
@@ -252,17 +252,11 @@ export default function AuctionDetailPage() {
                   sizes="(max-width: 768px) 100vw, 66vw"
                   priority
                 />
-                {auction.isActiveAuction && (
-                  <div className="absolute top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
-                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                    مزاد نشط
-                  </div>
-                )}
               </div>
               {auction.images && auction.images.length > 1 && (
                 <div className="p-4 md:p-6 bg-gray-50">
                   <h3 className="text-lg font-bold text-gray-800 mb-4">صور إضافية</h3>
-                  <div className="grid grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                     {auction.images.slice(0, 4).map((image, index) => (
                       <div key={index} className="h-24 md:h-32 relative rounded-xl overflow-hidden group cursor-pointer hover:ring-2 ring-orange-500 transition-all shadow-md hover:shadow-xl">
                         <Image
@@ -270,7 +264,7 @@ export default function AuctionDetailPage() {
                           alt={`${auction.name} ${index + 1}`}
                           fill
                           className="object-cover group-hover:scale-110 transition-transform duration-300"
-                          sizes="(max-width: 768px) 25vw, 16vw"
+                          sizes="(max-width: 768px) 50vw, 25vw"
                         />
                       </div>
                     ))}
@@ -280,7 +274,7 @@ export default function AuctionDetailPage() {
             </div>
 
             {/* Car Details */}
-            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+            <div className="bg-white rounded-2xl shadow-xl p-4 md:p-8">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 flex items-center">
                 <i className="fas fa-info-circle text-orange-600 ml-3"></i>
                 تفاصيل السيارة
@@ -332,10 +326,10 @@ export default function AuctionDetailPage() {
 
             {/* Bid History */}
             <BidHistory bids={auction.recentBids || []} />
-          </div>
+            </div>
 
-          {/* Right Column - Bidding */}
-          <div className="space-y-6">
+            {/* Right Column - Bidding */}
+            <div className="space-y-6">
               {auction.isActiveAuction ? (
                 <BidForm
                   carId={auction.id}
@@ -381,6 +375,7 @@ export default function AuctionDetailPage() {
                   )}
                 </div>
               )}
+            </div>
           </div>
         </div>
       </div>

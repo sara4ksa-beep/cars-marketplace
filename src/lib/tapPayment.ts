@@ -177,23 +177,64 @@ export async function getTapCharge(chargeId: string): Promise<TapChargeResponse>
 }
 
 /**
- * Verify Tap webhook signature
+ * Verify Tap webhook signature using HMAC-SHA256
  */
 export function verifyTapWebhook(
   payload: string,
   signature: string
 ): boolean {
-  // In production, verify the webhook signature using TAP_WEBHOOK_SECRET
-  // For now, we'll trust the webhook if TAP_WEBHOOK_SECRET is set
   const webhookSecret = process.env.TAP_WEBHOOK_SECRET;
+  
   if (!webhookSecret) {
     console.warn('TAP_WEBHOOK_SECRET is not set, webhook verification skipped');
-    return true; // Allow in development
+    // In development, allow webhooks without verification
+    // In production, this should return false
+    return process.env.NODE_ENV === 'development';
   }
 
-  // TODO: Implement proper HMAC signature verification
-  // This is a placeholder - implement actual signature verification
-  return true;
+  if (!signature) {
+    console.error('No signature provided in webhook');
+    return false;
+  }
+
+  try {
+    // Import crypto module for HMAC
+    const crypto = require('crypto');
+    
+    // Create HMAC-SHA256 hash of the payload
+    const hmac = crypto.createHmac('sha256', webhookSecret);
+    hmac.update(payload);
+    const expectedSignature = hmac.digest('hex');
+    
+    // Tap may send signature in different formats (hex, base64, or with prefix)
+    // Try to match the signature
+    const signatureToCompare = signature.replace(/^sha256=/, '').toLowerCase();
+    const expectedSignatureLower = expectedSignature.toLowerCase();
+    
+    // Use constant-time comparison to prevent timing attacks
+    if (signatureToCompare.length !== expectedSignatureLower.length) {
+      console.error('Signature length mismatch');
+      return false;
+    }
+    
+    let match = true;
+    for (let i = 0; i < signatureToCompare.length; i++) {
+      if (signatureToCompare[i] !== expectedSignatureLower[i]) {
+        match = false;
+      }
+    }
+    
+    if (!match) {
+      console.error('Webhook signature verification failed');
+      console.error('Expected:', expectedSignatureLower);
+      console.error('Received:', signatureToCompare);
+    }
+    
+    return match;
+  } catch (error: any) {
+    console.error('Error verifying webhook signature:', error);
+    return false;
+  }
 }
 
 export { TAP_PUBLISHABLE_KEY };

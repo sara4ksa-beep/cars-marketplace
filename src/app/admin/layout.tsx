@@ -125,9 +125,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           {/* Navigation */}
           <nav className="p-4 space-y-2 flex-1">
             <Link
-              href="/admin"
+              href="/admin/dashboard"
               className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors ${
-                isActive('/admin') && pathname === '/admin' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100'
+                isActive('/admin/dashboard') ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
               <i className="fas fa-chart-line"></i>
@@ -166,12 +166,22 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               }`}
             >
               <i className="fas fa-calendar-check"></i>
-              {!sidebarCollapsed && <span>إدارة الطلبات</span>}
+              {!sidebarCollapsed && <span>إدارة الحجوزات</span>}
               {!sidebarCollapsed && pendingBookingsCount > 0 && (
                 <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full mr-auto">
                   {pendingBookingsCount}
                 </span>
               )}
+            </Link>
+
+            <Link
+              href="/admin/orders"
+              className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors ${
+                isActive('/admin/orders') ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <i className="fas fa-shopping-cart"></i>
+              {!sidebarCollapsed && <span>إدارة الطلبات</span>}
             </Link>
 
             <Link

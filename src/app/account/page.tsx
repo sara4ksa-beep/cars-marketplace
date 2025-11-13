@@ -61,6 +61,21 @@ interface Bid {
   };
 }
 
+interface Order {
+  id: number;
+  carId: number;
+  status: string;
+  totalPrice: number;
+  createdAt: string;
+  car: {
+    id: number;
+    name: string;
+    brand: string;
+    year: number;
+    imageUrl: string | null;
+  };
+}
+
 interface UserStats {
   totalCars: number;
   approvedCars: number;
@@ -68,24 +83,27 @@ interface UserStats {
   totalBookings: number;
   activeBids: number;
   totalBids: number;
+  totalOrders: number;
 }
 
 function AccountPageContent() {
   const [cars, setCars] = useState<Car[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [bids, setBids] = useState<Bid[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [stats, setStats] = useState<UserStats>({
     totalCars: 0,
     approvedCars: 0,
     pendingCars: 0,
     totalBookings: 0,
     activeBids: 0,
-    totalBids: 0
+    totalBids: 0,
+    totalOrders: 0
   });
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'cars' | 'bookings' | 'bids'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'cars' | 'bookings' | 'bids' | 'orders'>('dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -106,8 +124,8 @@ function AccountPageContent() {
   // Set active tab from URL query parameter
   useEffect(() => {
     const tab = searchParams.get('tab');
-    if (tab && ['dashboard', 'cars', 'bookings', 'bids'].includes(tab)) {
-      setActiveTab(tab as 'dashboard' | 'cars' | 'bookings' | 'bids');
+    if (tab && ['dashboard', 'cars', 'bookings', 'bids', 'orders'].includes(tab)) {
+      setActiveTab(tab as 'dashboard' | 'cars' | 'bookings' | 'bids' | 'orders');
     }
   }, [searchParams]);
 
@@ -151,6 +169,10 @@ function AccountPageContent() {
       const bidsResponse = await fetch('/api/user/bids');
       const bidsData = await bidsResponse.json();
 
+      // جلب الطلبات (Orders)
+      const ordersResponse = await fetch('/api/orders');
+      const ordersData = await ordersResponse.json();
+
       if (carsData.success) {
         setCars(carsData.cars || []);
         const approvedCars = (carsData.cars || []).filter((c: Car) => c.status === 'APPROVED').length;
@@ -169,6 +191,14 @@ function AccountPageContent() {
         setStats(prev => ({
           ...prev,
           totalBookings: (bookingsData.bookings || []).length
+        }));
+      }
+
+      if (ordersData.success) {
+        setOrders(ordersData.orders || []);
+        setStats(prev => ({
+          ...prev,
+          totalOrders: (ordersData.orders || []).length
         }));
       }
 
@@ -297,7 +327,9 @@ function AccountPageContent() {
       'REJECTED': 'مرفوضة',
       'SOLD': 'مباعة',
       'CONTACTED': 'تم التواصل',
-      'COMPLETED': 'مكتمل'
+      'COMPLETED': 'مكتمل',
+      'CONFIRMED': 'مؤكدة',
+      'CANCELLED': 'ملغاة'
     };
     return statusMap[status] || status;
   };
@@ -309,7 +341,9 @@ function AccountPageContent() {
       'REJECTED': 'bg-red-500',
       'SOLD': 'bg-purple-500',
       'CONTACTED': 'bg-blue-500',
-      'COMPLETED': 'bg-green-600'
+      'COMPLETED': 'bg-green-600',
+      'CONFIRMED': 'bg-blue-600',
+      'CANCELLED': 'bg-red-600'
     };
     return colorMap[status] || 'bg-gray-500';
   };
@@ -332,6 +366,13 @@ function AccountPageContent() {
     const matchesSearch = bid.car.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          bid.car.brand.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesSearch;
+  });
+
+  const filteredOrders = orders.filter(order => {
+    const matchesSearch = order.car.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         order.car.brand.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = filterStatus === 'all' || order.status === filterStatus;
+    return matchesSearch && matchesStatus;
   });
 
   if (authLoading) {
@@ -450,12 +491,13 @@ function AccountPageContent() {
                 {activeTab === 'cars' && 'سياراتي'}
                 {activeTab === 'bookings' && 'حجوزاتي'}
                 {activeTab === 'bids' && 'مزايداتي'}
+                {activeTab === 'orders' && 'طلباتي'}
               </h1>
             </div>
             
             <div className="flex items-center gap-4">
               {/* Search */}
-              {(activeTab === 'cars' || activeTab === 'bookings' || activeTab === 'bids') && (
+              {(activeTab === 'cars' || activeTab === 'bookings' || activeTab === 'bids' || activeTab === 'orders') && (
                 <div className="relative">
                   <input
                     type="text"
@@ -537,6 +579,18 @@ function AccountPageContent() {
                         <div className="mr-4">
                           <p className="text-sm text-gray-600">المزايدات النشطة</p>
                           <p className="text-2xl font-bold text-gray-800">{stats.activeBids}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-white p-6 rounded-lg shadow">
+                      <div className="flex items-center">
+                        <div className="p-3 bg-purple-100 rounded-lg">
+                          <i className="fas fa-shopping-cart text-purple-600 text-xl"></i>
+                        </div>
+                        <div className="mr-4">
+                          <p className="text-sm text-gray-600">إجمالي الطلبات</p>
+                          <p className="text-2xl font-bold text-gray-800">{stats.totalOrders}</p>
                         </div>
                       </div>
                     </div>
@@ -839,6 +893,101 @@ function AccountPageContent() {
                           </div>
                         );
                       })}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Orders Tab */}
+              {activeTab === 'orders' && (
+                <div>
+                  {/* Filter */}
+                  <div className="mb-4 flex gap-4">
+                    <select
+                      value={filterStatus}
+                      onChange={(e) => setFilterStatus(e.target.value)}
+                      className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="all">جميع الحالات</option>
+                      <option value="PENDING">في الانتظار</option>
+                      <option value="CONFIRMED">مؤكدة</option>
+                      <option value="COMPLETED">مكتملة</option>
+                      <option value="CANCELLED">ملغاة</option>
+                    </select>
+                  </div>
+
+                  {filteredOrders.length === 0 ? (
+                    <div className="bg-white p-8 rounded-lg shadow text-center">
+                      <i className="fas fa-shopping-cart text-gray-400 text-4xl mb-4"></i>
+                      <h3 className="text-xl font-bold text-gray-800 mb-2">لا توجد طلبات</h3>
+                      <p className="text-gray-600 mb-4">لم تقم بإنشاء أي طلبات بعد</p>
+                      <Link href="/cars" className="btn-primary inline-block">
+                        <i className="fas fa-car ml-2"></i>
+                        استكشف السيارات
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {filteredOrders.map((order) => (
+                        <div key={order.id} className="bg-white rounded-lg shadow p-6">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-4">
+                              <div className="w-20 h-20 relative rounded-lg overflow-hidden">
+                                <Image
+                                  src={order.car.imageUrl || '/default-car.jpg'}
+                                  alt={order.car.name}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                              <div>
+                                <h3 className="text-lg font-bold text-gray-800">{order.car.name}</h3>
+                                <p className="text-gray-600">{order.car.brand} • {order.car.year}</p>
+                                <p className="text-sm text-gray-500 mt-1">
+                                  رقم الطلب: #{order.id}
+                                </p>
+                              </div>
+                            </div>
+                            <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                              order.status === 'COMPLETED' ? 'bg-green-500 text-white' :
+                              order.status === 'CONFIRMED' ? 'bg-blue-500 text-white' :
+                              order.status === 'CANCELLED' ? 'bg-red-500 text-white' :
+                              'bg-orange-500 text-white'
+                            }`}>
+                              {order.status === 'PENDING' ? 'في الانتظار' :
+                               order.status === 'CONFIRMED' ? 'مؤكدة' :
+                               order.status === 'COMPLETED' ? 'مكتملة' :
+                               'ملغاة'}
+                            </span>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div>
+                              <p className="text-sm text-gray-600">المبلغ الإجمالي</p>
+                              <p className="text-lg font-bold text-blue-600">{order.totalPrice.toLocaleString()} ريال</p>
+                            </div>
+                            <div>
+                              <p className="text-sm text-gray-600">تاريخ الطلب</p>
+                              <p className="text-sm font-medium text-gray-800">
+                                {new Date(order.createdAt).toLocaleDateString('ar-SA', {
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric',
+                                })}
+                              </p>
+                            </div>
+                            <div>
+                              <Link
+                                href={`/cars/${order.carId}`}
+                                className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                              >
+                                <i className="fas fa-eye ml-1"></i>
+                                عرض السيارة
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/database';
 import { verifyTapWebhook, getTapCharge } from '@/lib/tapPayment';
-import { BidDepositStatus } from '@prisma/client';
+import { BidDepositStatus, OrderStatus } from '@prisma/client';
 
 export async function POST(req: NextRequest) {
   try {
@@ -22,11 +22,8 @@ export async function POST(req: NextRequest) {
     // Handle charge.succeeded event
     if (object === 'charge' && status === 'CAPTURED') {
       const depositId = metadata?.depositId;
-      
-      if (!depositId) {
-        console.error('No depositId in webhook metadata');
-        return NextResponse.json({ success: false, error: 'Missing depositId' }, { status: 400 });
-      }
+      const orderId = metadata?.orderId;
+      const type = metadata?.type;
 
       // Get charge details to verify
       const charge = await getTapCharge(id);
@@ -35,21 +32,57 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: false, error: 'Charge not captured' }, { status: 400 });
       }
 
-      // Update deposit status
-      const deposit = await prisma.bidDeposit.update({
-        where: { id: parseInt(depositId) },
-        data: {
-          status: BidDepositStatus.PAID,
-          tapPaymentId: charge.id,
-        },
-      });
+      // Handle bid deposit payment
+      if (type === 'bid_deposit' && depositId) {
+        const deposit = await prisma.bidDeposit.update({
+          where: { id: parseInt(depositId) },
+          data: {
+            status: BidDepositStatus.PAID,
+            tapPaymentId: charge.id,
+          },
+        });
 
-      console.log(`Deposit ${depositId} marked as PAID for charge ${id}`);
+        console.log(`Deposit ${depositId} marked as PAID for charge ${id}`);
 
+        return NextResponse.json({
+          success: true,
+          message: 'Deposit payment confirmed',
+          depositId: deposit.id,
+        });
+      }
+
+      // Handle order payment
+      if (type === 'order_payment' && orderId) {
+        const order = await prisma.order.update({
+          where: { id: parseInt(orderId) },
+          data: {
+            status: OrderStatus.CONFIRMED,
+          },
+        });
+
+        // Mark car as sold
+        await prisma.car.update({
+          where: { id: order.carId },
+          data: {
+            status: 'SOLD',
+            isAvailable: false,
+          },
+        });
+
+        console.log(`Order ${orderId} confirmed for charge ${id}`);
+
+        return NextResponse.json({
+          success: true,
+          message: 'Order payment confirmed',
+          orderId: order.id,
+        });
+      }
+
+      // If no type or ID specified, log and return success
+      console.warn('Webhook received but no depositId or orderId in metadata');
       return NextResponse.json({
         success: true,
-        message: 'Deposit payment confirmed',
-        depositId: deposit.id,
+        message: 'Webhook received but no action taken',
       });
     }
 

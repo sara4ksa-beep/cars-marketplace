@@ -89,7 +89,7 @@ export async function POST(request: Request) {
         },
       });
 
-      // Create booking for the winner
+      // Create booking for the winner (for compatibility)
       await prisma.booking.create({
         data: {
           carId: auction.id,
@@ -100,6 +100,16 @@ export async function POST(request: Request) {
           customerPhone: highestBid.user.phone || '',
           message: `Winner of auction for ${auction.name}`,
           status: 'PENDING',
+        },
+      });
+
+      // Create Order for the winner
+      await prisma.order.create({
+        data: {
+          userId: highestBid.user.id,
+          carId: auction.id,
+          totalPrice: highestBid.amount,
+          status: 'CONFIRMED', // Auction winners get confirmed status
         },
       });
 
