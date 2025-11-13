@@ -41,6 +41,7 @@ model Car {
   orders            Order[]
   reviews           Review[]
   bids              Bid[]
+  bidDeposits       BidDeposit[]
 
   @@map("cars")
 }
@@ -58,6 +59,7 @@ model User {
   orders    Order[]
   reviews   Review[]
   bids      Bid[]
+  bidDeposits BidDeposit[]
 
   @@map("users")
 }
@@ -153,4 +155,32 @@ enum BookingStatus {
 enum SaleType {
   DIRECT_SALE
   AUCTION
+}
+
+enum BidDepositStatus {
+  PENDING
+  PAID
+  REFUNDED
+  APPLIED_TO_PURCHASE
+}
+
+model BidDeposit {
+  id            Int               @id @default(autoincrement())
+  userId        Int
+  carId         Int
+  amount        Float             @default(200)
+  tapChargeId   String?
+  tapPaymentId  String?
+  refundId      String?
+  status        BidDepositStatus  @default(PENDING)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  car           Car               @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  @@map("bid_deposits")
+  @@unique([userId, carId])
+  @@index([userId])
+  @@index([carId])
+  @@index([status])
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface BidFormProps {
   carId: number;
@@ -10,6 +10,12 @@ interface BidFormProps {
   onBidPlaced?: () => void;
   userId?: number;
   className?: string;
+}
+
+interface DepositStatus {
+  hasDeposit: boolean;
+  isGrandfathered: boolean;
+  deposit: any;
 }
 
 export default function BidForm({
@@ -27,6 +33,67 @@ export default function BidForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [depositStatus, setDepositStatus] = useState<DepositStatus | null>(null);
+  const [checkingDeposit, setCheckingDeposit] = useState(true);
+  const [processingPayment, setProcessingPayment] = useState(false);
+
+  useEffect(() => {
+    if (userId) {
+      checkDepositStatus();
+    } else {
+      setCheckingDeposit(false);
+    }
+  }, [userId, carId]);
+
+  const checkDepositStatus = async () => {
+    try {
+      setCheckingDeposit(true);
+      const response = await fetch(`/api/payments/check-deposit?carId=${carId}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setDepositStatus(data);
+      }
+    } catch (err) {
+      console.error('Error checking deposit status:', err);
+    } finally {
+      setCheckingDeposit(false);
+    }
+  };
+
+  const handleCreateDeposit = async () => {
+    if (!userId) {
+      setError('يجب تسجيل الدخول أولاً');
+      return;
+    }
+
+    try {
+      setProcessingPayment(true);
+      setError(null);
+      
+      const response = await fetch('/api/payments/create-deposit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ carId }),
+      });
+
+      const data = await response.json();
+
+      if (data.success && data.charge?.redirectUrl) {
+        // Redirect to Tap payment page
+        window.location.href = data.charge.redirectUrl;
+      } else {
+        setError(data.error || 'فشل في إنشاء عملية الدفع');
+      }
+    } catch (err: any) {
+      setError('حدث خطأ في الاتصال بالخادم');
+      console.error('Error creating deposit:', err);
+    } finally {
+      setProcessingPayment(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +148,13 @@ export default function BidForm({
           }, 2000);
         }
       } else {
-        setError(data.error || 'حدث خطأ أثناء وضع المزايدة');
+        if (data.requiresDeposit) {
+          setError(data.error || 'يجب دفع 200 ريال كتأكيد قبل المزايدة');
+          // Refresh deposit status
+          checkDepositStatus();
+        } else {
+          setError(data.error || 'حدث خطأ أثناء وضع المزايدة');
+        }
       }
     } catch (err: any) {
       setError('حدث خطأ في الاتصال بالخادم');
@@ -146,7 +219,9 @@ export default function BidForm({
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      {/* Only show form if user is logged in and has deposit or is grandfathered */}
+      {userId && !checkingDeposit && depositStatus && (depositStatus.hasDeposit || depositStatus.isGrandfathered) && (
+        <form onSubmit={handleSubmit} className="space-y-5">
         <div>
           <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center">
             <i className="fas fa-money-bill-wave text-orange-500 ml-2"></i>
@@ -237,11 +312,51 @@ export default function BidForm({
           )}
         </button>
       </form>
+      )}
 
       {!userId && (
         <div className="mt-6 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-xl text-yellow-800 text-sm text-center shadow-md">
           <i className="fas fa-info-circle ml-2 text-yellow-600"></i>
           <span className="font-semibold">يجب تسجيل الدخول للمزايدة</span>
+        </div>
+      )}
+
+      {userId && checkingDeposit && (
+        <div className="mt-6 p-4 bg-blue-50 border-2 border-blue-300 rounded-xl text-blue-800 text-sm text-center">
+          <div className="w-6 h-6 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+          <span className="font-semibold">جاري التحقق من حالة التأكيد...</span>
+        </div>
+      )}
+
+      {userId && !checkingDeposit && depositStatus && !depositStatus.hasDeposit && !depositStatus.isGrandfathered && (
+        <div className="mt-6 p-6 bg-gradient-to-br from-orange-50 to-red-50 border-2 border-orange-300 rounded-xl shadow-lg">
+          <div className="text-center mb-4">
+            <div className="bg-orange-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+              <i className="fas fa-lock text-orange-600 text-2xl"></i>
+            </div>
+            <h4 className="text-xl font-bold text-gray-800 mb-2">يجب دفع 200 ريال كتأكيد للمزايدة</h4>
+            <p className="text-gray-600 text-sm mb-4">
+              يجب دفع 200 ريال كتأكيد للمزايدة على هذه السيارة. سيتم استرداد المبلغ إذا لم تربح المزاد، أو سيتم خصمه من سعر الشراء إذا ربحت.
+            </p>
+          </div>
+          
+          <button
+            onClick={handleCreateDeposit}
+            disabled={processingPayment}
+            className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 px-6 rounded-xl font-bold hover:from-orange-600 hover:to-red-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-2xl transform hover:scale-105 active:scale-95 text-lg"
+          >
+            {processingPayment ? (
+              <span className="flex items-center justify-center">
+                <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin ml-3"></div>
+                جاري المعالجة...
+              </span>
+            ) : (
+              <span className="flex items-center justify-center">
+                <i className="fas fa-credit-card ml-3 text-xl"></i>
+                دفع 200 ريال كتأكيد
+              </span>
+            )}
+          </button>
         </div>
       )}
     </div>

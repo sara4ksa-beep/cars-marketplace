@@ -16,6 +16,7 @@ interface AuctionCardProps {
   reservePrice?: number | null;
   imageUrl: string | null;
   auctionEndDate: Date | string | null;
+  auctionStartDate?: Date | string | null;
   bidCount?: number;
   isActive?: boolean;
   featured?: boolean;
@@ -31,6 +32,7 @@ export default function AuctionCard({
   reservePrice,
   imageUrl,
   auctionEndDate,
+  auctionStartDate,
   bidCount = 0,
   isActive = false,
   featured = false,
@@ -111,13 +113,13 @@ export default function AuctionCard({
         </div>
 
         {/* Timer */}
-        {isActive && auctionEndDate && (
+        {auctionEndDate && (
           <div className="mb-4 p-3 bg-gradient-to-r from-orange-100 via-red-50 to-orange-100 rounded-xl border-2 border-orange-300">
             <div className="text-xs text-gray-700 font-semibold mb-2 text-center">
               <i className="fas fa-clock ml-1.5 text-orange-600"></i>
-              الوقت المتبقي
+              {isActive ? 'الوقت المتبقي' : 'حالة المزاد'}
             </div>
-            <AuctionTimer endDate={auctionEndDate} />
+            <AuctionTimer endDate={auctionEndDate} startDate={auctionStartDate} />
           </div>
         )}
 

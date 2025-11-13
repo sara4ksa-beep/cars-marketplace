@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/database';
-import { SaleType, CarStatus } from '@prisma/client';
+import { SaleType, CarStatus, BidDepositStatus } from '@prisma/client';
+import { verifyUserAuth } from '@/lib/userAuth';
 
 export async function GET(request: Request) {
   try {
@@ -51,21 +52,48 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    // Verify user authentication
+    const authResult = await verifyUserAuth(request);
+    
+    if (!authResult.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: authResult.error || 'يجب تسجيل الدخول للمزايدة',
+        },
+        { status: 401 }
+      );
+    }
+
+    const authenticatedUserId = authResult.user!.id;
     const body = await request.json();
     const { carId, userId, amount, maxBid, isAutoBid } = body;
 
     // Validate required fields
-    if (!carId || !userId || !amount) {
+    if (!carId || !amount) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Missing required fields: carId, userId, amount',
+          error: 'Missing required fields: carId, amount',
         },
         { status: 400 }
       );
     }
+
+    // Ensure userId matches authenticated user
+    if (userId && parseInt(userId.toString()) !== authenticatedUserId) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Unauthorized: User ID mismatch',
+        },
+        { status: 403 }
+      );
+    }
+
+    const userIdToUse = authenticatedUserId;
 
     // Get the car/auction
     const car = await prisma.car.findUnique({
@@ -128,7 +156,7 @@ export async function POST(request: Request) {
     }
 
     // Prevent seller from bidding on their own auction
-    if (car.sellerId === userId) {
+    if (car.sellerId === userIdToUse) {
       return NextResponse.json(
         {
           success: false,
@@ -136,6 +164,40 @@ export async function POST(request: Request) {
         },
         { status: 400 }
       );
+    }
+
+    // Check if user has existing bids (grandfathering)
+    const existingBids = await prisma.bid.findFirst({
+      where: {
+        userId: parseInt(userIdToUse.toString()),
+        carId: parseInt(carId.toString()),
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+    });
+
+    // If user has no existing bids, check for deposit
+    if (!existingBids) {
+      const deposit = await prisma.bidDeposit.findUnique({
+        where: {
+          userId_carId: {
+            userId: parseInt(userIdToUse.toString()),
+            carId: parseInt(carId.toString()),
+          },
+        },
+      });
+
+      if (!deposit || deposit.status !== BidDepositStatus.PAID) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'يجب دفع 200 ريال كتأكيد قبل المزايدة',
+            requiresDeposit: true,
+          },
+          { status: 400 }
+        );
+      }
     }
 
     // Get current highest bid
@@ -168,8 +230,8 @@ export async function POST(request: Request) {
     // Create the bid
     const bid = await prisma.bid.create({
       data: {
-        carId,
-        userId,
+        carId: parseInt(carId.toString()),
+        userId: parseInt(userIdToUse.toString()),
         amount,
         maxBid: maxBid || null,
         isAutoBid: isAutoBid || false,
@@ -225,4 +287,5 @@ export async function POST(request: Request) {
     );
   }
 }
+
 

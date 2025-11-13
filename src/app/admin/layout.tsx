@@ -135,6 +135,21 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </Link>
             
             <Link
+              href="/admin/pending-cars"
+              className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors ${
+                isActive('/admin/pending-cars') ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <i className="fas fa-clock"></i>
+              {!sidebarCollapsed && <span>السيارات المعلقة</span>}
+              {!sidebarCollapsed && pendingCarsCount > 0 && (
+                <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full mr-auto">
+                  {pendingCarsCount}
+                </span>
+              )}
+            </Link>
+            
+            <Link
               href="/admin/cars"
               className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors ${
                 isActive('/admin/cars') ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100'
@@ -142,11 +157,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             >
               <i className="fas fa-car"></i>
               {!sidebarCollapsed && <span>إدارة السيارات</span>}
-              {!sidebarCollapsed && pendingCarsCount > 0 && (
-                <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full mr-auto">
-                  {pendingCarsCount}
-                </span>
-              )}
             </Link>
             
             <Link
@@ -172,6 +182,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             >
               <i className="fas fa-users"></i>
               {!sidebarCollapsed && <span>إدارة المستخدمين</span>}
+            </Link>
+
+            <Link
+              href="/admin/deposits"
+              className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors ${
+                isActive('/admin/deposits') ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <i className="fas fa-wallet"></i>
+              {!sidebarCollapsed && <span>تأكيدات المزايدة</span>}
             </Link>
 
             <Link
@@ -207,4 +227,5 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     </div>
   );
 }
+
 

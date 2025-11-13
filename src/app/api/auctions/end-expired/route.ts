@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/database';
-import { SaleType, CarStatus } from '@prisma/client';
+import { SaleType, CarStatus, BidDepositStatus } from '@prisma/client';
+import axios from 'axios';
 
 // This endpoint should be called by a cron job or scheduled task
 // to automatically end expired auctions
@@ -102,6 +103,57 @@ export async function POST(request: Request) {
         },
       });
 
+      // Handle deposits: apply winner's deposit, refund losers
+      const allDeposits = await prisma.bidDeposit.findMany({
+        where: {
+          carId: auction.id,
+          status: BidDepositStatus.PAID,
+        },
+      });
+
+      const winnerDeposit = allDeposits.find(d => d.userId === highestBid.user.id);
+      if (winnerDeposit) {
+        // Apply winner's deposit to purchase
+        await prisma.bidDeposit.update({
+          where: { id: winnerDeposit.id },
+          data: {
+            status: BidDepositStatus.APPLIED_TO_PURCHASE,
+          },
+        });
+      }
+
+      // Refund losers' deposits
+      const loserDeposits = allDeposits.filter(d => d.userId !== highestBid.user.id);
+      const refundResults = [];
+
+      for (const deposit of loserDeposits) {
+        try {
+          const refundResponse = await axios.post(
+            `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/payments/refund-deposit`,
+            { depositId: deposit.id },
+            {
+              headers: {
+                'Authorization': `Bearer ${process.env.CRON_SECRET}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+          refundResults.push({
+            depositId: deposit.id,
+            userId: deposit.userId,
+            success: refundResponse.data.success,
+          });
+        } catch (error: any) {
+          console.error(`Failed to refund deposit ${deposit.id}:`, error.message);
+          refundResults.push({
+            depositId: deposit.id,
+            userId: deposit.userId,
+            success: false,
+            error: error.message,
+          });
+        }
+      }
+
       results.push({
         auctionId: auction.id,
         status: 'ended_winner_selected',
@@ -109,6 +161,12 @@ export async function POST(request: Request) {
           userId: highestBid.user.id,
           userName: highestBid.user.name,
           winningBid: highestBid.amount,
+        },
+        deposits: {
+          winnerApplied: winnerDeposit ? true : false,
+          refundsProcessed: refundResults.filter(r => r.success).length,
+          refundsFailed: refundResults.filter(r => !r.success).length,
+          refundDetails: refundResults,
         },
       });
     }
@@ -129,4 +187,5 @@ export async function POST(request: Request) {
     );
   }
 }
+
 

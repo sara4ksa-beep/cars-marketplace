@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/database';
-import { SaleType, CarStatus } from '@prisma/client';
+import { SaleType, CarStatus, BidDepositStatus } from '@prisma/client';
+import axios from 'axios';
 
 export async function POST(
   request: Request,
@@ -116,6 +117,57 @@ export async function POST(
       },
     });
 
+    // Handle deposits: apply winner's deposit, refund losers
+    const allDeposits = await prisma.bidDeposit.findMany({
+      where: {
+        carId: carId,
+        status: BidDepositStatus.PAID,
+      },
+    });
+
+    const winnerDeposit = allDeposits.find(d => d.userId === highestBid.user.id);
+    if (winnerDeposit) {
+      // Apply winner's deposit to purchase
+      await prisma.bidDeposit.update({
+        where: { id: winnerDeposit.id },
+        data: {
+          status: BidDepositStatus.APPLIED_TO_PURCHASE,
+        },
+      });
+    }
+
+    // Refund losers' deposits
+    const loserDeposits = allDeposits.filter(d => d.userId !== highestBid.user.id);
+    const refundResults = [];
+
+    for (const deposit of loserDeposits) {
+      try {
+        const refundResponse = await axios.post(
+          `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/payments/refund-deposit`,
+          { depositId: deposit.id },
+          {
+            headers: {
+              'Authorization': `Bearer ${process.env.CRON_SECRET}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        refundResults.push({
+          depositId: deposit.id,
+          userId: deposit.userId,
+          success: refundResponse.data.success,
+        });
+      } catch (error: any) {
+        console.error(`Failed to refund deposit ${deposit.id}:`, error.message);
+        refundResults.push({
+          depositId: deposit.id,
+          userId: deposit.userId,
+          success: false,
+          error: error.message,
+        });
+      }
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Auction ended successfully',
@@ -124,6 +176,12 @@ export async function POST(
         userName: highestBid.user.name,
         userEmail: highestBid.user.email,
         winningBid: highestBid.amount,
+      },
+      deposits: {
+        winnerApplied: winnerDeposit ? true : false,
+        refundsProcessed: refundResults.filter(r => r.success).length,
+        refundsFailed: refundResults.filter(r => !r.success).length,
+        refundDetails: refundResults,
       },
     });
   } catch (error: any) {

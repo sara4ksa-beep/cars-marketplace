@@ -50,11 +50,25 @@ export async function GET(
 
     const highestBid = auction.bids[0];
     const now = new Date();
-    const isActive =
-      auction.auctionStartDate &&
-      auction.auctionEndDate &&
-      new Date(auction.auctionStartDate) <= now &&
-      new Date(auction.auctionEndDate) > now;
+    
+    // Determine auction status
+    let isActive = false;
+    let hasStarted = false;
+    let hasEnded = false;
+    
+    if (auction.auctionStartDate && auction.auctionEndDate) {
+      const startDate = new Date(auction.auctionStartDate);
+      const endDate = new Date(auction.auctionEndDate);
+      
+      hasStarted = startDate <= now;
+      hasEnded = endDate <= now;
+      isActive = hasStarted && !hasEnded;
+    } else if (!auction.auctionEndDate) {
+      // If endDate is not set, consider it as not started yet (pending setup)
+      hasStarted = false;
+      hasEnded = false;
+      isActive = false;
+    }
 
     return NextResponse.json({
       success: true,
@@ -64,6 +78,8 @@ export async function GET(
         highestBidder: highestBid?.user || null,
         bidCount: auction.bids.length,
         isActive,
+        hasStarted,
+        hasEnded,
         timeRemaining: auction.auctionEndDate
           ? Math.max(0, new Date(auction.auctionEndDate).getTime() - now.getTime())
           : 0,

@@ -29,6 +29,8 @@ interface Auction {
   transmission: string | null;
   color: string | null;
   isActiveAuction: boolean;
+  hasStarted?: boolean;
+  hasEnded?: boolean;
   bidCount: number;
   highestBidder: {
     id: number;
@@ -48,10 +50,33 @@ export default function AuctionDetailPage() {
 
   useEffect(() => {
     fetchAuction();
+    checkUserAuth();
     // Poll for updates every 2 seconds
     const interval = setInterval(fetchAuction, 2000);
     return () => clearInterval(interval);
   }, [auctionId]);
+
+  useEffect(() => {
+    // Check if payment was successful
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('payment') === 'success') {
+      // Remove query parameter and show success message
+      window.history.replaceState({}, '', window.location.pathname);
+      // The BidForm component will automatically refresh deposit status
+    }
+  }, []);
+
+  const checkUserAuth = async () => {
+    try {
+      const response = await fetch('/api/auth/verify');
+      const data = await response.json();
+      if (data.success && data.user) {
+        setUserId(data.user.id);
+      }
+    } catch (error) {
+      console.error('Error checking auth:', error);
+    }
+  };
 
   const fetchAuction = async () => {
     try {
@@ -166,14 +191,17 @@ export default function AuctionDetailPage() {
               {getBrandName(auction.brand)} • {auction.year}
             </p>
 
-            {auction.isActiveAuction && auction.auctionEndDate && (
+            {auction.auctionEndDate && (
               <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 md:p-8 mb-8 border-2 border-white/30 shadow-2xl">
                 <div className="text-center mb-4">
                   <p className="text-base md:text-lg text-orange-50 mb-4 font-bold flex items-center justify-center">
                     <i className="fas fa-clock ml-2"></i>
-                    الوقت المتبقي للمزاد
+                    {auction.isActiveAuction ? 'الوقت المتبقي للمزاد' : auction.hasEnded ? 'انتهى المزاد' : 'يبدأ المزاد خلال'}
                   </p>
-                  <AuctionTimer endDate={auction.auctionEndDate} />
+                  <AuctionTimer 
+                    endDate={auction.auctionEndDate} 
+                    startDate={auction.auctionStartDate}
+                  />
                 </div>
               </div>
             )}
@@ -324,7 +352,7 @@ export default function AuctionDetailPage() {
                   onBidPlaced={handleBidPlaced}
                   userId={userId || undefined}
                 />
-              ) : (
+              ) : auction.hasEnded ? (
                 <div className="card-modern p-8 text-center">
                   <div className="text-red-600 text-5xl mb-6">
                     <i className="fas fa-times-circle"></i>
@@ -334,6 +362,28 @@ export default function AuctionDetailPage() {
                     <div className="bg-green-50 border border-green-200 rounded-xl p-4">
                       <p className="text-gray-700 font-semibold mb-1">الفائز</p>
                       <p className="text-green-700 font-bold text-lg">{auction.highestBidder.name}</p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="card-modern p-8 text-center">
+                  <div className="text-blue-600 text-5xl mb-6">
+                    <i className="fas fa-hourglass-half"></i>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">لم يبدأ المزاد بعد</h3>
+                  <p className="text-gray-600 mb-4">سيبدأ المزاد قريباً</p>
+                  {auction.auctionStartDate && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                      <p className="text-gray-700 font-semibold mb-1">تاريخ البدء</p>
+                      <p className="text-blue-700 font-bold text-lg">
+                        {new Date(auction.auctionStartDate).toLocaleDateString('ar-SA', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </p>
                     </div>
                   )}
                 </div>

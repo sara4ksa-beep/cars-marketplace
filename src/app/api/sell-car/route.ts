@@ -34,15 +34,32 @@ export async function POST(req: NextRequest) {
 
     // If it's an auction, add auction-specific fields
     if (data.saleType === SaleType.AUCTION) {
+      // Validate required auction fields
+      if (!data.auctionEndDate) {
+        return NextResponse.json(
+          { success: false, error: 'Auction end date is required' },
+          { status: 400 }
+        );
+      }
+
+      const startDate = data.auctionStartDate
+        ? new Date(data.auctionStartDate)
+        : new Date();
+      const endDate = new Date(data.auctionEndDate);
+
+      // Validate that end date is after start date
+      if (endDate <= startDate) {
+        return NextResponse.json(
+          { success: false, error: 'Auction end date must be after start date' },
+          { status: 400 }
+        );
+      }
+
       carData.reservePrice = data.reservePrice || null;
       carData.bidIncrement = data.bidIncrement || 500;
       carData.autoExtendMinutes = data.autoExtendMinutes || 5;
-      carData.auctionStartDate = data.auctionStartDate
-        ? new Date(data.auctionStartDate)
-        : new Date();
-      carData.auctionEndDate = data.auctionEndDate
-        ? new Date(data.auctionEndDate)
-        : null;
+      carData.auctionStartDate = startDate;
+      carData.auctionEndDate = endDate;
       carData.currentBid = null;
     }
 
