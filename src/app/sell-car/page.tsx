@@ -38,6 +38,8 @@ const gulfCountries = [
 
 export default function SellCarPage() {
   const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [formData, setFormData] = useState({
     carTitle: '',
     brand: '',
@@ -68,6 +70,28 @@ export default function SellCarPage() {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(false);
   const [showThankYouModal, setShowThankYouModal] = useState(false);
+
+  // Check authentication on mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/auth/verify');
+        const data = await response.json();
+        if (data.success) {
+          setIsAuthenticated(true);
+        } else {
+          // Redirect to login with return URL if not authenticated
+          router.push(`/login?redirect=${encodeURIComponent('/sell-car')}`);
+        }
+      } catch (error) {
+        console.error('Auth check failed:', error);
+        router.push(`/login?redirect=${encodeURIComponent('/sell-car')}`);
+      } finally {
+        setIsCheckingAuth(false);
+      }
+    };
+    checkAuth();
+  }, [router]);
 
   // جلب السيارات من قاعدة البيانات
   useEffect(() => {
@@ -240,8 +264,28 @@ export default function SellCarPage() {
 
   const selectedCountry = gulfCountries.find(country => country.code === formData.countryCode);
 
+  // Show loading state while checking authentication
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="container-custom py-12">
+          <div className="text-center animate-fade-in">
+            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4 transition-all duration-300 ease-in-out"></div>
+            <p className="text-gray-600 animate-pulse transition-opacity duration-300 ease-in-out">جاري التحقق من الحساب...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render form if not authenticated (will redirect)
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 animate-fade-in">
       {/* Header */}
       <Header />
       

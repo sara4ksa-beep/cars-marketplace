@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Header from "../components/Header";
 import Link from "next/link";
 
@@ -13,6 +13,15 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const redirect = searchParams.get('redirect');
+    if (redirect) {
+      setRedirectUrl(redirect);
+    }
+  }, [searchParams]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -40,8 +49,9 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (data.success) {
-        // Redirect to account dashboard
-        router.push('/account');
+        // Redirect to the redirect URL if provided, otherwise to account dashboard
+        const redirectTo = redirectUrl || '/account';
+        router.push(redirectTo);
       } else {
         setError(data.error || 'حدث خطأ في تسجيل الدخول');
       }
@@ -109,7 +119,10 @@ export default function LoginPage() {
           <a href="#" className="text-blue-600 hover:underline text-sm sm:text-base block">نسيت كلمة المرور؟</a>
           <p className="text-gray-600 text-sm sm:text-base">
             إذا لم يكن لديك حساب،{' '}
-            <Link href="/signup" className="text-blue-600 hover:text-blue-700 font-semibold hover:underline transition-colors">
+            <Link 
+              href={redirectUrl ? `/signup?redirect=${encodeURIComponent(redirectUrl)}` : '/signup'} 
+              className="text-blue-600 hover:text-blue-700 font-semibold hover:underline transition-colors"
+            >
               أنشئ حساباً الآن
             </Link>
           </p>

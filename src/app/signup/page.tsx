@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Header from "../components/Header";
 import Link from "next/link";
 
@@ -14,6 +14,15 @@ export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const redirect = searchParams.get('redirect');
+    if (redirect) {
+      setRedirectUrl(redirect);
+    }
+  }, [searchParams]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,8 +57,9 @@ export default function SignUpPage() {
       const data = await response.json();
 
       if (data.success) {
-        // Redirect to main page
-        router.push('/');
+        // Redirect to the redirect URL if provided, otherwise to home page
+        const redirectTo = redirectUrl || '/';
+        router.push(redirectTo);
       } else {
         setError(data.error || 'حدث خطأ في إنشاء الحساب');
       }

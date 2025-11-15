@@ -7,9 +7,15 @@ export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
 
-    // Check if user is logged in
+    // Require user to be logged in
     const authResult = await verifyUserAuth(req);
-    const sellerId = authResult.success ? authResult.user!.id : null;
+    if (!authResult.success) {
+      return NextResponse.json(
+        { success: false, error: 'يجب تسجيل الدخول أولاً لبيع سيارة' },
+        { status: 401 }
+      );
+    }
+    const sellerId = authResult.user!.id;
 
     const carData: any = {
       name: data.name,
