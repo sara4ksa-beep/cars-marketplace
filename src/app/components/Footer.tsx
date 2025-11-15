@@ -20,17 +20,17 @@ export default function Footer() {
             {/* Social Media */}
             <div>
               <h4 className="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-center sm:text-right">تابعنا على</h4>
-              <div className="flex flex-wrap justify-center sm:justify-start gap-4 sm:gap-6">
-                <a href="#" className="group bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+              <div className="flex flex-wrap justify-center sm:justify-start gap-3">
+                <a href="#" className="group bg-blue-600 hover:bg-blue-700 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
                   <i className="fab fa-facebook-f text-xl sm:text-2xl"></i>
                 </a>
-                <a href="#" className="group bg-black hover:bg-gray-800 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+                <a href="#" className="group bg-black hover:bg-gray-800 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
                   <i className="fab fa-x-twitter text-xl sm:text-2xl"></i>
                 </a>
-                <a href="#" className="group bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+                <a href="#" className="group bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
                   <i className="fab fa-instagram text-xl sm:text-2xl"></i>
                 </a>
-                <a href="#" className="group bg-red-600 hover:bg-red-700 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
+                <a href="#" className="group bg-red-600 hover:bg-red-700 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl">
                   <i className="fab fa-youtube text-xl sm:text-2xl"></i>
                 </a>
               </div>
