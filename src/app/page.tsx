@@ -127,6 +127,10 @@ export default function Home() {
                 <span className="hidden sm:inline">تصفح السيارات</span>
                 <span className="sm:hidden">السيارات</span>
               </a>
+              <a href="/sell-car" className="bg-blue-600 text-white rounded-xl md:rounded-2xl font-semibold hover:bg-blue-700 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-105 active:scale-95 hover:-translate-y-1 py-4 sm:py-5 px-6 sm:px-8 text-sm sm:text-base md:text-lg touch-target">
+                <i className="fas fa-plus-circle ml-2"></i>
+                <span>أضف سيارتك</span>
+              </a>
             </div>
           </div>
         </div>
