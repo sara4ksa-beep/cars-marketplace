@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Header from "../components/Header";
 import Link from "next/link";
 
-export default function LoginPage() {
+function LoginForm() {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -63,9 +63,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen relative">
-      <Header />
-      <div className="py-16 flex items-center justify-center">
+    <div className="py-16 flex items-center justify-center">
       <div className="bg-white rounded-2xl shadow-xl p-8 sm:p-12 border border-blue-100 w-full max-w-md">
         <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center">تسجيل الدخول</h1>
         <form className="space-y-6" onSubmit={handleSubmit}>
@@ -127,8 +125,25 @@ export default function LoginPage() {
             </Link>
           </p>
         </div>
-        </div>
       </div>
+    </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <div className="min-h-screen relative">
+      <Header />
+      <Suspense fallback={
+        <div className="py-16 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">جاري التحميل...</p>
+          </div>
+        </div>
+      }>
+        <LoginForm />
+      </Suspense>
     </div>
   );
 } 

@@ -18,8 +18,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const pathname = usePathname();
 
   useEffect(() => {
+    // Skip auth check for login page
+    if (pathname === '/admin/login') {
+      setAuthLoading(false);
+      return;
+    }
     checkAuth();
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (admin) {
@@ -83,6 +88,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     }
     return pathname?.startsWith(path);
   };
+
+  // If on login page, render children without layout
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
 
   if (authLoading) {
     return (
