@@ -198,26 +198,6 @@ export default function CarDetailsPage() {
               </span>
             </div>
             
-            {/* Action Buttons */}
-            <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
-              {car.saleType === 'DIRECT_SALE' && car.isAvailable ? (
-                <button
-                  onClick={() => router.push(`/checkout/${carId}`)}
-                  className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-8 py-3.5 sm:px-10 sm:py-4 rounded-xl font-semibold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl touch-target flex items-center justify-center"
-                >
-                  <i className="fas fa-shopping-cart ml-2"></i>
-                  شراء الآن
-                </button>
-              ) : null}
-              <button
-                onClick={() => router.push(`/booking/${carId}`)}
-                className="bg-white/20 backdrop-blur-md hover:bg-white/30 text-white px-8 py-3.5 sm:px-10 sm:py-4 rounded-xl font-semibold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl touch-target flex items-center justify-center"
-              >
-                <i className="fas fa-calendar-check ml-2"></i>
-                احجزها الآن
-              </button>
-            </div>
-            
             {/* Quick Stats - Hidden as requested */}
             {/* <div className="w-full px-1">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
@@ -280,12 +260,6 @@ export default function CarDetailsPage() {
                       sizes="(max-width: 768px) 100vw, 50vw"
                       priority
                     />
-                    {/* Click indicator */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center">
-                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 backdrop-blur-sm rounded-full p-3 sm:p-4 transform group-hover:scale-110">
-                        <i className="fas fa-expand text-gray-700 text-lg sm:text-xl"></i>
-                      </div>
-                    </div>
                   </div>
                 </div>
                 
