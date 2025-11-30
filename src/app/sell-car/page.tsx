@@ -63,6 +63,7 @@ export default function SellCarPage() {
     auctionStartDate: '',
     auctionEndDate: '',
     autoExtendMinutes: '5',
+    commissionOathAccepted: false,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -155,6 +156,13 @@ export default function SellCarPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate commission oath acceptance
+    if (!formData.commissionOathAccepted) {
+      alert('يجب الموافقة على التعهد بدفع عمولة البيع قبل المتابعة');
+      return;
+    }
+    
     setIsSubmitting(true);
 
     try {
@@ -736,11 +744,29 @@ export default function SellCarPage() {
                 )}
               </div>
 
+              {/* Commission Oath Checkbox */}
+              <div className="space-y-4 md:space-y-6 bg-blue-50 p-4 md:p-6 rounded-xl border-2 border-blue-200">
+                <div className="flex items-start space-x-3 space-x-reverse">
+                  <input
+                    type="checkbox"
+                    id="commissionOath"
+                    name="commissionOathAccepted"
+                    checked={formData.commissionOathAccepted}
+                    onChange={(e) => setFormData({ ...formData, commissionOathAccepted: e.target.checked })}
+                    required
+                    className="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 cursor-pointer"
+                  />
+                  <label htmlFor="commissionOath" className="flex-1 text-sm md:text-base text-gray-800 cursor-pointer leading-relaxed">
+                    <span className="font-semibold text-blue-700">أتعهد وأقسم بالله العظيم</span> أن أدفع عمولة البيع بنسبة <span className="font-bold text-blue-700">1%</span> من قيمة البيع فور إتمام عملية بيع السيارة بنجاح، وأقر بأنني على علم تام بهذا الالتزام وأوافق عليه.
+                  </label>
+                </div>
+              </div>
+
               {/* Submit Button */}
               <div className="text-center pt-6 md:pt-8">
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !formData.commissionOathAccepted}
                   className="btn-primary px-8 md:px-12 py-3.5 md:py-4 text-base md:text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   {isSubmitting ? (
@@ -828,6 +854,7 @@ export default function SellCarPage() {
                       auctionStartDate: '',
                       auctionEndDate: '',
                       autoExtendMinutes: '5',
+                      commissionOathAccepted: false,
                     });
                     setPreviewImages([]);
                   }}
