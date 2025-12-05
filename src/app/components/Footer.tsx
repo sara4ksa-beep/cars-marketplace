@@ -83,6 +83,15 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t border-gray-800 mt-6 sm:mt-8 pt-6 sm:pt-8">
+          <div className="flex flex-col items-center space-y-4 sm:space-y-3 mb-4 sm:mb-0">
+            <Link 
+              href="/contact" 
+              className="text-blue-400 hover:text-blue-300 transition-colors text-sm sm:text-base font-medium flex items-center group"
+            >
+              <i className="fas fa-envelope ml-2 group-hover:scale-110 transition-transform"></i>
+              راسلنا لأي ملاحظة
+            </Link>
+          </div>
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
             <p className="text-gray-400 text-center sm:text-right text-xs sm:text-sm">
               © 2025 موقع السيارات المتميز. جميع الحقوق محفوظة
